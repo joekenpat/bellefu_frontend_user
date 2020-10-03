@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { withRouter } from 'react-router-dom';
+import { withRouter,Link } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { signup } from "../../redux/actions/userActon";
 import Preloader from "../user/Preloader";
 
-export default function RegisterationFrom(props) {
+
+ function RegisterationFrom(props) {
 	const [formData, setFormData] = useState({
 		first_name: "",
 		last_name: "",
@@ -43,21 +44,22 @@ export default function RegisterationFrom(props) {
 
 	const onSubmitHandle = (e) => {
 		e.preventDefault();
-		if (
-			formData.first_name.length >= 3 &&
-			formData.last_name.length >= 3 &&
-			formData.username.length >= 3 &&
-			formData.gender.length !== '' &&
-			formData.phone.length >= 3 &&
-			formData.email.length >= 3 &&
-			formData.password.length >= 3
-		) {
-			dispatch(
-				signup(first_name, last_name, username, gender, phone, email, password)
-			);
-		} else {
-			alert("form can't be empty");
-		}
+		dispatch(
+			signup(first_name, last_name, username, gender, phone, email, password)
+		);
+		// if (
+		// 	formData.first_name.length >= 3 &&
+		// 	formData.last_name.length >= 3 &&
+		// 	formData.username.length >= 3 &&
+		// 	formData.gender.length !== '' &&
+		// 	formData.phone.length >= 3 &&
+		// 	formData.email.length >= 3 &&
+		// 	formData.password.length >= 3
+		// ) {
+			
+		// } else {
+		// 	alert("form can't be empty");
+		// }
 	};
 
 	return (
@@ -66,6 +68,12 @@ export default function RegisterationFrom(props) {
 			
 			<Card className="border-0">
 				<Card.Body>
+				<h4 className="text-center">
+						<strong>Let's create your account!</strong>
+					</h4>
+					<p className="text-center">
+					Already have an account? <span><Link to="/register" style={{color: "#ffa500"}}>Login Now!</Link></span>
+					</p>
 					<form onSubmit={onSubmitHandle} className="uk-grid-small" uk-grid>
 						<div class="uk-margin-top">
 							<div className="uk-inline">
@@ -83,6 +91,7 @@ export default function RegisterationFrom(props) {
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
+							{error && <p style={styles.formError}>{error.errors.first_name}</p>}
 						</div>
 						<div className="uk-margin">
 							<div class="uk-inline">
@@ -100,6 +109,7 @@ export default function RegisterationFrom(props) {
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
+							{error && <p style={styles.formError}>{error.errors.last_name}</p>}
 						</div>
 						<div className="uk-margin">
 							<div className="uk-inline">
@@ -117,6 +127,7 @@ export default function RegisterationFrom(props) {
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
+							{error && <p style={styles.formError}>{error.errors.username}</p>}
 						</div>
 						<div className="uk-margin">
 							<div className="uk-inline">
@@ -134,6 +145,7 @@ export default function RegisterationFrom(props) {
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
+							{error && <p style={styles.formError}>{error.errors.emeil}</p>}
 						</div>
 						<div className="uk-margin">
 							<div className="uk-inline">
@@ -151,6 +163,7 @@ export default function RegisterationFrom(props) {
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
+							{error && <p style={styles.formError}>{error.errors.phone}</p>}
 						</div>
 						<div className="uk-margin">
 							<div className="uk-inline">
@@ -168,6 +181,7 @@ export default function RegisterationFrom(props) {
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
+							{error && <p style={styles.formError}>{error.errors.password}</p>}
 						</div>
 
 						<div class="uk-margin">
@@ -184,6 +198,7 @@ export default function RegisterationFrom(props) {
 									Female
 								</option>
 							</select>
+							{error && <p style={styles.formError}>{error.errors.gender}</p>}
 						</div>
 						<div className="uk-margin">
 							<button type="submit" onClick={onSubmitHandle}
@@ -207,5 +222,11 @@ const styles = {
 		backgroundColor: "#ffa500",
 		border: "none",
 		color: "white"
+	},
+	formError: {
+		fontSize: "0.7em",
+		color: "red",
+		marginTop: "10px"
 	}
 };
+export default withRouter(RegisterationFrom)

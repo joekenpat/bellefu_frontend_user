@@ -14,7 +14,6 @@ const user = Cookie.getJSON("user") || null
 
 
 export const initialState = {
-    isAuthenticated: false,
     userSignin: { user},
     
     

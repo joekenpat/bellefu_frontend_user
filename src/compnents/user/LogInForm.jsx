@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { signin } from "../../redux/actions/userActon";
 import Preloader from "../user/Preloader";
 
-export default function LogInFrom(props) {
+function LogInForm(props) {
 	const [formData, setFormData] = useState({
 		identifier: "",
 		password: ""
@@ -17,6 +18,7 @@ export default function LogInFrom(props) {
 
 	useEffect(() => {
 		if (user) {
+			window.location.reload(true)
 			props.history.push("/user_dashboard");
 		}
 		return () => {};
@@ -29,15 +31,15 @@ export default function LogInFrom(props) {
 
 	const onSubmitHandle = (e) => {
 		e.preventDefault();
-		if (formData.identifier.length > 3 && formData.password.length > 3) {
-			dispatch(signin(identifier, password));
-		} else {
-			alert("form can't be empty");
-		}
+		dispatch(signin(identifier, password));
+		// if (formData.identifier.length > 3 && formData.password.length > 3) {
+		// 	dispatch(signin(identifier, password));
+		// } else {
+		// 	alert("form can't be empty");
+		// }
 	};
 
 	return (
-	
 		<div>
 			{loading && <Preloader />}
 			{error && (
@@ -47,6 +49,13 @@ export default function LogInFrom(props) {
 			)}
 			<Card className="border-0">
 				<Card.Body>
+					<h4 className="text-center">
+						<strong>Welcome Back</strong>
+					</h4>
+					<p className="text-center">
+						Don't have an account? <span ><Link to="/register" style={{color: "#ffa500"}}>Sign Up Now!</Link></span>
+					</p>
+
 					<form onSubmit={onSubmitHandle} className="uk-grid-small" uk-grid>
 						<div className="uk-margin-top">
 							<div className="uk-inline">
@@ -96,7 +105,7 @@ export default function LogInFrom(props) {
 								style={styles.btnRegister}
 								type="submit"
 								onClick={onSubmitHandle}>
-								<b>Register</b>
+								<b>Login</b>
 							</button>
 						</div>
 					</form>
@@ -104,19 +113,6 @@ export default function LogInFrom(props) {
 			</Card>
 		</div>
 	);
-}
-
-function Alert() {
-	const [show, setShow] = useState(true);
-
-	if (show) {
-		return (
-			<Alert variant="danger" onClose={() => setShow(false)} dismissible>
-				<Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-				<p>Form can't be empty, fill Out the form to continue</p>
-			</Alert>
-		);
-	}
 }
 
 const styles = {
@@ -134,3 +130,4 @@ const styles = {
 		marginTop: "10px"
 	}
 };
+export default withRouter(LogInForm);

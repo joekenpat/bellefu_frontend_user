@@ -2,7 +2,8 @@ import React from "react";
 import { Navbar, Nav, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import SideNav from "../navigations/SideNav";
 import logo from "../images/logo.png";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import Cookie from "js-cookie";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (CHANGE CONTRY)
 const renderTooltip = (props) => (
@@ -15,11 +16,11 @@ const renderTooltip = (props) => (
 export default function HeaderNav() {
 	return (
 		<div>
-			<Navbar style={styles.head} className=" shadow-sm fixed-top" >
-				<Navbar.Brand href="#home">
+			<Navbar style={styles.head} className=" shadow-sm fixed-top">
+				<Navbar.Brand as={Link} to="/">
 					<img src={logo} style={styles.logo} />
 				</Navbar.Brand>
-				<Navbar.Brand href="#home">
+				<Navbar.Brand>
 					<OverlayTrigger
 						placement="right"
 						delay={{ show: 250, hide: 400 }}
@@ -31,13 +32,37 @@ export default function HeaderNav() {
 				</Navbar.Brand>
 
 				<Navbar.Collapse className="justify-content-end">
-					<Nav.Link as={Link} to="/login"
-						className="d-none d-lg-block  d-md-none"
+					<Nav.Link
+						as={Link}
+						to="/user_dashboard"
+						className={`${
+							Cookie.get("user")
+								? "d-none d-lg-block  d-md-none"
+								: "d-none d-lg-none  d-md-none"
+						}`}
+						style={styles.auth}>
+						Dashboard
+					</Nav.Link>
+
+					<Nav.Link
+						as={Link}
+						to="/login"
+						className={`${
+							Cookie.get("user")
+								? "d-none d-lg-none  d-md-none"
+								: "d-none d-lg-block  d-md-none"
+						}`}
 						style={styles.auth}>
 						Login
 					</Nav.Link>
-					<Nav.Link as={Link} to="/register"
-						className="d-none d-lg-block  d-md-none"
+					<Nav.Link
+						as={Link}
+						to="/register"
+						className={`${
+							Cookie.get("user")
+								? "d-none d-lg-none  d-md-none"
+								: "d-none d-lg-block  d-md-none"
+						}`}
 						style={styles.auth}>
 						Register
 					</Nav.Link>
@@ -51,16 +76,14 @@ export default function HeaderNav() {
 							EN
 						</Button>
 					</Navbar.Brand>
-					<Navbar.Brand  className="d-lg-none d-xs-block  d-sm-block d-md-block">
-						<SideNav/>
+					<Navbar.Brand className="d-lg-none d-xs-block  d-sm-block d-md-block">
+						<SideNav />
 					</Navbar.Brand>
 				</Navbar.Collapse>
 			</Navbar>
 		</div>
 	);
 }
-
-
 
 //THE COMPONET STYLES GOES HERE.....
 const styles = {
@@ -84,8 +107,8 @@ const styles = {
 		backgroundColor: "white",
 		borderRadius: "5px"
 	},
-	
-	nav_icon:{
+
+	nav_icon: {
 		border: "5px solid red"
 	}
 };

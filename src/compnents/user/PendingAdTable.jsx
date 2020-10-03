@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Pagination from "reactjs-hooks-pagination";
+import Preloader from "./Preloader";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import {
 	Card,
 	Badge,
@@ -28,12 +32,51 @@ const editTooltip = (props) => (
 );
 
 export default function PendingAdTable() {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+	const [ad, setAd] = useState({});
+	const [totalRecords, setTotalRecords] = useState({});
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { user } = userSignin;
+	let url = "http://dev.bellefu.com/api/user/product/favourite/list";
+
+	useEffect(() => {
+		if (currentPage) {
+			axios
+				.get(`${url}`, {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+						"Content-Type": "application/json",
+						Accept: "application/json",
+						"User-Agent":
+							"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36",
+						"Access-Control-Request-Headers": "authorization",
+						"Access-Control-Request-Method": "GET"
+					}
+				})
+				.then((response) => {
+					setLoading(false);
+					setAd(response.data);
+					setError("");
+					console.log(response.data);
+				})
+				.catch((error) => {
+					setLoading(false);
+					setAd({});
+					setError("Something went worng");
+					console.log(error);
+				});
+		}
+	}, [currentPage]);
+
 	return (
 		<div>
 			<Card className="border-0">
 				<Card.Body>
-					<table  class="uk-table uk-table-responsive uk-table-divider">
-						<thead  style={{ backgroundColor: "#76ba1b", color: "white" }}>
+					<table class="uk-table uk-table-responsive uk-table-divider">
+						<thead style={{ backgroundColor: "#76ba1b", color: "white" }}>
 							<tr>
 								<th
 									style={{ color: "white", fontWeight: "bold" }}
@@ -47,7 +90,11 @@ export default function PendingAdTable() {
 								</th>
 
 								<th style={{ color: "white", fontWeight: "bold" }}>Status</th>
-								<th className="uk-table-expand" style={{ color: "white", fontWeight: "bold" }}>Action</th>
+								<th
+									className="uk-table-expand"
+									style={{ color: "white", fontWeight: "bold" }}>
+									Action
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -88,7 +135,9 @@ export default function PendingAdTable() {
 										<span style={styles.date} className="ml-1 ">
 											Post Date: 02-May-23
 										</span>
-										<span  className="ml-2" style={styles.price}>$100</span>
+										<span className="ml-2" style={styles.price}>
+											$100
+										</span>
 									</div>
 								</td>
 								<td>
@@ -120,7 +169,6 @@ export default function PendingAdTable() {
 									</div>
 								</td>
 							</tr>
-							
 						</tbody>
 					</table>
 				</Card.Body>
@@ -141,8 +189,8 @@ const styles = {
 		fontSize: "20px",
 		width: "300px",
 		whiteSpace: "nowrap",
-		overflow:"hidden",
-		 textOverflow: "ellipsis"
+		overflow: "hidden",
+		textOverflow: "ellipsis"
 	},
 	category: {
 		fontSize: "0.7em",

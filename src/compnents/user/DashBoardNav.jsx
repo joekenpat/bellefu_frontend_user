@@ -1,95 +1,104 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import { GoDashboard } from "react-icons/go";
+import { Link } from "react-router-dom";
+import Cookie from "js-cookie";
+import Preloader from "./Preloader";
+
 import {
 	AiOutlineUser,
-	AiOutlineUsergroupAdd,
 	AiOutlineGift,
 	AiOutlineHeart,
-	AiOutlineEyeInvisible,
 	AiOutlineMessage,
 	AiOutlineAccountBook,
 	AiOutlineSetting
 } from "react-icons/ai";
 import { IoMdTime, IoIosLogIn } from "react-icons/io";
-import { MdDateRange } from "react-icons/md"
 
-export default function DashBoardNav() {
+import { MdDateRange } from "react-icons/md";
+
+export default function DashBoardNav() { 
 	return (
 		<div>
+				  
 			<Card className="border-0">
-			<Card.Header className="border-0" style={{backgroundColor: "#76ba1b"}}>
-					<b style={{  color: "white" }}>Links</b>
+				<Card.Header
+					className="border-0"
+					style={{ backgroundColor: "#76ba1b" }}>
+					<b style={{ color: "white" }}>Links</b>
 				</Card.Header>
 				<div className="p-3">
 					<h6 className="p-3" style={styles.head}>
-				    Classified
+						Classified
 					</h6>
 					<ul style={styles.list}>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<GoDashboard className="mr-3" style={styles.icon} />
-							Dasboard
-						</li>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<AiOutlineUser className="mr-3" style={styles.icon} />
-							Profile public view
-						</li>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<AiOutlineUsergroupAdd className="mr-3" style={styles.icon} />
-							Menbership
-						</li>
+						<Link to="/user_dashboard" style={{ textDecoration: "none" }}>
+							<li
+								
+								className="pb-3"
+								onMouseOver={listHover}
+								onMouseLeave={listHoverNone}>
+								<GoDashboard className="mr-3" style={styles.icon} />
+								Dasboard
+							</li>
+						</Link>
+						<Link to="/profile">
+							<li
+							
+								className="pb-3"
+								onMouseOver={listHover}
+								onMouseLeave={listHoverNone}>
+								<AiOutlineUser className="mr-3" style={styles.icon} />
+								Profile public view
+							</li>
+						</Link>
 					</ul>
 					<h6 className="p-3" style={styles.head}>
 						Ads
 					</h6>
 					<ul style={styles.list}>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<AiOutlineGift className="mr-3" style={styles.icon} />
-							My Ads
-						</li>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<AiOutlineHeart className="mr-3" style={styles.icon} />
-							Favourite Ads
-						</li>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<IoMdTime className="mr-3" style={styles.icon} />
-							Pending Ads
-						</li>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<AiOutlineEyeInvisible className="mr-3" style={styles.icon} />
-							Hidden Ads
-						</li>
-						<li
-							className="pb-3"
-							onMouseOver={listHover}
-							onMouseLeave={listHoverNone}>
-							<MdDateRange className="mr-3" style={styles.icon} />
-							Expired Ads
-						</li>
+						<Link to="/user_ad">
+							<li
+								
+								className="pb-3"
+								onMouseOver={listHover}
+								onMouseLeave={listHoverNone}>
+								<AiOutlineGift className="mr-3" style={styles.icon} />
+								My Ads
+							</li>
+						</Link>
+						<Link to="/favourite_ad">
+							<li
+								className="pb-3"
+								onMouseOver={listHover}
+								onMouseLeave={listHoverNone}>
+								<AiOutlineHeart className="mr-3" style={styles.icon} />
+								Favourite Ads
+							</li>
+						</Link>
+						<Link to="/pending_ad">
+							<li
+								className="pb-3"
+								onMouseOver={listHover}
+								onMouseLeave={listHoverNone}>
+								<IoMdTime className="mr-3" style={styles.icon} />
+								Pending Ads
+							</li>
+						</Link>
+
+						<Link to="/expried_ad">
+							<li
+							
+								className="pb-3"
+								onMouseOver={listHover}
+								onMouseLeave={listHoverNone}>
+								<MdDateRange className="mr-3" style={styles.icon} />
+								Expired Ads
+							</li>
+						</Link>
 					</ul>
 					<h6 className="p-3" style={styles.head}>
-					Account
+						Account
 					</h6>
 					<ul style={styles.list}>
 						<li
@@ -114,6 +123,7 @@ export default function DashBoardNav() {
 							Settings
 						</li>
 						<li
+							onClick={logout}
 							className="pb-0"
 							onMouseOver={listHover}
 							onMouseLeave={listHoverNone}>
@@ -127,19 +137,23 @@ export default function DashBoardNav() {
 	);
 }
 
+//LOGOUT
+const logout = () => {
+	Cookie.remove("user");
+	window.location.reload();
+};
+
 const listHover = (e) => {
 	e.target.style.color = "#ffa500";
 };
-const listHoverBg = (e) => {
-	
-};
+
 const listHoverNone = (e) => {
 	e.target.style.color = "black";
 };
 
-
 const styles = {
 	list: {
+		textDecoration: "none",
 		listStyleType: "none",
 		fontSize: "15px",
 		opacity: "0.7",
@@ -150,7 +164,5 @@ const styles = {
 		fontSize: "0.9em",
 		color: "#ffa500"
 	},
-	icon: {
-		
-	}
+	icon: {}
 };

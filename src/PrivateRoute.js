@@ -1,27 +1,23 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import Cookie from "js-cookie";
 
-const PrivateRoute = ({ component: Component, userSignin, ...rest }) => (
+
+  const PrivateRoute = ({ component: Component, userSignin, ...rest }) => (
 		<Route
 			{...rest}
 			render={(props) =>
-				userSignin.isAuthenticated === true ? (
+				Cookie.get('user') ? (
 					<Component {...props} />
 				) : (
-					<Redirect to="/login" />
+					<Redirect to={{
+						pathname: "/login",
+						state: {from: props.location}
+					}}
+					/>
 				)
 			}
 		/>
 )
 
-PrivateRoute.proptoTypes = {
-	userSignin: PropTypes.object.isRequired
-};
-
-const mapStateToProps = (state) => ({
-	userSignin: state.userSignin
-});
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default (PrivateRoute)

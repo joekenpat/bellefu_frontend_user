@@ -59,6 +59,7 @@ function ProductTitle() {
 	);
 }
 
+
 export default function AdviewSlide() {
 	return (
 		<div>

@@ -20,7 +20,6 @@ function MyVerticallyCenteredModal(props) {
 			size="sm"
 			aria-labelledby="contained-modal-title-vcenter"
 			centered>
-          >
 			<Spinner animation="grow" variant="warning" />
 		</Modal>
 	);

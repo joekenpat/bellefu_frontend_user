@@ -47,7 +47,7 @@ try{
     dispatch({type: USER_SIGNUP_FAIL, payload: data.message})
 
 } catch (error){
-     dispatch({type: USER_SIGNUP_FAIL, payload: error.response})
+     dispatch({type: USER_SIGNUP_FAIL, payload: error.response.data})
    }
 }
 
