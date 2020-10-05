@@ -9,6 +9,8 @@ import AdSlide from "../slideshow/AdSlide";
 import PremiunAds from "../Ads/PremiunAds";
 import LatestAd from "../Ads/LatestAd";
 import MobileCategory from "../categories/MobileCategory";
+import { Link } from "react-router-dom";
+import {BsArrowRight} from "react-icons/bs"
 
 export default function LandingPage() {
 	return (
@@ -35,11 +37,33 @@ export default function LandingPage() {
 							<MobileCategory />
 						</div>
 						<div className="mt-5">
-							<h4 className="mb-5">Premium Ad</h4>
+							<Row>
+								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
+									<h4 className="mb-5">Premium Ad</h4>
+								</Col>
+								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
+									<Link to="/paid_product_list/plan" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
+										<p style={{ color: "#ffa500" }}>
+										View More<BsArrowRight/>
+										</p>
+									</Link>
+								</Col>
+							</Row>
 							<PremiunAds />
 						</div>
 						<div className="mt-5">
-							<h4 className="mb-5">Latest Ad</h4>
+							<Row>
+								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
+									<h4 className="mb-5">Latest Ad</h4>
+								</Col>
+								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
+									<Link to="/product_list" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
+										<p style={{ color: "#ffa500" }}>
+											View More<BsArrowRight/>
+										</p>
+									</Link>
+								</Col>
+							</Row>
 							<LatestAd />
 						</div>
 					</Col>
@@ -50,4 +74,3 @@ export default function LandingPage() {
 		</div>
 	);
 }
-

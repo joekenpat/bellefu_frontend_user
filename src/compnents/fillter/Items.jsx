@@ -1,4 +1,8 @@
-import React  from "react";
+import React, { useState, useEffect } from "react";
+// import Pagination from "reactjs-hooks-pagination";
+import Preloader from "../user/Preloader";
+import {Link} from "react-router-dom"
+import axios from "axios";
 import {
 	Card,
 	Col,
@@ -7,7 +11,7 @@ import {
 	Badge,
 	Tooltip
 } from "react-bootstrap";
-import pic from "../images/pic.jpg";
+
 import { AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftRight } from "react-icons/bs";
 
@@ -19,7 +23,7 @@ const convertTooltip = (props) => (
 );
 
 //==FUNCTION FOR LIKE AND UNLIKE BUTTON
-const Switch = (e)  => {
+const Switch = (e) => {
 	if (e.target.style.color === "#ffa500") {
 		e.target.style.color = "red";
 	} else if (e.target.style.color === "red") {
@@ -27,46 +31,126 @@ const Switch = (e)  => {
 	} else {
 		e.target.style.color = "red";
 	}
-}
+};
 
+export default function Items(props) {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+	const [productsData, setProductsData] = useState([]);
+	let url = "https://dev.bellefu.com/api/product/list";
+	useEffect(() => {
+		// if (currentPage) {
+		axios
+			.get(`${url}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setLoading(false);
+				// console.log(res)
+				setProductsData(res.data.products.data);
+				setError("");
+			})
+			.catch((error) => {
+				setLoading(false);
+				setError("Something went worng");
+				console.log(error);
+			});
+		// }
+	}, [productsData]);
 
-export default function Items() {
 	return (
 		<div>
 			<Row>
-				<Col xs={6} sm={6} md={3} lg={3} xl={3} className=" my-1 px-1">
-					<Card className="border-0 rounded-lg">
-						<Card.Img style={styles.image} variant="top" src={pic} />
-						<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-							<Row>
-								<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-									{/* <Badge style={{ marginLeft: "-10px" }} variant="danger">Ugent</Badge>
-							<Badge style={{ marginLeft: "-10px" }} variant="warning">Featured</Badge> */}
-									<Badge style={{ marginLeft: "-10px" }} variant="success">
-										Highlighted
-									</Badge>
-								</Col>
-								<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-									<AiFillHeart onClick={Switch} style={styles.favBtn} />
-								</Col>
-							</Row>
-						</Card.ImgOverlay>
-						<Card.Body style={styles.titleBody}>
-							<p style={styles.title}>
-								Some quick example text to bufflfl Some quick example text to
-								bufflfl
-							</p>
-							<Row>
-								<Col
-									xs={12}
-									sm={12}
-									md={12}
-									lg={12}
-									xl={12}
-									className="text-center">
-									<span className="mr-1" style={styles.price}>
-										$20000000000000
+				{loading ? (
+					<Preloader />
+				) : (
+					productsData &&
+					productsData.map((data) => (
+						<Col
+							key={data.slug}
+							xs={6}
+							sm={6}
+							md={3}
+							lg={3}
+							xl={3}
+							className=" my-1 px-1">
+							<Card className="border-0 rounded-lg">
+							
+								<Card.Img
+									style={styles.image}
+									variant="top"
+									src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
+								/>
+							
+								<Card.ImgOverlay style={{ marginTop: "-15px" }}>
+									<Row>
+										<Col xs={8} sm={8} md={8} lg={8} xl={8}>
+											<Badge
+												variant="danger"
+												className={`${
+													data.plan === "free"
+														? "d-none"
+														: "d-block" || data.plan === "featured"
+														? "d-none"
+														: "d-block" || data.plan === "higlighted"
+														? "d-none"
+														: "d-block" || data.plan === "Ugent"
+														? "d-block"
+														: "d-none"
+												}`}>
+												Ugent
+											</Badge>
+											<Badge
+												variant="warning"
+												className={`${
+													data.plan === "free"
+														? "d-none"
+														: "d-block" || data.plan === "ugent"
+														? "d-none"
+														: "d-block" || data.plan === "higlighted"
+														? "d-none"
+														: "d-block"|| data.plan === "Featured"
+														? "d-block"
+														: "d-none"
+												}`}>
+												}`}>
+												Featured
+											</Badge>
+											<Badge
+												variant="success"
+												className={`${
+													data.plan === "free"
+														? "d-none"
+														: "d-block" || data.plan === "ugent"
+														? "d-none"
+														: "d-block" || data.plan === "featured"
+														? "d-none"
+														: "d-block" || data.plan === "Higlighted"
+														? "d-block"
+														: "d-none"
+												}`}>
+												Higlighted
+											</Badge>
+										</Col>
+										<Col xs={4} sm={4} md={4} lg={4} xl={4}>
+											<AiFillHeart onClick={Switch} style={styles.favBtn} />
+										</Col>
+									</Row>
+								</Card.ImgOverlay>
+							
+								<Card.Body style={styles.titleBody}>
+								<Link  to={{pathname:`/product_detail/:${data.slug}`, productsData}} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+									<p style={styles.title}>{data.title}</p>
+									</Link>
+									<Link  to={{pathname:`/product_detail/`, productsData}} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+									<span className="mr-1 ml-1 " style={styles.price}>
+										{data.currency_symbol}
+										{data.price}
 									</span>
+									</Link>
 									<OverlayTrigger
 										placement="bottom"
 										delay={{ show: 50, hide: 100 }}
@@ -81,176 +165,15 @@ export default function Items() {
 											}}
 										/>
 									</OverlayTrigger>
-								</Col>
-							</Row>
-						</Card.Body>
-					</Card>
-				</Col>
-
-				<Col xs={6} sm={6} md={3} lg={3} xl={3} className=" my-1 px-1">
-					<Card className="border-0 rounded-lg">
-						<Card.Img style={styles.image} variant="top" src={pic} />
-						<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-							<Row>
-								<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-									{/* <Badge style={{ marginLeft: "-10px" }} variant="danger">Ugent</Badge>
-							<Badge style={{ marginLeft: "-10px" }} variant="warning">Featured</Badge> */}
-									<Badge style={{ marginLeft: "-10px" }} variant="success">
-										Highlighted
-									</Badge>
-								</Col>
-								<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-									<AiFillHeart onClick={Switch} style={styles.favBtn} />
-								</Col>
-							</Row>
-						</Card.ImgOverlay>
-						<Card.Body style={styles.titleBody}>
-							<p style={styles.title}>
-								Some quick example text to bufflfl Some quick example text to
-								bufflfl
-							</p>
-							<Row>
-								<Col
-									xs={12}
-									sm={12}
-									md={12}
-									lg={12}
-									xl={12}
-									className="text-center">
-									<span className="mr-1" style={styles.price}>
-										$20000000000000
-									</span>
-									<OverlayTrigger
-										placement="bottom"
-										delay={{ show: 50, hide: 100 }}
-										overlay={convertTooltip}>
-										<BsArrowLeftRight
-											className=" ml-1"
-											style={{
-												fontSize: "0.9em",
-												cursor: "pointer",
-												fontSize: "20px",
-												color: "#ffa500"
-											}}
-										/>
-									</OverlayTrigger>
-								</Col>
-							</Row>
-						</Card.Body>
-					</Card>
-				</Col>
-
-				<Col xs={6} sm={6} md={3} lg={3} xl={3} className=" my-1 px-1">
-					<Card className="border-0 rounded-lg">
-						<Card.Img style={styles.image} variant="top" src={pic} />
-						<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-							<Row>
-								<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-									{/* <Badge style={{ marginLeft: "-10px" }} variant="danger">Ugent</Badge>
-							<Badge style={{ marginLeft: "-10px" }} variant="warning">Featured</Badge> */}
-									<Badge style={{ marginLeft: "-10px" }} variant="success">
-										Highlighted
-									</Badge>
-								</Col>
-								<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-									<AiFillHeart onClick={Switch} style={styles.favBtn} />
-								</Col>
-							</Row>
-						</Card.ImgOverlay>
-						<Card.Body style={styles.titleBody}>
-							<p style={styles.title}>
-								Some quick example text to bufflfl Some quick example text to
-								bufflfl
-							</p>
-							<Row>
-								<Col
-									xs={12}
-									sm={12}
-									md={12}
-									lg={12}
-									xl={12}
-									className="text-center">
-									<span className="mr-1" style={styles.price}>
-										$20000000000000
-									</span>
-									<OverlayTrigger
-										placement="bottom"
-										delay={{ show: 50, hide: 100 }}
-										overlay={convertTooltip}>
-										<BsArrowLeftRight
-											className=" ml-1"
-											style={{
-												fontSize: "0.9em",
-												cursor: "pointer",
-												fontSize: "20px",
-												color: "#ffa500"
-											}}
-										/>
-									</OverlayTrigger>
-								</Col>
-							</Row>
-						</Card.Body>
-					</Card>
-				</Col>
-
-				<Col xs={6} sm={6} md={3} lg={3} xl={3} className=" my-1 px-1">
-					<Card className="border-0 rounded-lg">
-						<Card.Img style={styles.image} variant="top" src={pic} />
-						<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-							<Row>
-								<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-									{/* <Badge style={{ marginLeft: "-10px" }} variant="danger">Ugent</Badge>
-							<Badge style={{ marginLeft: "-10px" }} variant="warning">Featured</Badge> */}
-									<Badge style={{ marginLeft: "-10px" }} variant="success">
-										Highlighted
-									</Badge>
-								</Col>
-								<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-									<AiFillHeart onClick={Switch} style={styles.favBtn} />
-								</Col>
-							</Row>
-						</Card.ImgOverlay>
-						<Card.Body style={styles.titleBody}>
-							<p style={styles.title}>
-								Some quick example text to bufflfl Some quick example text to
-								bufflfl
-							</p>
-							<Row>
-								<Col
-									xs={12}
-									sm={12}
-									md={12}
-									lg={12}
-									xl={12}
-									className="text-center">
-									<span className="mr-1" style={styles.price}>
-										$20000000000000
-									</span>
-									<OverlayTrigger
-										placement="bottom"
-										delay={{ show: 50, hide: 100 }}
-										overlay={convertTooltip}>
-										<BsArrowLeftRight
-											className=" ml-1"
-											style={{
-												fontSize: "0.9em",
-												cursor: "pointer",
-												fontSize: "20px",
-												color: "#ffa500"
-											}}
-										/>
-									</OverlayTrigger>
-								</Col>
-							</Row>
-						</Card.Body>
-					</Card>
-				</Col>
+								</Card.Body>
+							</Card>
+						</Col>
+					))
+				)}
 			</Row>
 		</div>
 	);
 }
-
-
 
 const styles = {
 	image: {

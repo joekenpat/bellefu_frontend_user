@@ -1,7 +1,8 @@
-import React, { useState, useEffect,} from "react";
+import React, { useState, useEffect } from "react";
 import Pagination from "reactjs-hooks-pagination";
 import Preloader from "./Preloader";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import {
 	Card,
 	Badge,
@@ -15,7 +16,7 @@ import { GiHeartMinus } from "react-icons/gi";
 import { GoLocation } from "react-icons/go";
 import { IoMdTime } from "react-icons/io";
 import pic from "../images/pic.jpg";
-import { useSelector} from "react-redux";
+
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (unlike ad)
 const unlikeTooltip = (props) => (
@@ -31,7 +32,6 @@ const viewTooltip = (props) => (
 	</Tooltip>
 );
 
-
 const pageLimit = 10;
 export default function FavouriteAdTable() {
 	const [loading, setLoading] = useState(true);
@@ -43,30 +43,30 @@ export default function FavouriteAdTable() {
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
 
-	let url = "https://dev.bellefu.com/api/user/product/favourite/list"
+	let url = "https://dev.bellefu.com/api/user/product/favourite/list";
 	useEffect(() => {
-	if(currentPage){
-		axios
-		.get(`${url}`, {
-			headers: {
-				Authorization: `Bearer ${user.token}` ,
-				"Content-Type": "application/json",
-				"Accept": 'application/json'
-			}
-		})
-		.then((response) => {
-			setLoading(false);
-			setAd(response.data);
-			setError("");
-			console.log(response.data)
-		})
-		.catch(error => {
-			setLoading(false);
-			setAd({});
-			setError("Something went worng");
-			console.log(error)
-		});
-	}
+		if (currentPage) {
+			axios
+				.get(`${url}`, {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+						"Content-Type": "application/json",
+						Accept: "application/json"
+					}
+				})
+				.then((response) => {
+					setLoading(false);
+					setAd(response.data);
+					setError("");
+					console.log(response.data);
+				})
+				.catch((error) => {
+					setLoading(false);
+					setAd({});
+					setError("Something went worng");
+					console.log(error);
+				});
+		}
 	}, [currentPage]);
 
 	return (
@@ -110,33 +110,43 @@ export default function FavouriteAdTable() {
 											<Badge
 												variant="danger"
 												className={`${
-													data.current_page.data.plan === 'free'
+													data.current_page.data.plan === "free"
 														? "d-none"
-														: "d-block" || data.current_page.data.plan === 'featured'
+														: "d-block" ||
+														  data.current_page.data.plan === "featured"
 														? "d-none"
-														: "d-block"|| data.current_page.data.plan === 'higlighted'
+														: "d-block" ||
+														  data.current_page.data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
 												Ugent
 											</Badge>
-											<Badge variant="warning" className={`${
-													data.current_page.data.plan === 'free'
+											<Badge
+												variant="warning"
+												className={`${
+													data.current_page.data.plan === "free"
 														? "d-none"
-														: "d-block" || data.current_page.data.plan === 'ugent'
+														: "d-block" ||
+														  data.current_page.data.plan === "ugent"
 														? "d-none"
-														: "d-block"|| data.current_page.data.plan === 'higlighted'
+														: "d-block" ||
+														  data.current_page.data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
 												Featured
 											</Badge>
-											<Badge variant="success" className={`${
-													data.current_page.data.plan === 'free'
+											<Badge
+												variant="success"
+												className={`${
+													data.current_page.data.plan === "free"
 														? "d-none"
-														: "d-block" || data.current_page.data.plan === 'ugent'
+														: "d-block" ||
+														  data.current_page.data.plan === "ugent"
 														? "d-none"
-														: "d-block"|| data.current_page.data.plan === 'featured'
+														: "d-block" ||
+														  data.current_page.data.plan === "featured"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -149,7 +159,7 @@ export default function FavouriteAdTable() {
 													{data.current_page.data.category.name}
 												</span>
 												<span style={styles.subCategory} className="ml-2 mt-5">
-												{data.current_page.data.subcategory.name}
+													{data.current_page.data.subcategory.name}
 												</span>
 											</div>
 											<div className="mt-3">
@@ -162,7 +172,8 @@ export default function FavouriteAdTable() {
 													02-May-23
 												</span>
 												<span className="ml-2" style={styles.price}>
-												{data.current_page.data.currency_symbol}{data.current_page.data.price}
+													{data.current_page.data.currency_symbol}
+													{data.current_page.data.price}
 												</span>
 											</div>
 										</td>
@@ -198,11 +209,10 @@ export default function FavouriteAdTable() {
 								))
 							)}
 						</tbody>
-						
 					</table>
-					<div className={`${currentPage} ? d-none : d-block`, "uk-tetxt"} >
-							<p>No Favourite Ad</p>
-						</div>
+					<div className={(`${currentPage} ? d-none : d-block`, "text-center")}>
+						<p>No Favourite Ad</p>
+					</div>
 					<div className="justify-content-end">
 						<Pagination
 							totalRecords={totalRecords}

@@ -43,6 +43,18 @@ export default function HeaderNav() {
 						style={styles.auth}>
 						Dashboard
 					</Nav.Link>
+					<Nav.Link
+						as={Link}
+						to="/user_dashboard"
+						onClick={logout}
+						className={`${
+							Cookie.get("user")
+								? "d-none d-lg-block  d-md-none"
+								: "d-none d-lg-none  d-md-none"
+						}`}
+						style={styles.auth}>
+						LogOut
+					</Nav.Link>
 
 					<Nav.Link
 						as={Link}
@@ -84,6 +96,14 @@ export default function HeaderNav() {
 		</div>
 	);
 }
+
+
+//LOGOUT
+const logout = () => {
+	Cookie.remove("user");
+	window.location.reload();
+};
+
 
 //THE COMPONET STYLES GOES HERE.....
 const styles = {

@@ -26,7 +26,8 @@
     "reactjs-hooks-pagination": "^1.0.17",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "slate-editor": "^5.1.1"
+    "slate-editor": "^5.1.1",
+    "use-between": "^0.0.14"
   },
   "scripts": {
     "start": "react-scripts start",

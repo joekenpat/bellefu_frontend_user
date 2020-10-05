@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Pagination from "reactjs-hooks-pagination";
+import Preloader from "./Preloader";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import {
 	Card,
 	Badge,
@@ -27,7 +31,44 @@ const editTooltip = (props) => (
 	</Tooltip>
 );
 
+const pageLimit = 10;
 export default function ExpiredAdTable() {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+	const [ad, setAd] = useState({});
+	const [totalRecords, setTotalRecords] = useState({});
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { user } = userSignin;
+	let url = "https://dev.bellefu.com/api/user/product/favourite/list";
+
+	useEffect(() => {
+		if (currentPage) {
+			axios
+				.get(`${url}`, {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+						"Content-Type": "application/json",
+						Accept: "application/json",
+						
+					}
+				})
+				.then((response) => {
+					setLoading(false);
+					setAd(response.data);
+					setError("");
+					console.log(response.data);
+				})
+				.catch((error) => {
+					setLoading(false);
+					setAd({});
+					setError("Something went worng");
+					console.log(error);
+				});
+		}
+	}, [currentPage]);
+
 	return (
 		<div>
 			<Card className="border-0">
@@ -51,6 +92,11 @@ export default function ExpiredAdTable() {
 							</tr>
 						</thead>
 						<tbody>
+						{loading ? (
+								<Preloader />
+							) : (
+								ad.length > 0 &&
+								ad.map((data) => (
 							<tr>
 								<td className="uk-text-center">
 									<Image src={pic} style={styles.image} />
@@ -60,15 +106,51 @@ export default function ExpiredAdTable() {
 										Freshly processed onions for worldwide bulk delivery Freshly
 									</p>
 
-									<Badge variant="danger" className="ml-2">
-										Ugent
-									</Badge>
-									<Badge variant="warning" className="ml-2">
-										Featured
-									</Badge>
-									<Badge variant="success" className="ml-2">
-										Higlighted
-									</Badge>
+									<Badge
+												variant="danger"
+												className={`${
+													data.current_page.data.plan === "free"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "featured"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "higlighted"
+														? "d-none"
+														: "d-block"
+												}`}>
+												Ugent
+											</Badge>
+											<Badge
+												variant="warning"
+												className={`${
+													data.current_page.data.plan === "free"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "ugent"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "higlighted"
+														? "d-none"
+														: "d-block"
+												}`}>
+												Featured
+											</Badge>
+											<Badge
+												variant="success"
+												className={`${
+													data.current_page.data.plan === "free"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "ugent"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "featured"
+														? "d-none"
+														: "d-block"
+												}`}>
+												Higlighted
+											</Badge>
 
 									<div className="mt-3">
 										<AiOutlineTag style={styles.icon} className="mr-2" />
@@ -120,9 +202,21 @@ export default function ExpiredAdTable() {
 									</div>
 								</td>
 							</tr>
-							
+									))
+									)}
 						</tbody>
 					</table>
+					<div className={`${currentPage} ? d-none : d-block`, "text-center"}>
+						<p>No Expired Ad</p>
+					</div>
+					<div className="justify-content-end">
+						<Pagination
+							totalRecords={totalRecords}
+							pageLimit={pageLimit}
+							pageRangeDisplayed={1}
+							onChangePage={setCurrentPage}
+						/>
+					</div>
 				</Card.Body>
 			</Card>
 		</div>

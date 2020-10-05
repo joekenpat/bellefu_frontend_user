@@ -8,7 +8,7 @@ import {
 	USER_UPDATE_REQUEST,
 	USER_UPDATE_SUCCESS,
     USER_UPDATE_FAIL,
-    USER_LOGOUT
+    USER_LOGOUT,
 } from "../types";
 import axios from "axios";
 import Cookie from "js-cookie";
@@ -68,6 +68,7 @@ export const update = ({ userId, name, email, password }) => async (dispatch, ge
         dispatch({ type: USER_UPDATE_FAIL, payload: error.message });
     }
 }
+
 
 
 //LOGOUT USER ACTION PAYLOAD

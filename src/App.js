@@ -29,9 +29,10 @@ function App() {
 				<BrowserRouter>
 					<Route exact path="/" component={LandingPage} />
 					<Route exact path="/product_list" component={CategoryPage} />
+					<Route exact path="/paid_product_list/:plan" component={CategoryPage} />
 					<Route exact path="/register" component={RegistrationFormPage} />
 					<Route exact path="/login" component={LoginFormPage} />
-					<Route exact path="/ad" component={AdViewPage} />
+					<Route exact path="/product_detail" component={AdViewPage} />
 					<Switch>
 						<PrivateRoute
 							exact

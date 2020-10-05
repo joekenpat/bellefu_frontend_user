@@ -32,19 +32,17 @@ export default function DashBoardNav() {
 						Classified
 					</h6>
 					<ul style={styles.list}>
-						<Link to="/user_dashboard" style={{ textDecoration: "none" }}>
+						<Link to="/user_dashboard" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 							<li
-								
-								className="pb-3"
+								className="pb-3 linking"
 								onMouseOver={listHover}
 								onMouseLeave={listHoverNone}>
 								<GoDashboard className="mr-3" style={styles.icon} />
 								Dasboard
 							</li>
-						</Link>
-						<Link to="/profile">
+					</Link>
+						<Link to="/profile" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 							<li
-							
 								className="pb-3"
 								onMouseOver={listHover}
 								onMouseLeave={listHoverNone}>
@@ -57,9 +55,8 @@ export default function DashBoardNav() {
 						Ads
 					</h6>
 					<ul style={styles.list}>
-						<Link to="/user_ad">
+						<Link to="/user_ad" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 							<li
-								
 								className="pb-3"
 								onMouseOver={listHover}
 								onMouseLeave={listHoverNone}>
@@ -67,7 +64,7 @@ export default function DashBoardNav() {
 								My Ads
 							</li>
 						</Link>
-						<Link to="/favourite_ad">
+						<Link to="/favourite_ad" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 							<li
 								className="pb-3"
 								onMouseOver={listHover}
@@ -76,7 +73,7 @@ export default function DashBoardNav() {
 								Favourite Ads
 							</li>
 						</Link>
-						<Link to="/pending_ad">
+						<Link to="/pending_ad" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 							<li
 								className="pb-3"
 								onMouseOver={listHover}
@@ -86,9 +83,8 @@ export default function DashBoardNav() {
 							</li>
 						</Link>
 
-						<Link to="/expried_ad">
+						<Link to="/expried_ad" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 							<li
-							
 								className="pb-3"
 								onMouseOver={listHover}
 								onMouseLeave={listHoverNone}>
@@ -153,7 +149,6 @@ const listHoverNone = (e) => {
 
 const styles = {
 	list: {
-		textDecoration: "none",
 		listStyleType: "none",
 		fontSize: "15px",
 		opacity: "0.7",

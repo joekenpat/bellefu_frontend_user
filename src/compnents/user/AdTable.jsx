@@ -1,4 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Pagination from "reactjs-hooks-pagination";
+import Preloader from "./Preloader";
+import axios from "axios";
+import { useSelector } from "react-redux";
+
+
 import {
 	Card,
 	Badge,
@@ -27,7 +33,42 @@ const editTooltip = (props) => (
 	</Tooltip>
 );
 
+const pageLimit = 10;
 export default function AdTable() {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
+	const [ad, setAd] = useState({});
+	const [totalRecords, setTotalRecords] = useState(0);
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { user } = userSignin;
+
+	let url = "https://dev.bellefu.com/api/user/product/list";
+	useEffect(() => {
+		if (currentPage) {
+			axios
+				.get(`${url}`, {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+						"Content-Type": "application/json",
+						Accept: "application/json"
+					}
+				})
+				.then((response) => {
+					setLoading(false);
+					setAd(response.data);
+					setError("");
+					console.log(response.data);
+				})
+				.catch((error) => {
+					setLoading(false);
+					setAd({});
+					setError("Something went worng");
+					console.log(error);
+				});
+		}
+	}, [currentPage]);
 	return (
 		<div>
 			<Card className="border-0">
@@ -55,45 +96,87 @@ export default function AdTable() {
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
+						{loading ? (
+								<Preloader />
+							) : (
+								ad.length > 0 &&
+								ad.map((data) => (
+							<tr key={data.id}>
 								<td className="uk-text-center">
 									<Image src={pic} style={styles.image} />
 								</td>
 								<td>
 									<p style={styles.titel}>
-										Freshly processed onions for worldwide bulk delivery Freshly
+									{data.current_page.data.titel}
 									</p>
 
-									<Badge variant="danger" className="ml-2">
-										Ugent
-									</Badge>
-									<Badge style={{color: 'white'}} variant="warning" className="ml-2">
-										Featured
-									</Badge>
-									<Badge variant="success" className="ml-2">
-										Higlighted
-									</Badge>
+									<Badge
+												variant="danger"
+												className={`${
+													data.current_page.data.plan === "free"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "featured"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "higlighted"
+														? "d-none"
+														: "d-block"
+												}`}>
+												Ugent
+											</Badge>
+											<Badge
+												variant="warning"
+												className={`${
+													data.current_page.data.plan === "free"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "ugent"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "higlighted"
+														? "d-none"
+														: "d-block"
+												}`}>
+												Featured
+											</Badge>
+											<Badge
+												variant="success"
+												className={`${
+													data.current_page.data.plan === "free"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "ugent"
+														? "d-none"
+														: "d-block" ||
+														  data.current_page.data.plan === "featured"
+														? "d-none"
+														: "d-block"
+												}`}>
+												Higlighted
+											</Badge>
 
 									<div className="mt-3">
 										<AiOutlineTag style={styles.icon} className="mr-2" />
 										<span style={styles.category} className="ml-2 mt-3">
-											Agricultural Produce
+										{data.current_page.data.category.name}
 										</span>
 										<span style={styles.subCategory} className="ml-2 mt-5">
-											Grains
+										{data.current_page.data.subcategory.name}
 										</span>
 									</div>
 									<div className="mt-3">
 										<GoLocation style={styles.icon} className="mr-1" />
 										<span style={styles.location} className="ml-1 ">
-											port harcourt
+										{data.current_page.data.address}
 										</span>
 										<MdDateRange style={styles.icon} className="mr-1 ml-1" />
 										<span style={styles.date} className="ml-1 ">
 											Expiring: 02-May-23
 										</span>
 										<span className="ml-2" style={styles.price}>
-											$100
+										{data.current_page.data.currency_symbol}
+													{data.current_page.data.price}
 										</span>
 									</div>
 								</td>
@@ -126,8 +209,23 @@ export default function AdTable() {
 									</div>
 								</td>
 							</tr>
+
+							))
+							)}
 						</tbody>
+
 					</table>
+					<div className={(`${currentPage} ? d-none : d-block`, "text-center")}>
+						<p>No Pending Ad</p>
+					</div>
+					<div className="justify-content-end">
+						<Pagination
+							totalRecords={totalRecords}
+							pageLimit={pageLimit}
+							pageRangeDisplayed={1}
+							onChangePage={setCurrentPage}
+						/>
+					</div>
 				</Card.Body>
 			</Card>
 		</div>
