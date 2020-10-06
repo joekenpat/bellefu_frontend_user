@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Badge, Card } from "react-bootstrap";
 import pic from "../images/pic.jpg";
 import land from "../images/land.PNG";
@@ -8,7 +8,11 @@ import {
 } from "react-icons/io";
 
 // ====PRODUCT TITLE & TAGS====
-function ProductTitle() {
+function ProductTitle(props) {
+	const [productTitel, setProductTitel] = useState(props);
+	useEffect(() => {
+		setProductTitel(props);
+	}, [props]);
 	return (
 		<div>
 			{/* ===FOR DESKTOP VIEW=== */}
@@ -18,18 +22,53 @@ function ProductTitle() {
 				<span
 					className="mb-5"
 					style={{
-						fontSize: "15px",
-					
+						fontSize: "15px"
 					}}>
-					<b>Product Title</b>
+					<b>{productTitel.title}</b>
 				</span>
-				<Badge variant="danger" className="ml-2">
+				<Badge
+					variant="danger"
+					className={`${
+						productTitel.plan === "free"
+							? "d-none"
+							: "d-block" || productTitel.plan === "featured"
+							? "d-none"
+							: "d-block" || productTitel.plan === "higlighted"
+							? "d-none"
+							: "d-block" || productTitel.plan === "Ugent"
+							? "d-block"
+							: "d-none"
+					}`}>
 					Ugent
 				</Badge>
-				<Badge style={{ color: "white" }} variant="warning" className="ml-2">
-					Featured
+				<Badge
+					variant="warning"
+					className={`${
+						productTitel.plan === "free"
+							? "d-none"
+							: "d-block" || productTitel.plan === "ugent"
+							? "d-none"
+							: "d-block" || productTitel.plan === "higlighted"
+							? "d-none"
+							: "d-block" || productTitel.plan === "Featured"
+							? "d-block"
+							: "d-none"
+					}`}>
+					}`}> Featured
 				</Badge>
-				<Badge variant="success" className="ml-2">
+				<Badge
+					variant="success"
+					className={`${
+						productTitel.plan === "free"
+							? "d-none"
+							: "d-block" || productTitel.plan === "ugent"
+							? "d-none"
+							: "d-block" || productTitel.plan === "featured"
+							? "d-none"
+							: "d-block" || productTitel.plan === "Higlighted"
+							? "d-block"
+							: "d-none"
+					}`}>
 					Higlighted
 				</Badge>
 			</div>
@@ -41,17 +80,53 @@ function ProductTitle() {
 				<span
 					className="mb-5"
 					style={{
-						fontSize: "15px",
+						fontSize: "15px"
 					}}>
-			<b>Product Title</b>
+					<b>{productTitel.title}</b>
 				</span>
-				<Badge variant="danger" className="ml-2">
+				<Badge
+					variant="danger"
+					className={`${
+						productTitel.plan === "free"
+							? "d-none"
+							: "d-block" || productTitel.plan === "featured"
+							? "d-none"
+							: "d-block" || productTitel.plan === "higlighted"
+							? "d-none"
+							: "d-block" || productTitel.plan === "Ugent"
+							? "d-block"
+							: "d-none"
+					}`}>
 					Ugent
 				</Badge>
-				<Badge style={{ color: "white" }} variant="warning" className="ml-2">
-					Featured
+				<Badge
+					variant="warning"
+					className={`${
+						productTitel.plan === "free"
+							? "d-none"
+							: "d-block" || productTitel.plan === "ugent"
+							? "d-none"
+							: "d-block" || productTitel.plan === "higlighted"
+							? "d-none"
+							: "d-block" || productTitel.plan === "Featured"
+							? "d-block"
+							: "d-none"
+					}`}>
+					}`}> Featured
 				</Badge>
-				<Badge variant="success" className="ml-2">
+				<Badge
+					variant="success"
+					className={`${
+						productTitel.plan === "free"
+							? "d-none"
+							: "d-block" || productTitel.plan === "ugent"
+							? "d-none"
+							: "d-block" || productTitel.plan === "featured"
+							? "d-none"
+							: "d-block" || productTitel.plan === "Higlighted"
+							? "d-block"
+							: "d-none"
+					}`}>
 					Higlighted
 				</Badge>
 			</div>
@@ -59,62 +134,65 @@ function ProductTitle() {
 	);
 }
 
-
-export default function AdviewSlide() {
+export default function AdviewSlide(props) {
+	const [productImg, setProductImg] = useState(props);
+	useEffect(() => {
+		setProductImg(props);
+		console.log(productImg);
+	}, [props]);
 	return (
 		<div>
-				<Card className="border-0">
-					<Card.Header
-						style={{ backgroundColor: "#76ba1b" }}>
-						<b style={{ color: "white" }}> Ad</b>
-					</Card.Header>
-					<Card.Body>
-					<ProductTitle  />
-						<div
-							class="uk-position-relative uk-visible-toggle uk-dark"
-							tabindex="-1"
-							uk-slideshow="animation: pull"
-							uk-slideshow="min-height: 100; max-height: 400">
-							<ul uk-lightbox="animation: slide" class="uk-slideshow-items">
-								<li>
-									<a
-										class="uk-cover-container uk-inline"
-										href={pic}
-										data-caption="Caption 1">
-										<img src={pic} alt="" uk-cover />
-									</a>
-								</li>
-								<li>
-									<a
-										class="uk-cover-container uk-inline"
-										href={land}
-										data-caption="Caption 1">
-										<img src={land} alt="" uk-cover />
-									</a>
-								</li>
-							</ul>
+			<Card className="border-0">
+				<Card.Header style={{ backgroundColor: "#76ba1b" }}>
+					<b style={{ color: "white" }}> Ad</b>
+				</Card.Header>
+				<Card.Body>
+					<ProductTitle {...productImg} />
 
-							<button
-								class="uk-border-pill uk-button uk-button-default uk-button-small uk-position-center-left  "
-								href="#"
-								uk-slidenav-previous
-								uk-slideshow-item="previous">
-								<IoIosArrowDropleftCircle
-									style={{ fontSize: "2em", color: "#ffa500" }}
-								/>
-							</button>
-							<button
-								class="uk-border-pill uk-button uk-border-remove uk-button-default uk-button-small  uk-position-center-right  "
-								href="#"
-								uk-slidenav-next
-								uk-slideshow-item="next">
-								<IoIosArrowDroprightCircle
-									style={{ fontSize: "2em", color: "#ffa500" }}
-								/>
-							</button>
-						</div>
-					</Card.Body>
-				</Card>
+					<div
+						class="uk-position-relative uk-visible-toggle uk-dark"
+						tabindex="-1"
+						uk-slideshow="animation: pull"
+						uk-slideshow="min-height: 100; max-height: 400">
+						{
+							Object.keys(productImg).map((productImg) => (
+								<ul uk-lightbox="animation: slide" class="uk-slideshow-items">
+									<li>
+										<a
+											class="uk-cover-container uk-inline"
+											href={`https://dev.bellefu.com/images/product/${productImg.images}`}
+											data-caption="Caption 1">
+											<img
+												src={`https://dev.bellefu.com/images/product/${productImg.images}`}
+												alt=""
+												uk-cover
+											/>
+										</a>
+									</li>
+								</ul>
+							))}
+
+						<button
+							class="uk-border-pill uk-button uk-button-default uk-button-small uk-position-center-left  "
+							href="#"
+							uk-slidenav-previous
+							uk-slideshow-item="previous">
+							<IoIosArrowDropleftCircle
+								style={{ fontSize: "2em", color: "#ffa500" }}
+							/>
+						</button>
+						<button
+							class="uk-border-pill uk-button uk-border-remove uk-button-default uk-button-small  uk-position-center-right  "
+							href="#"
+							uk-slidenav-next
+							uk-slideshow-item="next">
+							<IoIosArrowDroprightCircle
+								style={{ fontSize: "2em", color: "#ffa500" }}
+							/>
+						</button>
+					</div>
+				</Card.Body>
+			</Card>
 		</div>
 	);
 }

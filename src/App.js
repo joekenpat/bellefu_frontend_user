@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import PrivateRoute from "./PrivateRoute";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useParams  } from "react-router-dom";
 
 import LandingPage from "./compnents/app/LandingPage";
 import CategoryPage from "./compnents/app/CategoryPage";
@@ -26,13 +26,13 @@ function App() {
 	return (
 		<Provider store={store}>
 			<div className="App">
-				<BrowserRouter>
+				<Router>
 					<Route exact path="/" component={LandingPage} />
 					<Route exact path="/product_list" component={CategoryPage} />
 					<Route exact path="/paid_product_list/:plan" component={CategoryPage} />
 					<Route exact path="/register" component={RegistrationFormPage} />
 					<Route exact path="/login" component={LoginFormPage} />
-					<Route exact path="/product_detail" component={AdViewPage} />
+					<Route exact path="/product_detail/:id"  component={AdViewPage} />
 					<Switch>
 						<PrivateRoute
 							exact
@@ -41,7 +41,7 @@ function App() {
 						/>
 						<PrivateRoute exact path="/profile" component={UserProfilePage} />
 						<PrivateRoute exact path="/user_ad" component={UserAdPage} />
-						<PrivateRoute exact path="/pending_ad" component={UserPendingAdPage} />
+						<PrivateRoute exact path="/pending_ad/:id" component={UserPendingAdPage} />
 						<PrivateRoute
 							exact
 							path="/favourite_ad"
@@ -55,7 +55,7 @@ function App() {
 						<PrivateRoute exact path="/post_ad" component={PostAdPage} />
 						<PrivateRoute exact path="/user_ad" component={PostAdPaymentPage} />
 					</Switch>
-				</BrowserRouter>
+				</Router>
 			</div>
 		</Provider>  
 	);

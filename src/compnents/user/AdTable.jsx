@@ -37,7 +37,7 @@ const pageLimit = 10;
 export default function AdTable() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
-	const [ad, setAd] = useState({});
+	const [ad, setAd] = useState([]);
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -46,7 +46,7 @@ export default function AdTable() {
 
 	let url = "https://dev.bellefu.com/api/user/product/list";
 	useEffect(() => {
-		if (currentPage) {
+		// if (currentPage) {
 			axios
 				.get(`${url}`, {
 					headers: {
@@ -59,7 +59,7 @@ export default function AdTable() {
 					setLoading(false);
 					setAd(response.data);
 					setError("");
-					console.log(response.data);
+					console.log(ad);
 				})
 				.catch((error) => {
 					setLoading(false);
@@ -67,8 +67,8 @@ export default function AdTable() {
 					setError("Something went worng");
 					console.log(error);
 				});
-		}
-	}, [currentPage]);
+		// }
+	}, [ad != null &&  ad.length < 1]);
 	return (
 		<div>
 			<Card className="border-0">
@@ -107,13 +107,13 @@ export default function AdTable() {
 								</td>
 								<td>
 									<p style={styles.titel}>
-									{data.current_page.data.titel}
+									{data.titel}
 									</p>
 
 									<Badge
 												variant="danger"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
 														  data.current_page.data.plan === "featured"

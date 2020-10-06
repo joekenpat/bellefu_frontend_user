@@ -38,6 +38,8 @@ export default function Items(props) {
 	const [error, setError] = useState("");
 	const [productsData, setProductsData] = useState([]);
 	let url = "https://dev.bellefu.com/api/product/list";
+
+
 	useEffect(() => {
 		// if (currentPage) {
 		axios
@@ -49,7 +51,6 @@ export default function Items(props) {
 			})
 			.then((res) => {
 				setLoading(false);
-				// console.log(res)
 				setProductsData(res.data.products.data);
 				setError("");
 			})
@@ -59,7 +60,7 @@ export default function Items(props) {
 				console.log(error);
 			});
 		// }
-	}, [productsData]);
+	}, [productsData.length]);
 
 	return (
 		<div>
@@ -67,7 +68,7 @@ export default function Items(props) {
 				{loading ? (
 					<Preloader />
 				) : (
-					productsData &&
+					
 					productsData.map((data) => (
 						<Col
 							key={data.slug}
@@ -142,15 +143,15 @@ export default function Items(props) {
 								</Card.ImgOverlay>
 							
 								<Card.Body style={styles.titleBody}>
-								<Link  to={{pathname:`/product_detail/:${data.slug}`, productsData}} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+									<Link   to={{pathname:`/product_detail/${data.slug}`, state: data.slug }}   style={{ color: 'inherit', textDecoration: 'inherit'}}>
 									<p style={styles.title}>{data.title}</p>
 									</Link>
-									<Link  to={{pathname:`/product_detail/`, productsData}} style={{ color: 'inherit', textDecoration: 'inherit'}}>
+									
 									<span className="mr-1 ml-1 " style={styles.price}>
 										{data.currency_symbol}
 										{data.price}
 									</span>
-									</Link>
+									
 									<OverlayTrigger
 										placement="bottom"
 										delay={{ show: 50, hide: 100 }}
