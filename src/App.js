@@ -22,14 +22,14 @@ import LoginFormPage from "./compnents/app/LogInFormPage";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
+
 function App() {
 	return (
 		<Provider store={store}>
 			<div className="App">
 				<Router>
 					<Route exact path="/" component={LandingPage} />
-					<Route exact path="/product_list" component={CategoryPage} />
-					<Route exact path="/paid_product_list/:plan" component={CategoryPage} />
+					<Route exact path="/paid_product_list/" component={CategoryPage} />
 					<Route exact path="/register" component={RegistrationFormPage} />
 					<Route exact path="/login" component={LoginFormPage} />
 					<Route exact path="/product_detail/:id"  component={AdViewPage} />

@@ -7,7 +7,8 @@ import {
 	USER_SIGNUP_FAIL,
 	USER_UPDATE_FAIL,
 	USER_UPDATE_SUCCESS,
-	USER_UPDATE_REQUEST
+	USER_UPDATE_REQUEST,
+	SEARCH_FILTER
 } from "../types";
 
 
@@ -76,6 +77,20 @@ export const userUpdateReducer = (state = {}, action) => {
 			return {
 				loading: false,
 				error: action.payload
+			};
+		default:
+			return state;
+	}
+};
+
+
+
+//REDUCER FOR SEARCH FILTER
+export const searchFilterRuducer = (state = {}, action) => {
+	switch (action.type) {
+		case SEARCH_FILTER:
+			return {
+				productFilter: action.payload
 			};
 		default:
 			return state;

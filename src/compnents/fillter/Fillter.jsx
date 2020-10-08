@@ -1,115 +1,128 @@
-import React from "react";
-import {
-	Col,
-	Row,
-	Card,
-	Form,
-	Container,
-	Button,
-} from "react-bootstrap";
-import Select, { components } from "react-select";
-import { GoLocation } from "react-icons/go";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { search } from "../../redux/actions/userActon";
 
-const options = [
-	{ value: "Aro food", label: "Agro food" },
-	{ value: "Agro job", label: "Agro job" },
-	{ value: "Agro tools", label: "Agro tools" },
-	{ value: "Agro training", label: "Vanilla" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "vanilla", label: "Vanilla" },
-	{ value: "vanilla", label: "Vanilla" }
-];
+import { Col, Row, Card, Form, Container, Button } from "react-bootstrap";
 
-//FOR SELECT INCON
-const { Option } = components;
-const IconOption = (props) => (
-	<Option {...props}>
-		<GoLocation style={{ fontSize: 36 }} />
-		{props.data.label}
-	</Option>
-);
+
 export default function Fillter() {
+	const [filterData, setFilterData] = useState({
+		min_price: "",
+		country: "",
+		max_price: "",
+		subcategory: "",
+		category: "",
+		plan: "",
+		sort: ""
+	});
+	const dispatch = useDispatch();
+
+	
+	const {
+		min_price,
+		country,
+		max_price,
+		subcategory,
+		category,
+		plan,
+		sort
+	} = filterData;
+	const onChangeHandler = (e) => {
+		setFilterData({ ...filterData, [e.target.name]: e.target.value });
+	};
+
+	const onSubmitHandle = (e) => {
+		e.preventDefault();
+		dispatch(
+			search(filterData)
+		);
+	};
+
 	return (
 		<div>
-			<Form>
-				<div>
-					<Card className="border-0">
-						<Container>
-							<Form.Group>
-								<Form.Label
-									className="mt-3"
-									style={{ opacity: "0.4", fontSize: "0.8em" }}>
-									<b>Location</b>
-								</Form.Label>
-								<Select
-									options={options}
-									components={{ Option: IconOption }}
-									placeholder={"--select location--"}
-									styles={selectStyles}
-									components={{}}
-								/>
-							</Form.Group>
-						</Container>
-					</Card>
-				</div>
+			<Form onSubmit={onSubmitHandle}>
 				<Card className="border-0">
 					<Container>
 						<Form.Group>
-							<Form.Label style={{ opacity: "0.4", fontSize: "0.8em" }}>
+							<Form.Label
+								className="mt-3"
+								style={{ opacity: "0.4", fontSize: "0.8em" }}>
 								<b>Category</b>
 							</Form.Label>
-							<Select
-								options={options}
-								placeholder={"--select category--"}
-								styles={selectStyles}
-							/>
+							<div class="uk-margin">
+								<select
+									class="uk-select  "
+									name="category"
+									value={category}
+									onChange={(e) => onChangeHandler(e)}>
+									<option>select category</option>
+									<option
+										value="test-cat-one"
+										selected={category === "test-cat-one" ? true : false}>
+										test-cat-one
+									</option>
+								</select>
+							</div>
 						</Form.Group>
 						<Form.Group>
-							<Form.Label style={{ opacity: "0.4", fontSize: "0.8em" }}>
-								<b>Subcategory</b>
-							</Form.Label>
-							<Select
-								options={options}
-								placeholder={"--select subcategory--"}
-								styles={selectStyles}
-							/>
-						</Form.Group>
-						<Form.Group>
-							<Form.Label style={{ opacity: "0.4", fontSize: "0.8em" }}>
-								<b>Types</b>
-							</Form.Label>
-							<Select
-								options={options}
-								placeholder={"--select type--"}
-								styles={selectStyles}
-							/>
-						</Form.Group>
-						<Form.Group>
-							<Form.Label style={{ opacity: "0.4", fontSize: "0.8em" }}>
-								<b>Condition</b>
-							</Form.Label>
-							<Select
-								options={options}
-								placeholder={"--select condition--"}
-								styles={selectStyles}
-							/>
-						</Form.Group>
+								<Form.Label
+									className="mt-3"
+									style={{ opacity: "0.4", fontSize: "0.8em" }}>
+									<b>Subcategory</b>
+								</Form.Label>
+								<div class="uk-margin">
+									<select
+										class="uk-select  "
+										name="subcategory"
+										value={subcategory}
+										onChange={(e) => onChangeHandler(e)}>
+										<option>select subcategory</option>
+										<option value="test-subcagegory" selected={subcategory === "test-subcagegory" ? true : false}>
+										test-subcagegory
+										</option>
+										<option value="test-subcategory-four" selected={subcategory === "test-subcategory-four" ? true : false}>
+										test-subcategory-four
+										</option>
+									</select>
+								</div>
+							</Form.Group>
 						<Form.Group>
 							<Form.Label style={{ opacity: "0.4", fontSize: "0.8em" }}>
 								<b>Price</b>
 							</Form.Label>
 							<Row>
-								<Col xs={6} sm={6} >
-								<Form.Control  onFocus={inputFocus}  type="email" placeholder="Price min" />										
+								<Col xs={6} sm={6}>
+									<Form.Control
+										onFocus={inputFocus}
+										type="number"
+										min="0"
+										placeholder="Min Price"
+										name="min_price"
+										value={min_price}
+										onChange={(e) => onChangeHandler(e)}
+									/>
 								</Col>
 								<Col xs={6} sm={6} md={6} lg={6} xl={6}>
-									<Form.Control onFocus={inputFocus} placeholder="Price max" />
+									<Form.Control
+										onFocus={inputFocus}
+										placeholder="Price max"
+										type="number"
+										min="0"
+										name="max_price"
+										value={max_price}
+										onChange={(e) => onChangeHandler(e)}
+									/>
 								</Col>
 							</Row>
 						</Form.Group>
 						<Form.Group>
-							<Button style={styles.btn} variant="warning" size="lg" block>
+							<Button
+								style={styles.btn}
+								variant="warning"
+								size="lg"
+								block
+								type="button"
+								onClick={onSubmitHandle}>
 								Appy Filter
 							</Button>
 						</Form.Group>
@@ -120,46 +133,8 @@ export default function Fillter() {
 	);
 }
 
-
-const inputFocus =(e) => {
-e.target.style.outLineColor = "#ffa500 !important"
-}
-
-const selectStyles = {
-	control: (styles) => ({
-		...styles,
-		backgroundColor: "white",
-		height: "40px",
-		fontSize: "13px",
-		borderRadius: "5px",
-		"&:focus": {
-			borderColor: "1px solid green"
-		}
-	}),
-	option: (styles) => {
-		return {
-			...styles,
-			backgroundColor: "white",
-			fontSize: "15px",
-			color: "black",
-			postion: "relative",
-			"&:hover": {
-				backgroundColor: "#faebd7",
-				color: "#ffa500"
-			},
-			cursor: "pointer"
-		};
-	},
-	container: (styles) => {
-		return {
-			...styles,
-			minHeight: "1px",
-			textAlign: "left",
-			"&:focus": {
-				borderColor: "1px solid green"
-			}
-		};
-	}
+const inputFocus = (e) => {
+	e.target.style.outLineColor = "#ffa500 !important";
 };
 
 const styles = {
@@ -168,6 +143,5 @@ const styles = {
 		backgroundColor: "#ffa500",
 		border: "none",
 		color: "white"
-	},
-}
-
+	}
+};

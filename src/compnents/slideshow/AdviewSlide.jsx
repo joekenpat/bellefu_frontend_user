@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Badge, Card } from "react-bootstrap";
 import pic from "../images/pic.jpg";
-import land from "../images/land.PNG";
+
 import {
 	IoIosArrowDropleftCircle,
 	IoIosArrowDroprightCircle

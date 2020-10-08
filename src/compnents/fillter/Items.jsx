@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 // import Pagination from "reactjs-hooks-pagination";
 import Preloader from "../user/Preloader";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { search } from "../../redux/actions/userActon";
 import {
 	Card,
 	Col,
@@ -34,16 +36,30 @@ const Switch = (e) => {
 };
 
 export default function Items(props) {
+	//FILTER GLOBAL STATE
+	const porductSearchFilter = useSelector((state) => state.porductSearchFilter);
+	const { productFilter } = porductSearchFilter;
+
+
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [productsData, setProductsData] = useState([]);
-	let url = "https://dev.bellefu.com/api/product/list";
 
+	let dataUrl = "";
+	let apiUrl = "https://dev.bellefu.com/api/product/list";
 
-	useEffect(() => {
-		// if (currentPage) {
-		axios
-			.get(`${url}`, {
+let filterString = ""
+ const  loadFilterData = () => {
+	filterString = new URLSearchParams(productFilter).toString()
+	dataUrl = apiUrl + filterString
+	loadData(1)
+ }
+ const  loadInitData = () => {
+	 
+}
+const  loadData = (page=1) => {
+	axios
+			.get(`${dataUrl}&page=${page}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Accept: "application/json"
@@ -58,17 +74,22 @@ export default function Items(props) {
 				setLoading(false);
 				setError("Something went worng");
 				console.log(error);
-			});
-		// }
+			}); 
+}
+	
+
+	useEffect(() => {
+		
+		
 	}, [productsData.length]);
 
 	return (
 		<div>
+		
 			<Row>
 				{loading ? (
 					<Preloader />
 				) : (
-					
 					productsData.map((data) => (
 						<Col
 							key={data.slug}
@@ -79,13 +100,12 @@ export default function Items(props) {
 							xl={3}
 							className=" my-1 px-1">
 							<Card className="border-0 rounded-lg">
-							
 								<Card.Img
 									style={styles.image}
 									variant="top"
 									src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
 								/>
-							
+
 								<Card.ImgOverlay style={{ marginTop: "-15px" }}>
 									<Row>
 										<Col xs={8} sm={8} md={8} lg={8} xl={8}>
@@ -113,12 +133,11 @@ export default function Items(props) {
 														? "d-none"
 														: "d-block" || data.plan === "higlighted"
 														? "d-none"
-														: "d-block"|| data.plan === "Featured"
+														: "d-block" || data.plan === "Featured"
 														? "d-block"
 														: "d-none"
 												}`}>
-												}`}>
-												Featured
+												}`}> Featured
 											</Badge>
 											<Badge
 												variant="success"
@@ -141,17 +160,22 @@ export default function Items(props) {
 										</Col>
 									</Row>
 								</Card.ImgOverlay>
-							
+
 								<Card.Body style={styles.titleBody}>
-									<Link   to={{pathname:`/product_detail/${data.slug}`, state: data.slug }}   style={{ color: 'inherit', textDecoration: 'inherit'}}>
-									<p style={styles.title}>{data.title}</p>
+									<Link
+										to={{
+											pathname: `/product_detail/${data.slug}`,
+											state: data.slug
+										}}
+										style={{ color: "inherit", textDecoration: "inherit" }}>
+										<p style={styles.title}>{data.title}</p>
 									</Link>
-									
+
 									<span className="mr-1 ml-1 " style={styles.price}>
 										{data.currency_symbol}
 										{data.price}
 									</span>
-									
+
 									<OverlayTrigger
 										placement="bottom"
 										delay={{ show: 50, hide: 100 }}

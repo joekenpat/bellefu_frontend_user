@@ -7,6 +7,7 @@ import {
     userSigninReducer,
     userSignupReducer,
     userUpdateReducer,
+    searchFilterRuducer
 } from './reducers/userReducer'
 
 
@@ -15,6 +16,7 @@ const user = Cookie.getJSON("user") || null
 
 export const initialState = {
     userSignin: { user},
+    porductSearchFilter: {}
     
     
 }
@@ -24,6 +26,7 @@ const  reducers = combineReducers({
      userSignin: userSigninReducer,
      userSignup: userSignupReducer,
      userUpdate: userUpdateReducer,
+     porductSearchFilter:searchFilterRuducer,
  
 })
 
