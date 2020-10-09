@@ -39,14 +39,14 @@ function ProductTitle(props) {
 							? "d-block"
 							: "d-none"
 					}`}>
-					Ugent
+					Urgent
 				</Badge>
 				<Badge
 					variant="warning"
 					className={`${
 						productTitel.plan === "free"
 							? "d-none"
-							: "d-block" || productTitel.plan === "ugent"
+							: "d-block" || productTitel.plan === "urgent"
 							? "d-none"
 							: "d-block" || productTitel.plan === "higlighted"
 							? "d-none"
@@ -61,7 +61,7 @@ function ProductTitle(props) {
 					className={`${
 						productTitel.plan === "free"
 							? "d-none"
-							: "d-block" || productTitel.plan === "ugent"
+							: "d-block" || productTitel.plan === "urgent"
 							? "d-none"
 							: "d-block" || productTitel.plan === "featured"
 							? "d-none"
@@ -93,7 +93,7 @@ function ProductTitle(props) {
 							? "d-none"
 							: "d-block" || productTitel.plan === "higlighted"
 							? "d-none"
-							: "d-block" || productTitel.plan === "Ugent"
+							: "d-block" || productTitel.plan === "Urgent"
 							? "d-block"
 							: "d-none"
 					}`}>
@@ -104,7 +104,7 @@ function ProductTitle(props) {
 					className={`${
 						productTitel.plan === "free"
 							? "d-none"
-							: "d-block" || productTitel.plan === "ugent"
+							: "d-block" || productTitel.plan === "urgent"
 							? "d-none"
 							: "d-block" || productTitel.plan === "higlighted"
 							? "d-none"
@@ -119,7 +119,7 @@ function ProductTitle(props) {
 					className={`${
 						productTitel.plan === "free"
 							? "d-none"
-							: "d-block" || productTitel.plan === "ugent"
+							: "d-block" || productTitel.plan === "uyarn start gent"
 							? "d-none"
 							: "d-block" || productTitel.plan === "featured"
 							? "d-none"
@@ -160,10 +160,10 @@ export default function AdviewSlide(props) {
 									<li>
 										<a
 											class="uk-cover-container uk-inline"
-											href={`https://dev.bellefu.com/images/product/${productImg.images}`}
+											href={`https://dev.bellefu.com/images/products/${productImg.slug}/${productImg.images}`}
 											data-caption="Caption 1">
 											<img
-												src={`https://dev.bellefu.com/images/product/${productImg.images}`}
+												src={`https://dev.bellefu.com/images/products/${productImg.slug}/${productImg.images}`}
 												alt=""
 												uk-cover
 											/>

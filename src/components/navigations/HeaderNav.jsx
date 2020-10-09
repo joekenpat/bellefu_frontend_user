@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar, Nav, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
-import SideNav from "../navigations/SideNav";
+import SideNav from "./SideNav";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import Cookie from "js-cookie";
@@ -79,9 +79,11 @@ export default function HeaderNav() {
 						Register
 					</Nav.Link>
 					<Navbar.Brand className="d-none d-lg-block  d-md-none">
+						<Link to="/post_ad">
 						<Button variant="warning" style={styles.post_free_add_btn}>
 							Post Free Ad
 						</Button>
+						</Link>
 					</Navbar.Brand>
 					<Navbar.Brand styles={styles.language}>
 						<Button variant="warning" style={styles.post_free_add_btn}>

@@ -42,7 +42,7 @@ export default function LandingPage() {
 									<h4 className="mb-5">Premium Ad</h4>
 								</Col>
 								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-									<Link to="/paid_product_list?plan=featured" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
+									<Link to="/product_list?plan=featured" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
 										<p style={{ color: "#ffa500" }}>
 										View More<BsArrowRight/>
 										</p>
@@ -57,7 +57,7 @@ export default function LandingPage() {
 									<h4 className="mb-5">Latest Ad</h4>
 								</Col>
 								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-									<Link to="/paid_product_list" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
+									<Link to="/product_list" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
 										<p style={{ color: "#ffa500" }}>
 											View More<BsArrowRight/>
 										</p>

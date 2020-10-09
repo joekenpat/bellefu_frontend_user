@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { withRouter,Link } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { signup } from "../../redux/actions/userActon";
-import Preloader from "../user/Preloader";
+import Preloader from "./Preloader";
 
 
  function RegisterationFrom(props) {

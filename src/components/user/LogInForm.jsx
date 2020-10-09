@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { signin } from "../../redux/actions/userActon";
-import Preloader from "../user/Preloader";
+import Preloader from "./Preloader";
 
 function LogInForm(props) {
 	const [formData, setFormData] = useState({

@@ -1,6 +1,6 @@
 import React from "react";
 import { Carousel, Card} from "react-bootstrap";
-import DesktopInput from "../slideshow/DesktopInput"
+import DesktopInput from "./DesktopInput"
 import banner from "../images/banner.png";
 
 export default function DesktpSlideShow() {

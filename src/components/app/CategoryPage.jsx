@@ -64,11 +64,14 @@ export default function CategoryPage() {
 	} = filterData;
 	const onChangeHandler = (e) => {
 		setFilterData({ ...filterData, [e.target.name]: e.target.value });
+		loadSubCategory()
+		
 	};
-
+	
 	const onSubmitHandle = (e) => {
 		loadFilterData();
 		e.preventDefault();
+		console.log(filterData.category)
 	};
 	// ========FOR FITER FROM  STATE AND FUNCTION END HERE ==================================//
 
@@ -110,7 +113,54 @@ export default function CategoryPage() {
 			});
 	};
 
+// ==============CATEGORY LIST STATE =========
+  
+const [categoryData, setCategoryData] = useState([])
+ const loadCategory = () => {
+	
+	axios.get("https://dev.bellefu.com/api/category/list", {
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json"
+		}
+	})
+	.then((res) => {
+		setCategoryData(res.data.categories.data)
+		setError("");
+	})
+	.catch((error) => {
+		setError("Something went worng");
+		console.log(error);
+	});
+ }
+
+ // ==============SUBCATEGORY LIST STATE =========
+  
+const [subcategoryData, setSubCategoryData] = useState([])
+const [notShow, setNotShow] = useState(true)
+const loadSubCategory = () => {
+   
+   axios.get(`https://dev.bellefu.com/api/subcategory/listfor/${filterData.category}`, {
+	   headers: {
+		   "Content-Type": "application/json",
+		   Accept: "application/json"
+	   }
+   })
+   .then((res) => {
+	   setSubCategoryData(res.data.subcategories.data)
+	   setNotShow(false)
+	   setError("");
+   })
+   .catch((error) => {
+	   setError("Something went worng");
+	   console.log(error);
+   });
+}
+ 
+
+
 	useEffect(() => {
+	
 		if (parsed.plan) {
 			setFilterData(parsed);
 		}
@@ -119,23 +169,25 @@ export default function CategoryPage() {
 			setFilterData(parsed);
 		}
 		if (parsed.subcategory) {
-			setFilterData(subcategory);
+			setFilterData(parsed);
 		}
 		if (parsed.category) {
-			setFilterData(category);
+			setFilterData(parsed);
 		}
 		if (parsed.sort) {
-			setFilterData(sort);
+			setFilterData(parsed);
 		}
 		if (parsed.min_price) {
-			setFilterData(min_price);
+			setFilterData(parsed);
 		}
 		if (parsed.max_price) {
-			setFilterData(max_price);
+			setFilterData(parsed);
 		}
-		console.log(filterData);
+	
+		
 		loadFilterData();
-	}, [productsData.length]);
+		loadCategory();
+	}, [productsData.length], [categoryData], [subcategoryData]);
 	return (
 		<div>
 			<HeaderNav />
@@ -148,6 +200,7 @@ export default function CategoryPage() {
 						sm={12}
 						style={{ paddingLeft: "3px", paddingRight: "3px" }}>
 						<div style={{ marginTop: "100px" }}>
+								{/* ======FOR DESKTOP FILLTER====== */}
 							<div className="d-none d-lg-block  d-md-none">
 								<Form onSubmit={onSubmitHandle}>
 									<Card className="border-0">
@@ -158,21 +211,30 @@ export default function CategoryPage() {
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
 													<b>Category</b>
 												</Form.Label>
-												<div class="uk-margin">
+												<div>
+													
 													<select
 														class="uk-select  "
 														name="category"
-														value={category}
-														onChange={(e) => onChangeHandler(e)}>
+														id="category"
+														value={category }
+														 onChange={(e) => onChangeHandler(e)}
+														onClick={(e) => onChangeHandler(e)}
+														>
+
 														<option>select category</option>
-														<option
-															value="test-cat-one"
+														{ 
+														categoryData.map((data) => (
+														<option key={data.slug}
+															value={data.slug}
 															selected={
-																category === "test-cat-one" ? true : false
+																category === data.slug ? true : false
 															}>
-															test-cat-one
+															{data.name}
 														</option>
+														))}
 													</select>
+													
 												</div>
 											</Form.Group>
 											<Form.Group>
@@ -181,30 +243,67 @@ export default function CategoryPage() {
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
 													<b>Subcategory</b>
 												</Form.Label>
-												<div class="uk-margin">
+												<div >
 													<select
 														class="uk-select  "
 														name="subcategory"
+														id="subcategory"
 														value={subcategory}
-														onChange={(e) => onChangeHandler(e)}>
+														onChange={(e) => onChangeHandler(e)}
+														disabled={notShow}>
 														<option>select subcategory</option>
-														<option
-															value="test-subcagegory"
+														{ 
+														subcategoryData.map((data) => (
+														<option key={data.slug}
+															value={data.slug}
 															selected={
-																subcategory === "test-subcagegory"
-																	? true
-																	: false
+																subcategory === data.slug ? true : false
 															}>
-															test-subcagegory
+															{data.name}
+														</option>
+														))}
+														
+													</select>
+												</div>
+											</Form.Group>
+											<Form.Group>
+												<Form.Label
+													className="mt-3"
+													style={{ opacity: "0.4", fontSize: "0.8em" }}>
+													<b>Plan</b>
+												</Form.Label>
+												<div>
+													<select
+														class="uk-select  "
+														name="plan"
+														value={plan}
+														onChange={(e) => onChangeHandler(e)}>
+														<option>select plan</option>
+														<option
+															value="free"
+															selected={subcategory === "free" ? true : false}>
+															Free
 														</option>
 														<option
-															value="test-subcategory-four"
+															value="urgent"
 															selected={
-																subcategory === "test-subcategory-four"
-																	? true
-																	: false
+																subcategory === "urgent" ? true : false
 															}>
-															test-subcategory-four
+															Urgent
+														</option>
+														<option
+															value="featured"
+															selected={
+																subcategory === "featured" ? true : false
+															}>
+															Featured
+														</option>
+														<option
+															value="higlighted"
+															selected={
+																subcategory === "higlighted" ? true : false
+															}>
+															Higlighted
 														</option>
 													</select>
 												</div>
@@ -247,7 +346,7 @@ export default function CategoryPage() {
 													block
 													type="button"
 													onClick={onSubmitHandle}>
-													Appy Filter
+												<b>Appy Filter</b>	
 												</Button>
 											</Form.Group>
 										</Container>
@@ -285,59 +384,109 @@ export default function CategoryPage() {
 											<Form onSubmit={onSubmitHandle}>
 												<Card className="border-0">
 													<Container>
+													<Form.Group>
+												<Form.Label
+													className="mt-3"
+													style={{ opacity: "0.4", fontSize: "0.8em" }}>
+													<b>Category</b>
+												</Form.Label>
+												<div>
+													
+													<select
+														class="uk-select  "
+														name="category"
+														id="category"
+														value={category }
+														 onChange={(e) => onChangeHandler(e)}
+														onClick={(e) => onChangeHandler(e)}
+														>
+
+														<option>---select category---</option>
+														{ 
+														categoryData.map((data) => (
+														<option key={data.slug}
+															value={data.slug}
+															selected={
+																category === data.slug ? true : false
+															}>
+															{data.name}
+														</option>
+														))}
+													</select>
+													
+												</div>
+											</Form.Group>
+											<Form.Group>
+												<Form.Label
+													className="mt-3"
+													style={{ opacity: "0.4", fontSize: "0.8em" }}>
+													<b>Subcategory</b>
+												</Form.Label>
+												<div >
+													<select
+														class="uk-select  "
+														name="subcategory"
+														id="subcategory"
+														value={subcategory}
+														onChange={(e) => onChangeHandler(e)}
+														disabled={notShow}>
+														<option>---select subcategory---</option>
+														{ 
+														subcategoryData.map((data) => (
+														<option key={data.slug}
+															value={data.slug}
+															selected={
+																subcategory === data.slug ? true : false
+															}>
+															{data.name}
+														</option>
+														))}
+														
+													</select>
+												</div>
+											</Form.Group>
 														<Form.Group>
 															<Form.Label
 																className="mt-3"
 																style={{ opacity: "0.4", fontSize: "0.8em" }}>
-																<b>Category</b>
+																<b>Plan</b>
 															</Form.Label>
-															<div class="uk-margin">
+															<div >
 																<select
 																	class="uk-select  "
-																	name="category"
-																	value={category}
+																	name="plan"
+																	value={plan}
 																	onChange={(e) => onChangeHandler(e)}>
-																	<option>select category</option>
+																	<option>select plan</option>
 																	<option
-																		value="test-cat-one"
+																		value="free"
 																		selected={
-																			category === "test-cat-one" ? true : false
+																			subcategory === "free" ? true : false
 																		}>
-																		test-cat-one
+																		Free
 																	</option>
-																</select>
-															</div>
-														</Form.Group>
-														<Form.Group>
-															<Form.Label
-																className="mt-3"
-																style={{ opacity: "0.4", fontSize: "0.8em" }}>
-																<b>Subcategory</b>
-															</Form.Label>
-															<div class="uk-margin">
-																<select
-																	class="uk-select  "
-																	name="subcategory"
-																	value={subcategory}
-																	onChange={(e) => onChangeHandler(e)}>
-																	<option>select subcategory</option>
 																	<option
-																		value="test-subcagegory"
+																		value="urgent"
 																		selected={
-																			subcategory === "test-subcagegory"
+																			subcategory === "urgent" ? true : false
+																		}>
+																		Urgent
+																	</option>
+																	<option
+																		value="featured"
+																		selected={
+																			subcategory === "featured" ? true : false
+																		}>
+																		Featured
+																	</option>
+																	<option
+																		value="higlighted"
+																		selected={
+																			subcategory === "higlighted"
 																				? true
 																				: false
 																		}>
-																		test-subcagegory
-																	</option>
-																	<option
-																		value="test-subcategory-four"
-																		selected={
-																			subcategory === "test-subcategory-four"
-																				? true
-																				: false
-																		}>
-																		test-subcategory-four
+																		Higlighted
 																	</option>
 																</select>
 															</div>
@@ -380,7 +529,7 @@ export default function CategoryPage() {
 																block
 																type="button"
 																onClick={onSubmitHandle}>
-																Appy Filter
+															<b>Appy Filter</b>	
 															</Button>
 														</Form.Group>
 													</Container>
@@ -398,9 +547,9 @@ export default function CategoryPage() {
 							style={{ marginTop: "100px" }}
 							className="d-none d-lg-block  d-md-none">
 							<Row>
-								{loading ? (
+								{loading ? 
 									<Preloader />
-								) : (
+								 :  
 									productsData.map((data) => (
 										<Col
 											key={data.slug}
@@ -511,7 +660,7 @@ export default function CategoryPage() {
 											</Card>
 										</Col>
 									))
-								)}
+							}
 							</Row>
 						</div>
 						{/* =========FOR ITEM MOBILEVIEW======= */}
@@ -610,6 +759,7 @@ export default function CategoryPage() {
 													</Link>
 
 													<span className="mr-1 ml-1 " style={styles.price}>
+														
 														{data.currency_symbol}
 														{data.price}
 													</span>
