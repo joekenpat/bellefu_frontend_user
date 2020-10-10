@@ -1,6 +1,6 @@
 import React , {useState, useEffect} from 'react'
 import { Card, Row, Image, Col } from'react-bootstrap'
-import pic from "../images/pic.jpg"
+import avater_placeholder from "../images/avater_placeholder.jpg"
 import { IoIosTime, IoMdMailOpen } from "react-icons/io"
 import { AiFillPhone } from "react-icons/ai"
 
@@ -22,7 +22,7 @@ export default function UserAdInfo(props) {
                     <Card.Body>    
                      <Row> 
                      <Col xm={12} sm={12} md={12} lg={12} xl={12} className="text-center" >
-                     <Image src={pic} style={styles.avater}  roundedCircle/>
+                     <Image src={avater_placeholder} style={styles.avater}  roundedCircle/>
                          </Col>
                          <Col xm={12} sm={12} md={12} lg={12} xl={12}  className="text-center mt-2" >
                             <p><b>{userprofile.user && userprofile.user.profile.first_name}</b>
