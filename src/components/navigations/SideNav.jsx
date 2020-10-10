@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Button } from "react-bootstrap";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { MdCancel } from "react-icons/md";
+import Cookie from "js-cookie";
+import { Link } from "react-router-dom";
 
 export default function SideNav() {
+	useEffect(() => {
+	
+	}, )
 	return (
 		<div>
 			<div type="button" uk-toggle="target: #offcanvas-push">
@@ -23,20 +28,85 @@ export default function SideNav() {
 						Menu
 					</h6>
 					<div style={styles.line}>
-						<hr />
+						<br />
 					</div>
 					<div>
-					    <Button className="rounded-0" variant="dark" size="sm" block>Dashboard</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>My Ads</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>My Profile</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>Menbership</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>Transaction</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>Logout</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>Login</Button>
-						<Button className="rounded-0" variant="dark" size="sm" block>Register</Button>
-						<Button className="rounded-0" variant="warning"  size="sm" block style={styles.post_free_add_btn}>
-							Post Free Ad
-						</Button>
+						<div className="mb-3">
+						<a href="/user_dashboard"
+						className={`${
+							Cookie.get("user")
+								? "d-block"
+								: "d-none"
+						} `}
+							
+							style={{ color: "inherit", textDecoration: "inherit" }}>
+							<Button  className="rounded-0" variant="dark" size="sm" block>
+								Dashboard
+							</Button>
+						</a>
+						</div>
+						<div className="mb-3">
+						<a href="/profile"
+						className={`${
+							Cookie.get("user")
+								? "d-block"
+								: "d-none"
+						}`}
+							style={{ color: "inherit", textDecoration: "inherit" }}>
+							<Button  className="rounded-0" variant="dark" size="sm" block>
+								profile
+							</Button>
+						</a>
+						</div>
+						<div className="mb-3">
+						<a href="/login"
+						className={`${
+							Cookie.get("user")
+								? "d-none"
+								: "d-block"
+						}`}
+							style={{ color: "inherit", textDecoration: "inherit" }}>
+							<Button  className="rounded-0" variant="dark" size="sm" block>
+								Login
+							</Button>
+						</a>
+					</div>
+					<div className="mb-3">
+						<a href="/register"
+						className={`${
+							Cookie.get("user")
+								? "d-none"
+								: "d-block"
+						}`}
+							style={{ color: "inherit", textDecoration: "inherit" }}>
+							<Button  className="rounded-0" variant="dark" size="sm" block>
+								Register
+							</Button>
+						</a>
+						</div>
+						<div className="mb-3">
+						<a
+							href="/post_ad"
+							style={{ color: "inherit", textDecoration: "inherit" }}>
+							<Button
+								className="rounded-0"
+								variant="warning"
+								size="sm"
+								block
+								style={styles.post_free_add_btn}>
+								Post Free Ad
+							</Button>
+						</a>
+						</div>
+						<div className={`${
+							Cookie.get("user")
+								? "d-block"
+								: "d-none"
+								} `}>
+							<Button  onClick={logout} style={{backgroundColor: "red"}}  className="rounded-0" variant="dark" size="sm" block>
+								Logout
+							</Button>
+							</div>
 					</div>
 				</div>
 			</div>
@@ -44,6 +114,16 @@ export default function SideNav() {
 	);
 }
 
+
+//LOGOUT
+const logout = () => {
+	Cookie.remove("user");
+	window.location.reload();
+};
+
+const reload = () => {
+	window.location.reload();
+}
 //THIS COMPONET STYLES GOES HERE
 const styles = {
 	icon: {
