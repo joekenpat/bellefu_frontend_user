@@ -6,9 +6,7 @@ import Cookie from "js-cookie";
 import { Link } from "react-router-dom";
 
 export default function SideNav() {
-	useEffect(() => {
-	
-	}, )
+
 	return (
 		<div>
 			<div type="button" uk-toggle="target: #offcanvas-push">

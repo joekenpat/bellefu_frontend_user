@@ -24,7 +24,7 @@ export default function DesktpSlideShow() {
 					/>
 					<Carousel.Caption>
 						<div style={{ marginTop: "-18%" }}>
-							<h3 style={{ color: "white" }}>Buy And Sale</h3>
+							<h3 style={{ color: "white" }}>Buy And Sell</h3>
 							<Card style={styles.from_card} className="border-0">
 								< DesktopInput />
 							</Card>

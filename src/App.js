@@ -17,6 +17,7 @@ import PostAdPaymentPage from "./components/app/PostAdPaymentPage";
 import AdViewPage from  "./components/app/AdViewPage"
 import RegistrationFormPage from "./components/app/RegistrationFormPage";
 import LoginFormPage from "./components/app/LogInFormPage";
+import  PostAdSuccessMessagePage from "./components/app/PostAdSuccessMessagePage"
 
 //REDUX STATE
 import { Provider } from "react-redux";
@@ -52,8 +53,10 @@ function App() {
 							path="/expried_ad"
 							component={UserExpriedAdPage}
 						/>
+						
 						<PrivateRoute exact path="/post_ad" component={PostAdPage} />
-						<PrivateRoute exact path="/user_ad" component={PostAdPaymentPage} />
+						<PrivateRoute exact path="/payment" component={PostAdPaymentPage} />
+						<PrivateRoute exact path="/post_sucess" component={PostAdSuccessMessagePage} />
 					</Switch>
 				</Router>
 			</div>

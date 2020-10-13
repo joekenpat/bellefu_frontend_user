@@ -32,11 +32,6 @@ function LogInForm(props) {
 	const onSubmitHandle = (e) => {
 		e.preventDefault();
 		dispatch(signin(identifier, password));
-		// if (formData.identifier.length > 3 && formData.password.length > 3) {
-		// 	dispatch(signin(identifier, password));
-		// } else {
-		// 	alert("form can't be empty");
-		// }
 	};
 
 	return (
