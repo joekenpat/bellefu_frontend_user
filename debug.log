@@ -1,3 +1,5 @@
 
 [0903/142524.809:ERROR:file_io.cc(135)] WriteFile: The pipe is being closed. (0xE8)
 [1003/091949.966:ERROR:file_io.cc(135)] WriteFile: The pipe is being closed. (0xE8)
+[1014/125014.370:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1015/060657.089:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

@@ -55,8 +55,8 @@ function App() {
 						/>
 						
 						<PrivateRoute exact path="/post_ad" component={PostAdPage} />
-						<PrivateRoute exact path="/payment" component={PostAdPaymentPage} />
-						<PrivateRoute exact path="/post_sucess" component={PostAdSuccessMessagePage} />
+						<PrivateRoute exact path="/payment/:slug/:plan" component={PostAdPaymentPage} />
+						<PrivateRoute exact path="/post_sucess/:slug/:is_upgradable//:pathname" component={PostAdSuccessMessagePage} />
 					</Switch>
 				</Router>
 			</div>

@@ -138,7 +138,7 @@ export default function AdviewSlide(props) {
 	const [productImg, setProductImg] = useState(props);
 	useEffect(() => {
 		setProductImg(props);
-		console.log(productImg);
+		console.log(props.images);
 	}, [props]);
 	return (
 		<div>
@@ -154,23 +154,24 @@ export default function AdviewSlide(props) {
 						tabindex="-1"
 						uk-slideshow="animation: pull"
 						uk-slideshow="min-height: 100; max-height: 400">
-						{
-							Object.keys(productImg).map((productImg) => (
+					
 								<ul uk-lightbox="animation: slide" class="uk-slideshow-items">
+								{	props.images &&	props.images.map((data) => (
 									<li>
 										<a
 											class="uk-cover-container uk-inline"
-											href={`https://dev.bellefu.com/images/products/${productImg.slug}/${productImg.images}`}
+											href={`https://dev.bellefu.com/images/products/${props.slug}/${data}`}
 											data-caption="Caption 1">
 											<img
-												src={`https://dev.bellefu.com/images/products/${productImg.slug}/${productImg.images}`}
+												src={`https://dev.bellefu.com/images/products/${props.slug}/${data}`}
 												alt=""
 												uk-cover
 											/>
 										</a>
 									</li>
+									))}
 								</ul>
-							))}
+							
 
 						<button
 							class="uk-border-pill uk-button uk-button-default uk-button-small uk-position-center-left  "

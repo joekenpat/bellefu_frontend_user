@@ -98,7 +98,7 @@ function PostAd(props) {
 				}
 			})
 			.then((res) => {
-				productSuccess = res.data.is_upgradable;
+				productSuccess = res.data;
 				console.log(productSuccess);
 				setSuccess(productSuccess);
 				setLoading(false);
@@ -152,6 +152,8 @@ function PostAd(props) {
 				console.log(error);
 			});
 	};
+	// TO GET PATHNAME
+	let location = useLocation();
 
 	useEffect(
 		() => {
@@ -163,8 +165,21 @@ function PostAd(props) {
 	);
 	return (
 		<div>
-			{success === true ? <Redirect to="/payment" /> : null}
-			{success === false ? <Redirect to="/post_sucess" /> : null}
+			{success && success.is_upgradable === true ? (
+				<Redirect
+					to={{
+						pathname: `/payment/${success.product_details.product_slug}/${success.product_details.product_plan}`,
+						state: success && success.product_details
+					}}
+				/>
+			) : null}
+			{success && success.is_upgradable === false ? (
+				<Redirect
+					to={`/post_sucess/${success &&
+						success.product_details.product_slug}/${success &&
+						success.is_upgradable}/${location.pathname}`}
+				/>
+			) : null}
 			{loading ? <Preloader /> : null}
 			<Form onSubmit={onSubmitHandle}>
 				<Card className="border-0">
