@@ -1,69 +1,105 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Container, Form, Button } from "react-bootstrap";
-import { withRouter, Link, Redirect, useLocation } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import Preloader from "./Preloader";
 
 export default function PostAdPayment() {
 	let location = useLocation();
-
+	const [success, setSuccess] = useState()
+	const [loading, setLoading] = useState();
 	const [paymentData, setPaymentData] = useState({
-		product_slug: `${location.state.product_slug}`,
-		upgrade_plan:`${location.state.product_plan}`,
 		payment_channel: "",
 		voucher_code: "",
 		gateway_provider: ""
 	});
-	const [voucherShow, setVoucherShow] = useState(true);
-	const [cardShow, setCardShow] = useState(true);
+	// const [voucherShow, setVoucherShow] = useState(true);
+	// const [cardShow, setCardShow] = useState(true);
 
 	const showVoucherInput = () => {
-		setVoucherShow(false);
+		// setVoucherShow(false);
 	};
 	const showCardInput = () => {
-		setCardShow(false);
+		// setCardShow(false);
 	};
-
-	//     product_slug = `${location.state.product_slug}`
-	// 	upgrade_plan = `${location.state.product_plan}`
-	// const {
-	// 	product_slug,
-	// 	upgrade_plan
-	// } = paymentData
 
 	//ONCHANGE FOR IMAGE
 	const onChangHandler = (e) => {
-		setPaymentData({ ...paymentData,  [e.target.name]: e.target.value });
+		setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
 	};
 
 	//GLOBAL STATE FROM REDUX
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
+
+	//SUBMIT FUNCTION
 	const onSubmitHandle = (e) => {
 		e.preventDefault();
+		setLoading(true);
+		let mainData = {};
+		let walletPayment = {
+			product_slug: `${location.state.product_slug}`,
+			upgrade_plan: `${location.state.product_plan}`,
+			payment_channel: paymentData.payment_channel
+		};
+		let voucherPayment = {
+			product_slug: `${location.state.product_slug}`,
+			upgrade_plan: `${location.state.product_plan}`,
+			payment_channel: paymentData.payment_channel,
+			voucher_code: paymentData.voucher_code
+		};
+		let cardPayment = {
+			product_slug: `${location.state.product_slug}`,
+			upgrade_plan: `${location.state.product_plan}`,
+			payment_channel: paymentData.payment_channel,
+			gateway_provider: paymentData.gateway_provider
+		};
+		if (paymentData.payment_channel === "wallet") {
+			mainData = walletPayment;
+		} else if (paymentData.payment_channel === "voucher") {
+			mainData = voucherPayment;
+		} else if (paymentData.payment_channel === "card") {
+			mainData = cardPayment;
+		}
+       
 		let url = "https://dev.bellefu.com/api/user/product/upgrade";
 		axios
-			.post(url, paymentData,  {
+			.post(url, mainData, {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
 			})
-			.then((res) => {})
+			.then(response => {
+				setSuccess(response.data)
+				setLoading(false);
+			
+			})
 			.catch((error) => {
 				console.log(error);
+				setLoading(false);
 			});
-			console.log(paymentData)
+		console.log(paymentData);
 	};
 
 	useEffect(() => {
-	
+		console.log({work: success});
 	});
-
+	
 	return (
 		<div>
+			{success ? (
+				<Redirect
+					to={{
+						pathname: "/upgrade_success",
+						state: success.message
+					}}
+				/>
+			) : null}
 			<Container>
+			{loading ? <Preloader /> : null}
 				<Form onSubmit={onSubmitHandle}>
 					<Card className="border-0">
 						<Card.Header
@@ -108,7 +144,7 @@ export default function PostAdPayment() {
 										class="uk-input "
 										type="text"
 										style={styles.input}
-										disabled={voucherShow}
+										// disabled={voucherShow}
 										name="voucher_code"
 										placeholder="Enter Voucher code"
 										onChange={(e) => onChangHandler(e)}
@@ -133,17 +169,20 @@ export default function PostAdPayment() {
 										class="uk-select"
 										name="gateway_provider"
 										onChange={(e) => onChangHandler(e)}
-										disabled={cardShow}>
+										// disabled={cardShow}
+										>
 										<option>---select category---</option>
 										<option value="paystack">Paystack</option>
 									</select>
 								</Col>
 							</Row>
 
-							<Button style={styles.btnSubmit} variant="warning" size="sm"
-							onClick={onSubmitHandle}
-							>
-								Proccess
+							<Button
+								style={styles.btnSubmit}
+								variant="warning"
+								size="sm"
+								onClick={onSubmitHandle}>
+								Proceed
 							</Button>
 						</Card.Body>
 					</Card>

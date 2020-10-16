@@ -4,7 +4,6 @@ import Preloader from "./Preloader";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-
 import {
 	Card,
 	Badge,
@@ -17,7 +16,6 @@ import { AiOutlineTag } from "react-icons/ai";
 import { GoLocation, GoPencil } from "react-icons/go";
 import { MdDateRange } from "react-icons/md";
 import { IoMdTrash } from "react-icons/io";
-import pic from "../images/pic.jpg";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (delete)
 const deleteTooltip = (props) => (
@@ -38,37 +36,35 @@ export default function AdTable() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [ad, setAd] = useState([]);
-	const [totalRecords, setTotalRecords] = useState(0);
-	const [currentPage, setCurrentPage] = useState(1);
+	const [totalRecords, setTotalRecords] = useState();
+	const [currentPage, setCurrentPage] = useState(3);
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
 
-	let url = "https://dev.bellefu.com/api/user/product/list";
+	let url = "https://dev.bellefu.com/api/user/product/list?page="+currentPage
 	useEffect(() => {
-		// if (currentPage) {
-			axios
-				.get(`${url}`, {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-						"Content-Type": "application/json",
-						Accept: "application/json"
-					}
-				})
-				.then((response) => {
-					setLoading(false);
-					setAd(response.data);
-					setError("");
-					console.log(ad);
-				})
-				.catch((error) => {
-					setLoading(false);
-					setAd({});
-					setError("Something went worng");
-					console.log(error);
-				});
-		// }
-	}, [ad != null &&  ad.length < 1]);
+		axios
+			.get(url, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((response) => {
+				setLoading(false);
+				setAd(response.data.products);
+				setError("");
+			})
+			.catch((error) => {
+				setLoading(false);
+				setError("Something went worng");
+				console.log(error);
+			});
+		console.log(ad);
+	}, [ad.length] );
+	console.log(ad);
 	return (
 		<div>
 			<Card className="border-0">
@@ -96,30 +92,29 @@ export default function AdTable() {
 							</tr>
 						</thead>
 						<tbody>
-						{loading ? (
+							{loading ? (
 								<Preloader />
 							) : (
-								ad.length > 0 &&
-								ad.map((data) => (
-							<tr key={data.id}>
-								<td className="uk-text-center">
-									<Image src={pic} style={styles.image} />
-								</td>
-								<td>
-									<p style={styles.titel}>
-									{data.titel}
-									</p>
+								ad.data &&
+								ad.data.map((data) => (
+									<tr key={data.id}>
+										<td className="uk-text-center">
+											<Image
+												src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
+												style={styles.image}
+											/>
+										</td>
+										<td>
+											<p style={styles.title}>{data.title}</p>
 
-									<Badge
+											<Badge
 												variant="danger"
 												className={`${
 													data.plan === "free"
 														? "d-none"
-														: "d-block" ||
-														  data.current_page.data.plan === "featured"
+														: "d-block" || data.plan === "featured"
 														? "d-none"
-														: "d-block" ||
-														  data.current_page.data.plan === "higlighted"
+														: "d-block" || data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -128,13 +123,11 @@ export default function AdTable() {
 											<Badge
 												variant="warning"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
-														: "d-block" ||
-														  data.current_page.data.plan === "ugent"
+														: "d-block" || data.plan === "ugent"
 														? "d-none"
-														: "d-block" ||
-														  data.current_page.data.plan === "higlighted"
+														: "d-block" || data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -143,89 +136,93 @@ export default function AdTable() {
 											<Badge
 												variant="success"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
-														: "d-block" ||
-														  data.current_page.data.plan === "ugent"
+														: "d-block" || data.plan === "ugent"
 														? "d-none"
-														: "d-block" ||
-														  data.current_page.data.plan === "featured"
+														: "d-block" || data.plan === "featured"
 														? "d-none"
 														: "d-block"
 												}`}>
 												Higlighted
 											</Badge>
 
-									<div className="mt-3">
-										<AiOutlineTag style={styles.icon} className="mr-2" />
-										<span style={styles.category} className="ml-2 mt-3">
-										{data.current_page.data.category.name}
-										</span>
-										<span style={styles.subCategory} className="ml-2 mt-5">
-										{data.current_page.data.subcategory.name}
-										</span>
-									</div>
-									<div className="mt-3">
-										<GoLocation style={styles.icon} className="mr-1" />
-										<span style={styles.location} className="ml-1 ">
-										{data.current_page.data.address}
-										</span>
-										<MdDateRange style={styles.icon} className="mr-1 ml-1" />
-										<span style={styles.date} className="ml-1 ">
-											Expiring: 02-May-23
-										</span>
-										<span className="ml-2" style={styles.price}>
-										{data.current_page.data.currency_symbol}
-													{data.current_page.data.price}
-										</span>
-									</div>
-								</td>
-								<td>
-									<Badge
-										style={{ backgroundColor: "#b8e6b8", color: "white" }}
-										className="ml-2">
-										active
-									</Badge>
-								</td>
-								<td>
-									<div className="btn-group" role="group">
-										<OverlayTrigger
-											placement="bottom"
-											delay={{ show: 50, hide: 100 }}
-											overlay={editTooltip}>
-											<Button size="lg" variant="light">
-												<GoPencil style={{ color: "green" }} />
-											</Button>
-										</OverlayTrigger>
+											<div className="mt-3">
+												<AiOutlineTag style={styles.icon} className="mr-2" />
+												<span style={styles.category} className="ml-2 mt-3">
+													{data.category.name}
+												</span>
+												<span style={styles.subCategory} className="ml-2 mt-5">
+													{data.subcategory.name}
+												</span>
+											</div>
+											<div className="mt-3">
+												<GoLocation style={styles.icon} className="mr-1" />
+												<span style={styles.location} className="ml-1 ">
+													{data.address}
+												</span>
+												<MdDateRange
+													style={styles.icon}
+													className="mr-1 ml-1"
+												/>
+												<span style={styles.date} className="ml-1 ">
+													{data.created_at}
+												</span>
+												<span className="ml-2" style={styles.price}>
+													{data.currency_symbol}
+													{data.price}
+												</span>
+											</div>
+										</td>
+										<td>
+											<Badge
+												style={{ backgroundColor: "#b8e6b8", color: "white" }}
+												className="ml-2">
+												active
+											</Badge>
+										</td>
+										<td>
+											<div className="btn-group" role="group">
+												<OverlayTrigger
+													placement="bottom"
+													delay={{ show: 50, hide: 100 }}
+													overlay={editTooltip}>
+													<Button size="lg" variant="light">
+														<GoPencil style={{ color: "green" }} />
+													</Button>
+												</OverlayTrigger>
 
-										<OverlayTrigger
-											placement="bottom"
-											delay={{ show: 50, hide: 100 }}
-											overlay={deleteTooltip}>
-											<Button size="lg" variant="light">
-												<IoMdTrash style={{ color: "red" }} />
-											</Button>
-										</OverlayTrigger>
-									</div>
-								</td>
-							</tr>
-
-							))
+												<OverlayTrigger
+													placement="bottom"
+													delay={{ show: 50, hide: 100 }}
+													overlay={deleteTooltip}>
+													<Button size="lg" variant="light">
+														<IoMdTrash style={{ color: "red" }} />
+													</Button>
+												</OverlayTrigger>
+											</div>
+										</td>
+									</tr>
+								))
 							)}
 						</tbody>
-
 					</table>
-					<div className={(`${currentPage} ? d-none : d-block`, "text-center")}>
-						<p>No Pending Ad</p>
-					</div>
-					<div className="justify-content-end">
+					{ad.data  ? (
+						<div className="d-flex flex-row py-4 justify-content-end">
 						<Pagination
 							totalRecords={totalRecords}
 							pageLimit={pageLimit}
 							pageRangeDisplayed={1}
 							onChangePage={setCurrentPage}
 						/>
+						hi
 					</div>
+					) : (
+						<div className="text-center ">
+							<p>No Pending Ad</p>
+						</div>
+					)}
+					
 				</Card.Body>
 			</Card>
 		</div>
@@ -239,13 +236,13 @@ const styles = {
 		fotsize: "30px",
 		color: "#ffa500"
 	},
-	titel: {
+	title: {
 		opacity: "0.9",
-		fontSize: "20px",
+		fontSize: "15px",
 		width: "300px",
 		whiteSpace: "nowrap",
-		overflow:"hidden",
-		 textOverflow: "ellipsis"
+		overflow: "hidden",
+		textOverflow: "ellipsis"
 	},
 	category: {
 		fontSize: "0.7em",
