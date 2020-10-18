@@ -7,6 +7,7 @@ import { AiFillPhone, AiFillEye } from "react-icons/ai";
 import { FaSlackHash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import Moment from "react-moment";
+import renderHTML from "react-render-html"
 
 function AdDetails(props) {
 	const [productsDataDetail, setProductsDataDetail] = useState(props);
@@ -102,7 +103,8 @@ function AdDetails(props) {
 							<Row>
 								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
 									<span style={styles.text}>
-										{productsDataDetail.description}
+										
+									{	renderHTML(`${productsDataDetail.description}`)}
 									</span>
 								</Col>
 							</Row>
