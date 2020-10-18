@@ -145,7 +145,7 @@ import Preloader from "./Preloader";
 									onChange={(e) => onChangeHandelr(e)}
 								/>
 							</div>
-							{error && <p style={styles.formError}>{error.errors.emeil}</p>}
+							{error && <p style={styles.formError}>{error.errors.email}</p>}
 						</div>
 						<div className="uk-margin">
 							<div className="uk-inline">
