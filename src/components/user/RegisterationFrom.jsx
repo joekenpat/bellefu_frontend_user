@@ -72,7 +72,7 @@ import Preloader from "./Preloader";
 						<strong>Let's create your account!</strong>
 					</h4>
 					<p className="text-center">
-					Already have an account? <span><Link to="/register" style={{color: "#ffa500"}}>Login Now!</Link></span>
+					Already have an account? <span><Link to="/login" style={{color: "#ffa500"}}>Login Now!</Link></span>
 					</p>
 					<form onSubmit={onSubmitHandle} className="uk-grid-small" uk-grid>
 						<div class="uk-margin-top">
