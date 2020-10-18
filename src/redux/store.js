@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import Cookie from "js-cookie"
 
 
+
 import {
     userSigninReducer,
     userSignupReducer,
@@ -13,12 +14,10 @@ import {
 
 const user = Cookie.getJSON("user") || null
 
+// const user = signin
 
 export const initialState = {
-    userSignin: { user},
-    porductSearchFilter: {}
-    
-    
+    userSignin: { user},  
 }
 
 const  reducers = combineReducers({

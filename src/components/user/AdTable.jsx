@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "reactjs-hooks-pagination";
+import Paginator from "react-hooks-paginator";
 import Preloader from "./Preloader";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import {Link} from "react-router-dom"
 
 import {
 	Card,
@@ -12,7 +13,7 @@ import {
 	Tooltip,
 	OverlayTrigger
 } from "react-bootstrap";
-import { AiOutlineTag } from "react-icons/ai";
+import { AiOutlineTag, AiOutlineEye } from "react-icons/ai";
 import { GoLocation, GoPencil } from "react-icons/go";
 import { MdDateRange } from "react-icons/md";
 import { IoMdTrash } from "react-icons/io";
@@ -21,6 +22,13 @@ import { IoMdTrash } from "react-icons/io";
 const deleteTooltip = (props) => (
 	<Tooltip id="button-tooltip" {...props}>
 		Delete Ad
+	</Tooltip>
+);
+
+//THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (view ad)
+const viewTooltip = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+		View Ad
 	</Tooltip>
 );
 
@@ -34,15 +42,15 @@ const editTooltip = (props) => (
 const pageLimit = 10;
 export default function AdTable() {
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
 	const [ad, setAd] = useState([]);
-	const [totalRecords, setTotalRecords] = useState();
-	const [currentPage, setCurrentPage] = useState(3);
+	const [offset, setOffset] = useState(0);
+	const [currentData, setCurrentData] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
 
-	let url = "https://dev.bellefu.com/api/user/product/list?page="+currentPage
+	let url = "https://dev.bellefu.com/api/user/product/list";
 	useEffect(() => {
 		axios
 			.get(url, {
@@ -55,16 +63,18 @@ export default function AdTable() {
 			.then((response) => {
 				setLoading(false);
 				setAd(response.data.products);
-				setError("");
 			})
 			.catch((error) => {
 				setLoading(false);
-				setError("Something went worng");
-				console.log(error);
 			});
 		console.log(ad);
-	}, [ad.length] );
+	});
+
 	console.log(ad);
+	useEffect(() => {
+		setCurrentData(ad.data && ad.data.slice(offset, offset + pageLimit));
+	}, [offset, ad.data && ad.data]);
+
 	return (
 		<div>
 			<Card className="border-0">
@@ -95,8 +105,8 @@ export default function AdTable() {
 							{loading ? (
 								<Preloader />
 							) : (
-								ad.data &&
-								ad.data.map((data) => (
+								currentData &&
+								currentData.map((data) => (
 									<tr key={data.id}>
 										<td className="uk-text-center">
 											<Image
@@ -186,8 +196,26 @@ export default function AdTable() {
 												<OverlayTrigger
 													placement="bottom"
 													delay={{ show: 50, hide: 100 }}
+													overlay={viewTooltip}>
+													<Link
+														to={{
+															pathname: `/product_detail/${data.slug}`,
+															state: data.slug
+														}}
+														style={{
+															color: "inherit",
+															textDecoration: "inherit"
+														}}>
+														<Button size="sm" variant="light">
+															<AiOutlineEye style={{ color: "#ffa500" }} />
+														</Button>
+													</Link>
+												</OverlayTrigger>
+												<OverlayTrigger
+													placement="bottom"
+													delay={{ show: 50, hide: 100 }}
 													overlay={editTooltip}>
-													<Button size="lg" variant="light">
+													<Button size="sm" variant="light">
 														<GoPencil style={{ color: "green" }} />
 													</Button>
 												</OverlayTrigger>
@@ -196,7 +224,7 @@ export default function AdTable() {
 													placement="bottom"
 													delay={{ show: 50, hide: 100 }}
 													overlay={deleteTooltip}>
-													<Button size="lg" variant="light">
+													<Button size="sm" variant="light">
 														<IoMdTrash style={{ color: "red" }} />
 													</Button>
 												</OverlayTrigger>
@@ -207,22 +235,31 @@ export default function AdTable() {
 							)}
 						</tbody>
 					</table>
-					{ad.data  ? (
+
+					<Paginator
+						totalRecords={ad.data && ad.data.length}
+						pageLimit={pageLimit}
+						pageNeighbours={2}
+						setOffset={setOffset}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+					/>
+					{ad.data ? (
 						<div className="d-flex flex-row py-4 justify-content-end">
-						<Pagination
-							totalRecords={totalRecords}
-							pageLimit={pageLimit}
-							pageRangeDisplayed={1}
-							onChangePage={setCurrentPage}
-						/>
-						hi
-					</div>
+							<Paginator
+								totalRecords={ad.length}
+								pageLimit={4}
+								pageNeighbours={1}
+								setOffset={setOffset}
+								currentPage={currentPage}
+								setCurrentPage={setCurrentPage}
+							/>
+						</div>
 					) : (
 						<div className="text-center ">
-							<p>No Pending Ad</p>
+							<p>No Ad</p>
 						</div>
 					)}
-					
 				</Card.Body>
 			</Card>
 		</div>

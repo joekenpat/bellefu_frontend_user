@@ -25,6 +25,7 @@ import LoginFormPage from "./components/app/LogInFormPage";
 import PostAdSuccessMessagePage from "./components/app/PostAdSuccessMessagePage";
 import UpgradeSuccess from "./components/app/UpgradeSuccess";
 import Footer from "./components/app/Footer"
+import VerificationPage from "./components/app/VerificationPage"
 
 //REDUX STATE
 import { Provider } from "react-redux";
@@ -79,6 +80,11 @@ function App() {
 							exact
 							path="/upgrade_success"
 							component={UpgradeSuccess}
+						/>
+						<PrivateRoute
+							exact
+							path="/verification"
+							component={VerificationPage}
 						/>
 					</Switch>
 					<div className="d-none d-lg-block  d-md-none" style={{paddingTop: "50px"}}>

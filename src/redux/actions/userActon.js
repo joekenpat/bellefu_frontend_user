@@ -29,6 +29,7 @@ export const signin = (identifier, password) => async (dispatch) => {
 		if (token) {
 			dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
 			Cookie.set("user", JSON.stringify(data));
+
 		}
 		dispatch({ type: USER_SIGNIN_FAIL, payload: data.errors });
 	} catch (error) {

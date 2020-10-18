@@ -14,7 +14,7 @@ import {
 	AiOutlineSetting
 } from "react-icons/ai";
 import { IoMdTime, IoIosLogIn } from "react-icons/io";
-
+import { GoVerified } from "react-icons/go"
 import { MdDateRange } from "react-icons/md";
 
 export default function DashBoardNav() { 
@@ -104,13 +104,15 @@ export default function DashBoardNav() {
 							<AiOutlineMessage className="mr-3" style={styles.icon} />
 							Message
 						</li>
+						<Link to="/verification" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 						<li
 							className="pb-3"
 							onMouseOver={listHover}
 							onMouseLeave={listHoverNone}>
-							<AiOutlineAccountBook className="mr-3" style={styles.icon} />
-							Transaction
+							<GoVerified className="mr-3" style={styles.icon} />
+							Verification
 						</li>
+						</Link>
 						<li
 							className="pb-3"
 							onMouseOver={listHover}
@@ -159,5 +161,7 @@ const styles = {
 		fontSize: "0.9em",
 		color: "#ffa500"
 	},
-	icon: {}
+	icon: {
+		color: "#ffa500"
+	}
 };
