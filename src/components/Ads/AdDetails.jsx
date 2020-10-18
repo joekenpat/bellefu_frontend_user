@@ -102,8 +102,7 @@ function AdDetails(props) {
 						<Card.Body>
 							<Row>
 								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
-									<span style={styles.text}>
-										
+									<span style={styles.text}>	
 									{	renderHTML(`${productsDataDetail.description}`)}
 									</span>
 								</Col>
