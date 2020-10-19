@@ -9,11 +9,10 @@ import {
 	Tooltip
 } from "react-bootstrap";
 import pic from "../images/pic.jpg";
-import { AiFillHeart } from "react-icons/ai";
-import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Price from "./Price";
+import Fav from "./Fav";
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -25,7 +24,7 @@ const convertTooltip = (props) => (
 
 
 
-export default function PremiunAds() {
+export default function PremiunAds(props) {
 	const [productsData, setProductsData] = useState([]);
 
 	const userSignin = useSelector((state) => state.userSignin);
@@ -48,36 +47,6 @@ export default function PremiunAds() {
 				console.log(error);
 			});
 	};
-
-	const toggleFav = (e, product_slug, isFav) => {
-		Switch(e)
-		axios
-			.get(`https://dev.bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-					"Content-Type": "application/json",
-					Accept: "application/json"
-				}
-			})
-			.then((res) => {
-				console.log(res)
-				
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
-
-	//==FUNCTION FOR LIKE AND UNLIKE BUTTON
-const Switch = (e) => {
-	if (e.target.style.color === "#ffa500") {
-		e.target.style.color = "red";
-	} else if (e.target.style.color === "red") {
-		e.target.style.color = "#ffa500";
-	} else {
-		e.target.style.color = "red";
-	}
-};
 
 	useEffect(() => {
 		loadData();
@@ -152,15 +121,7 @@ const Switch = (e) => {
 										</Badge>
 									</Col>
 									<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-										<AiFillHeart
-											style={{color: data.is_user_favourite === true ? 'red' : '#ffa500', marginBottom: "-220px",
-											fontSize: "30px",
-											cursor: "pointer",
-											padding: "2px",
-											borderRadius: "50px",
-											backgroundColor: "white",}}
-											onClick={(e) => toggleFav(e, data.slug, data.is_user_favourite)}
-										/>
+									<Fav {...props} user={user} data={data} />
 									</Col>
 								</Row>
 							</Card.ImgOverlay>

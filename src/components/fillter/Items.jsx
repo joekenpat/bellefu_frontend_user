@@ -16,6 +16,8 @@ import {
 
 import { AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftRight } from "react-icons/bs";
+import Fav from "../Ads/Fav";
+import Price from "../Ads/Price";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -23,17 +25,6 @@ const convertTooltip = (props) => (
 		convert currency
 	</Tooltip>
 );
-
-//==FUNCTION FOR LIKE AND UNLIKE BUTTON
-const Switch = (e) => {
-	if (e.target.style.color === "#ffa500") {
-		e.target.style.color = "red";
-	} else if (e.target.style.color === "red") {
-		e.target.style.color = "#ffa500";
-	} else {
-		e.target.style.color = "red";
-	}
-};
 
 export default function Items(props) {
 	//FILTER GLOBAL STATE
@@ -156,7 +147,7 @@ const  loadData = (page=1) => {
 											</Badge>
 										</Col>
 										<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-											<AiFillHeart onClick={Switch} style={styles.favBtn} />
+											<Fav {...props} user={user} data={data} />
 										</Col>
 									</Row>
 								</Card.ImgOverlay>
@@ -171,27 +162,12 @@ const  loadData = (page=1) => {
 										<p style={styles.title}>{data.title}</p>
 									</Link>
 
-									<span className="mr-1 ml-1 " style={styles.price}>
-										{data.currency_symbol}
-										{data.price}
-									</span>
-
-									<OverlayTrigger
-										placement="bottom"
-										delay={{ show: 50, hide: 100 }}
-										overlay={convertTooltip}>
-										<BsArrowLeftRight
-											className=" ml-1"
-											style={{
-												fontSize: "0.9em",
-												cursor: "pointer",
-												fontSize: "20px",
-												color: "#ffa500"
-											}}
-										/>
-									</OverlayTrigger>
+									
 								</Card.Body>
 							</Card>
+							<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
+								<Price styles={styles} data={data} convertTooltip={convertTooltip} />
+							</div>
 						</Col>
 					))
 				)}
