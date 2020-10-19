@@ -13,6 +13,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Price from "./Price";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -99,6 +100,7 @@ useEffect(() => {
 											lg={3}
 											xl={3}
 											className=" my-1 px-1">
+												
 											<Card className="border-0 rounded-lg">
 												<Card.Img
 													style={styles.image}
@@ -157,7 +159,7 @@ useEffect(() => {
 														</Col>
 														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
 															<AiFillHeart
-																style={{color: data.is_user_favourite ? 'red' : '#ffa500', marginBottom: "-220px",
+																style={{color: data.is_user_favourite === true ? 'red' : '#ffa500', marginBottom: "-220px",
 																fontSize: "30px",
 																cursor: "pointer",
 																padding: "2px",
@@ -182,27 +184,12 @@ useEffect(() => {
 														<p style={styles.title}>{data.title}</p>
 													</Link>
 
-													<span className="mr-1 ml-1 " style={styles.price}>
-														{data.currency_symbol}
-														{data.price}
-													</span>
-
-													<OverlayTrigger
-														placement="bottom"
-														delay={{ show: 50, hide: 100 }}
-														overlay={convertTooltip}>
-														<BsArrowLeftRight
-															className=" ml-1"
-															style={{
-																fontSize: "0.9em",
-																cursor: "pointer",
-																fontSize: "20px",
-																color: "#ffa500"
-															}}
-														/>
-													</OverlayTrigger>
+													
 												</Card.Body>
 											</Card>
+											<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
+											<Price styles={styles} data={data} {...props} convertTooltip={convertTooltip} />
+											</div>
 										</Col>
 									))
 							}
