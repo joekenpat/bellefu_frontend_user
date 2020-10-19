@@ -73,7 +73,7 @@ export default function AdTable() {
 	console.log(ad);
 	useEffect(() => {
 		setCurrentData(ad.data && ad.data.slice(offset, offset + pageLimit));
-	}, [offset, ad.data && ad.data]);
+	}, [offset, ad.data && ad.data.length]);
 
 	return (
 		<div>

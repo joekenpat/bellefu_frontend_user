@@ -9,10 +9,16 @@ import {
 	USER_UPDATE_SUCCESS,
 	USER_UPDATE_FAIL,
 	USER_LOGOUT,
-	SEARCH_FILTER
+	SEARCH_FILTER,
+	LOAD_USER_COUNTRY
 } from "../types";
 import axios from "axios";
 import Cookie from "js-cookie";
+
+export const loadCountry = (country) => ({
+    type: LOAD_USER_COUNTRY,
+    country
+})
 
 //USER SIGNIN ACTION PAYLOAD
 export const signin = (identifier, password) => async (dispatch) => {
@@ -28,7 +34,11 @@ export const signin = (identifier, password) => async (dispatch) => {
 		const token = data.token;
 		if (token) {
 			dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+			dispatch(loadCountry(data.location_info))
+			Cookie.remove('country')
+			Cookie.set('country', JSON.stringify(data.location_info))
 			Cookie.set("user", JSON.stringify(data));
+			console.log(data)
 
 		}
 		dispatch({ type: USER_SIGNIN_FAIL, payload: data.errors });
@@ -67,6 +77,9 @@ export const signup = (
 		const token = data.token;
 		if (token) {
 			dispatch({ type: USER_SIGNUP_SUCCESS, payload: data });
+			dispatch(loadCountry(data.location_info))
+			Cookie.remove('country')
+			Cookie.set('country', JSON.stringify(data.location_info))
 			Cookie.set("user", JSON.stringify(data));
 		}
 		dispatch({ type: USER_SIGNUP_FAIL, payload: data.message });

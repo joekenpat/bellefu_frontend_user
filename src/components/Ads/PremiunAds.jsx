@@ -12,6 +12,7 @@ import pic from "../images/pic.jpg";
 import { AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -20,7 +21,58 @@ const convertTooltip = (props) => (
 	</Tooltip>
 );
 
-//==FUNCTION FOR LIKE AND UNLIKE BUTTON
+
+
+
+export default function PremiunAds(props) {
+	const [productsData, setProductsData] = useState([]);
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { user } = userSignin;
+
+	let apiUrl = "https://dev.bellefu.com/api/product/home/premium/latest";
+
+	const loadData = () => {
+		axios
+			.get(apiUrl, {
+				headers: {
+					// Authorization: user ? `Bearer ${user.token}` : 'hh',
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				console.log(res.data.premium_products)
+				setProductsData(res.data.premium_products);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	const toggleFav = (e, product_slug, isFav) => {
+		if(!user) {
+			props.history.push('/login')
+		}
+		Switch(e)
+		axios
+			.get(`https://dev.bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				console.log(res)
+				
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	//==FUNCTION FOR LIKE AND UNLIKE BUTTON
 const Switch = (e)  => {
 	if (e.target.style.color === "#ffa500") {
 		e.target.style.color = "red";
@@ -30,28 +82,6 @@ const Switch = (e)  => {
 		e.target.style.color = "red";
 	}
 }
-
-
-export default function PremiunAds() {
-	const [productsData, setProductsData] = useState([]);
-
-	let apiUrl = "https://dev.bellefu.com/api/product/home/premium/latest";
-
-	const loadData = () => {
-		axios
-			.get(apiUrl, {
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json"
-				}
-			})
-			.then((res) => {
-				setProductsData(res.data.premium_products);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
 
 useEffect(() => {
 	loadData();
@@ -127,8 +157,13 @@ useEffect(() => {
 														</Col>
 														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
 															<AiFillHeart
-																onClick={Switch}
-																style={styles.favBtn}
+																style={{color: data.is_user_favourite ? 'red' : '#ffa500', marginBottom: "-220px",
+																fontSize: "30px",
+																cursor: "pointer",
+																padding: "2px",
+																borderRadius: "50px",
+																backgroundColor: "white",}}
+																onClick={(e) => toggleFav(e, data.slug, data.is_user_favourite)}
 															/>
 														</Col>
 													</Row>

@@ -12,6 +12,8 @@ import pic from "../images/pic.jpg";
 import { AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -20,19 +22,13 @@ const convertTooltip = (props) => (
 	</Tooltip>
 );
 
-//==FUNCTION FOR LIKE AND UNLIKE BUTTON
-const Switch = (e) => {
-	if (e.target.style.color === "#ffa500") {
-		e.target.style.color = "red";
-	} else if (e.target.style.color === "red") {
-		e.target.style.color = "#ffa500";
-	} else {
-		e.target.style.color = "red";
-	}
-};
+
 
 export default function PremiunAds() {
 	const [productsData, setProductsData] = useState([]);
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { user } = userSignin;
 
 	let apiUrl = "https://dev.bellefu.com/api/product/home/all/latest";
 
@@ -51,6 +47,36 @@ export default function PremiunAds() {
 				console.log(error);
 			});
 	};
+
+	const toggleFav = (e, product_slug, isFav) => {
+		Switch(e)
+		axios
+			.get(`https://dev.bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				console.log(res)
+				
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	//==FUNCTION FOR LIKE AND UNLIKE BUTTON
+const Switch = (e) => {
+	if (e.target.style.color === "#ffa500") {
+		e.target.style.color = "red";
+	} else if (e.target.style.color === "red") {
+		e.target.style.color = "#ffa500";
+	} else {
+		e.target.style.color = "red";
+	}
+};
 
 	useEffect(() => {
 		loadData();
@@ -125,7 +151,15 @@ export default function PremiunAds() {
 										</Badge>
 									</Col>
 									<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-										<AiFillHeart onClick={Switch} style={styles.favBtn} />
+										<AiFillHeart
+											style={{color: data.is_user_favourite ? 'red' : '#ffa500', marginBottom: "-220px",
+											fontSize: "30px",
+											cursor: "pointer",
+											padding: "2px",
+											borderRadius: "50px",
+											backgroundColor: "white",}}
+											onClick={(e) => toggleFav(e, data.slug, data.is_user_favourite)}
+										/>
 									</Col>
 								</Row>
 							</Card.ImgOverlay>
@@ -196,13 +230,4 @@ const styles = {
 		padding: "5px",
 		color: "#ffa500"
 	},
-	favBtn: {
-		marginBottom: "-220px",
-		fontSize: "30px",
-		color: "#ffa500",
-		cursor: "pointer",
-		padding: "2px",
-		borderRadius: "50px",
-		backgroundColor: "white"
-	}
 };

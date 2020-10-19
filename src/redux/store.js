@@ -9,15 +9,21 @@ import {
     userSignupReducer,
     userUpdateReducer,
     searchFilterRuducer
-} from './reducers/userReducer'
+} from './reducers/userReducer';
+
+import {
+    userCountry
+} from './reducers/userCountry'
 
 
 const user = Cookie.getJSON("user") || null
+const country = Cookie.getJSON('country') || {}
 
 // const user = signin
 
 export const initialState = {
-    userSignin: { user},  
+    userSignin: { user},
+    userCountry: country
 }
 
 const  reducers = combineReducers({
@@ -26,6 +32,7 @@ const  reducers = combineReducers({
      userSignup: userSignupReducer,
      userUpdate: userUpdateReducer,
      porductSearchFilter:searchFilterRuducer,
+     userCountry: userCountry
  
 })
 

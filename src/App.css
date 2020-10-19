@@ -14,3 +14,21 @@ body{
     background-color: transparent !important;
     border: 0;
 }
+
+.cursor {
+    cursor: pointer;
+}
+
+.flag {
+    width: 15px;
+    height: 15px;
+}
+
+.text {
+    color: #ffa500;
+}
+
+.country:hover {
+    color: #ffa500;
+    transition: 0.2s all ease-in;
+}

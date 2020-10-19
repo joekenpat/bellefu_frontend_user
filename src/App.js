@@ -26,8 +26,8 @@ import PostAdSuccessMessagePage from "./components/app/PostAdSuccessMessagePage"
 import UpgradeSuccess from "./components/app/UpgradeSuccess";
 import Footer from "./components/app/Footer"
 import VerificationPage from "./components/app/VerificationPage"
+import WithCountry from "./WithCountry";
 
-//REDUX STATE
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
@@ -36,56 +36,57 @@ function App() {
 		<Provider store={store}>
 			<div className="App">
 				<Router>
-					<Route exact path="/" component={LandingPage} />
-					<Route exact path="/product_list/" component={CategoryPage} />
-					<Route exact path="/register" component={RegistrationFormPage} />
-					<Route exact path="/login" component={LoginFormPage} />
-					<Route exact path="/product_detail/:id" component={AdViewPage} />
+			
+					<Route exact path="/" component={WithCountry(LandingPage)} />
+					<Route exact path="/product_list/" component={WithCountry(CategoryPage)} />
+					<Route exact path="/register" component={WithCountry(RegistrationFormPage)} /> */}
+					<Route exact path="/login" component={WithCountry(LoginFormPage)} />
+					<Route exact path="/product_detail/:id" component={AdViewPage}/>
 					<Switch>
 						<PrivateRoute
 							exact
 							path="/user_dashboard"
 							component={UserDashbordPage}
 						/>
-						<PrivateRoute exact path="/profile" component={UserProfilePage} />
-						<PrivateRoute exact path="/user_ad" component={UserAdPage} />
+						 <PrivateRoute exact path="/profile" component={WithCountry(UserProfilePage)} />
+						<PrivateRoute exact path="/user_ad" component={WithCountry(UserAdPage)} />
 						<PrivateRoute
 							exact
 							path="/pending_ad"
-							component={UserPendingAdPage}
+							component={WithCountry(UserPendingAdPage)}
 						/>
 						<PrivateRoute
 							exact
 							path="/favourite_ad"
-							component={UserFavouriteAdPage}
+							component={WithCountry(UserFavouriteAdPage)}
 						/>
 						<PrivateRoute
 							exact
 							path="/expried_ad"
-							component={UserExpriedAdPage}
+							component={WithCountry(UserExpriedAdPage)}
 						/>
 
-						<PrivateRoute exact path="/post_ad" component={PostAdPage} />
+						<PrivateRoute exact path="/post_ad" component={WithCountry(PostAdPage)} />
 						<PrivateRoute
 							exact
 							path="/payment/:slug/:plan"
-							component={PostAdPaymentPage}
+							component={WithCountry(PostAdPaymentPage)}
 						/>
 						<PrivateRoute
 							exact
 							path="/post_sucess/:slug/:is_upgradable//:pathname"
-							component={PostAdSuccessMessagePage}
+							component={WithCountry(PostAdSuccessMessagePage)}
 						/>
 						<PrivateRoute
 							exact
 							path="/upgrade_success"
-							component={UpgradeSuccess}
+							component={WithCountry(UpgradeSuccess)}
 						/>
 						<PrivateRoute
 							exact
 							path="/verification"
-							component={VerificationPage}
-						/>
+							component={WithCountry(VerificationPage)}
+						/> 
 					</Switch>
 					<div className="d-none d-lg-block  d-md-none" style={{paddingTop: "50px"}}>
 					<Footer/>
@@ -97,7 +98,7 @@ function App() {
 				</Router>
 				
 			</div>
-		</Provider>
+			   </Provider>
 	);
 }
 

@@ -12,7 +12,7 @@ import MobileCategory from "../categories/MobileCategory";
 import { Link } from "react-router-dom";
 import {BsArrowRight} from "react-icons/bs"
 
-export default function LandingPage() {
+export default function LandingPage(props) {
 	return (
 		<div>
 			<HeaderNav />
@@ -49,7 +49,7 @@ export default function LandingPage() {
 									</Link>
 								</Col>
 							</Row>
-							<PremiunAds />
+							<PremiunAds/>
 						</div>
 						<div className="mt-5">
 							<Row>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { signin } from "../../redux/actions/userActon";
 import Preloader from "./Preloader";
@@ -16,13 +16,13 @@ function LogInForm(props) {
 	const userSignin = useSelector((state) => state.userSignin);
 	const { loading, user, error } = userSignin;
 
-	useEffect(() => {
-		if (user) {
-			window.location.reload(true)
-			props.history.push("/user_dashboard");
-		}
-		return () => {};
-	}, [user]);
+	// useEffect(() => {
+	// 	if (user) {
+	// 		window.location.reload(true)
+	// 		props.history.push("/user_dashboard");
+	// 	}
+	// 	return () => {};
+	// }, [user]);
 
 	const { identifier, password } = formData;
 	const onChangeHandler = (e) => {
@@ -31,11 +31,16 @@ function LogInForm(props) {
 
 	const onSubmitHandle = (e) => {
 		e.preventDefault();
-		dispatch(signin(identifier, password));
+		dispatch(signin(identifier, password)).then(() => {
+
+			props.history.push("/user_dashboard");
+			window.location.reload(true)
+		})
 	};
 
 	return (
 		<div>
+			 {/* {user ? <Redirect to="/user_dashboard" />: null} */}
 			{loading && <Preloader />}
 			{error && (
 				<div class="alert alert-danger" role="alert">
