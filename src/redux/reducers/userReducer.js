@@ -70,6 +70,7 @@ export const userUpdateReducer = (state = {}, action) => {
 			};
 		case USER_UPDATE_SUCCESS:
 			return {
+				...state,
 				loading: false,
 				user: action.payload
 			};

@@ -18,7 +18,7 @@ const renderTooltip = (props) => (
 );
 
 //THIS IS A HEADER COMPOENT
-export default function HeaderNav() {
+export default function HeaderNav(props) {
 	const dispatch = useDispatch();
 	const country = useSelector((state) => state.userCountry);
 
@@ -33,6 +33,7 @@ export default function HeaderNav() {
 		.then((res) => res.json())
 		.then((data) => {
 			dispatch(updateUserCountry(data.location_info))
+			window.location.reload(true)
 		});
 	}
 

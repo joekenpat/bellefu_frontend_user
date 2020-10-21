@@ -22,6 +22,10 @@ import { GiSettingsKnobs } from "react-icons/gi";
 import Preloader from "../user/Preloader";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import Fav from "../Ads/Fav";
+import Price from "../Ads/Price";
+import { useSelector } from "react-redux";
+import InfiniteScroll from 'react-infinite-scroll-component';
 const queryString = require("query-string");
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -31,18 +35,7 @@ const convertTooltip = (props) => (
 	</Tooltip>
 );
 
-//==FUNCTION FOR LIKE AND UNLIKE BUTTON
-const Switch = (e) => {
-	if (e.target.style.color === "#ffa500") {
-		e.target.style.color = "red";
-	} else if (e.target.style.color === "red") {
-		e.target.style.color = "#ffa500";
-	} else {
-		e.target.style.color = "red";
-	}
-};
-
-export default function CategoryPage() {
+export default function CategoryPage(props) {
 	// ========FOR FITER FROM STATE AND FUNCTION START HERE ==================================//
 	const [filterData, setFilterData] = useState({
 		min_price: "",
@@ -78,9 +71,15 @@ export default function CategoryPage() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [productsData, setProductsData] = useState([]);
+	const [products, setProducts] = useState([])
+	const [nextPageUrl, setNextPageUrl] = useState('')
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const userCountry = useSelector((state) => state.userCountry);
+	const { user } = userSignin;
 
 	let dataUrl = "";
-	let apiUrl = "https://dev.bellefu.com/api/product/list";
+	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${userCountry.country_slug}`;
 
 	let location = useLocation();
 	const parsed = queryString.parse(location.search);
@@ -90,7 +89,6 @@ export default function CategoryPage() {
 	const loadFilterData = () => {
 		filterString = new URLSearchParams(filterData).toString();
 		dataUrl = apiUrl + "?" + filterString;
-		loadData(1);
 	};
 	const loadData = (page = 1) => {
 		setLoading(true);
@@ -103,7 +101,9 @@ export default function CategoryPage() {
 			})
 			.then((res) => {
 				setLoading(false);
+				setProducts(res.data.products)
 				setProductsData(res.data.products.data);
+				setNextPageUrl(res.data.products.next_page_url)
 				setError("");
 			})
 			.catch((error) => {
@@ -112,6 +112,24 @@ export default function CategoryPage() {
 				console.log(error);
 			});
 	};
+
+	const nextData = () => {
+		setLoading(false);
+		axios
+			.get(nextPageUrl, {
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setLoading(false);
+				setProducts(res.data.products)
+				setNextPageUrl(res.data.products.next_page_url)
+				setProductsData(productsData.concat(...res.data.products.data))
+				console.log(productsData)
+			})
+	}
 
 // ==============CATEGORY LIST STATE =========
   
@@ -147,6 +165,7 @@ const loadSubCategory = () => {
 	   }
    })
    .then((res) => {
+	   
 	   setSubCategoryData(res.data.subcategories.data)
 	   setNotShow(false)
 	   setError("");
@@ -188,6 +207,10 @@ const loadSubCategory = () => {
 		loadFilterData();
 		loadCategory();
 	}, [productsData.length], [categoryData], [subcategoryData]);
+
+	useEffect(() => {
+		loadData(1);
+	}, [])
 	return (
 		<div>
 			<HeaderNav />
@@ -546,11 +569,17 @@ const loadSubCategory = () => {
 						<div
 							style={{ marginTop: "100px" }}
 							className="d-none d-lg-block  d-md-none">
-							<Row>
+							
 								{loading ? 
 									<Preloader />
 								 :  
-									productsData.map((data) => (
+								 (
+									 <div>
+									
+									
+									  
+									<Row>
+									{productsData.map((data) => (
 										<Col
 											key={data.slug}
 											xs={6}
@@ -616,10 +645,7 @@ const loadSubCategory = () => {
 															</Badge>
 														</Col>
 														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-															<AiFillHeart
-																onClick={Switch}
-																style={styles.favBtn}
-															/>
+															<Fav {...props} user={user} data={data} />
 														</Col>
 													</Row>
 												</Card.ImgOverlay>
@@ -637,31 +663,32 @@ const loadSubCategory = () => {
 														<p style={styles.title}>{data.title}</p>
 													</Link>
 
-													<span className="mr-1 ml-1 " style={styles.price}>
-														{data.currency_symbol}
-														{data.price}
-													</span>
-
-													<OverlayTrigger
-														placement="bottom"
-														delay={{ show: 50, hide: 100 }}
-														overlay={convertTooltip}>
-														<BsArrowLeftRight
-															className=" ml-1"
-															style={{
-																fontSize: "0.9em",
-																cursor: "pointer",
-																fontSize: "20px",
-																color: "#ffa500"
-															}}
-														/>
-													</OverlayTrigger>
+													
 												</Card.Body>
 											</Card>
+											<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
+												<Price styles={styles} data={data} convertTooltip={convertTooltip} />
+											</div>
 										</Col>
-									))
+									))}
+								  	</Row>
+									  <InfiniteScroll
+										dataLength={productsData.length}
+										next={nextData}
+										hasMore={products.current_page !== products.last_page ? true : false}
+										loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
+										endMessage={
+										<p style={{ textAlign: 'center' }}>
+											<b>Yay! You have seen it all</b>
+										</p>
+										}
+										>
+									</InfiniteScroll>
+								  </div>
+								 )
+									
 							}
-							</Row>
+							
 						</div>
 						{/* =========FOR ITEM MOBILEVIEW======= */}
 						<div
@@ -737,10 +764,7 @@ const loadSubCategory = () => {
 															</Badge>
 														</Col>
 														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-															<AiFillHeart
-																onClick={Switch}
-																style={styles.favBtn}
-															/>
+														<Fav {...props} user={user} data={data} />
 														</Col>
 													</Row>
 												</Card.ImgOverlay>
@@ -758,32 +782,30 @@ const loadSubCategory = () => {
 														<p style={styles.title}>{data.title}</p>
 													</Link>
 
-													<span className="mr-1 ml-1 " style={styles.price}>
-														
-														{data.currency_symbol}
-														{data.price}
-													</span>
-
-													<OverlayTrigger
-														placement="bottom"
-														delay={{ show: 50, hide: 100 }}
-														overlay={convertTooltip}>
-														<BsArrowLeftRight
-															className=" ml-1"
-															style={{
-																fontSize: "0.9em",
-																cursor: "pointer",
-																fontSize: "20px",
-																color: "#ffa500"
-															}}
-														/>
-													</OverlayTrigger>
+													
 												</Card.Body>
 											</Card>
+											<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
+											<Price styles={styles} data={data} convertTooltip={convertTooltip} />
+											</div>
 										</Col>
 									))
 								)}
 							</Row>
+							<div >
+							<InfiniteScroll
+								dataLength={productsData.length}
+								next={nextData}
+								hasMore={products.current_page !== products.last_page ? true : false}
+								loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
+								endMessage={
+								<p style={{ textAlign: 'center' }}>
+									<b>Yay! You have seen it all</b>
+								</p>
+								}
+								>
+							</InfiniteScroll>
+							</div>
 						</div>
 					</Col>
 				</Row>
