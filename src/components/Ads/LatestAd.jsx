@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import pic from "../images/pic.jpg";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import Price from "./Price";
 import Fav from "./Fav";
 
@@ -27,15 +27,15 @@ const convertTooltip = (props) => (
 export default function PremiunAds(props) {
 	const [productsData, setProductsData] = useState([]);
 
-	const userSignin = useSelector((state) => state.userSignin);
-	const { user } = userSignin;
+	
 
-	let apiUrl = "https://dev.bellefu.com/api/product/home/all/latest";
+	let apiUrl = `https://dev.bellefu.com/api/product/home/all/latest?country=${props.country.country_slug}`;
 
 	const loadData = () => {
 		axios
 			.get(apiUrl, {
 				headers: {
+					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
@@ -54,6 +54,9 @@ export default function PremiunAds(props) {
 
 	return (
 		<div>
+			{productsData.length > 0 && (
+
+			
 			<Row>
 				{productsData.map((data) => (
 					<Col
@@ -121,7 +124,7 @@ export default function PremiunAds(props) {
 										</Badge>
 									</Col>
 									<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-									<Fav {...props} user={user} data={data} />
+									<Fav {...props} user={props.user} data={data} />
 									</Col>
 								</Row>
 							</Card.ImgOverlay>
@@ -148,6 +151,7 @@ export default function PremiunAds(props) {
 					</Col>
 				))}
 			</Row>
+		)}
 		</div>
 	);
 }

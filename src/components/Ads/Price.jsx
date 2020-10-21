@@ -17,8 +17,8 @@ const Price = (props) => {
             <span className="mr-1 ml-1 " style={props.styles.price}>
                 {convert ? (
                     <span>
-                        $
-                        27
+                        {props.data.alt_price_info.alt_symbol}
+                        {props.data.alt_price_info.alt_price}
                     </span>
                 ) : (
                     <span>
@@ -29,7 +29,8 @@ const Price = (props) => {
             }
             </span>
            
-            <OverlayTrigger
+            {props.data.alt_price_info && (
+                <OverlayTrigger
                 style={{zindex: 999}}
                 placement="bottom"
                 delay={{ show: 50, hide: 100 }}
@@ -45,6 +46,7 @@ const Price = (props) => {
                     }}
                 />
             </OverlayTrigger>
+            )}
         </span>
     )
 }

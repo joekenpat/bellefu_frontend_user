@@ -58,6 +58,7 @@ const  loadData = (page=1) => {
 			})
 			.then((res) => {
 				setLoading(false);
+				console.log(res)
 				setProductsData(res.data.products.data);
 				setError("");
 			})

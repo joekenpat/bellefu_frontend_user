@@ -16,6 +16,7 @@ import { GiHeartMinus } from "react-icons/gi";
 import { GoLocation } from "react-icons/go";
 import { IoMdTime } from "react-icons/io";
 import pic from "../images/pic.jpg";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (unlike ad)
@@ -35,17 +36,35 @@ const viewTooltip = (props) => (
 const pageLimit = 10;
 export default function FavouriteAdTable() {
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [ad, setAd] = useState({});
-	const [totalRecords, setTotalRecords] = useState(0);
-	const [currentPage, setCurrentPage] = useState(1);
+	const [ad, setAd] = useState([]);
+	const [products, setProducts] = useState([])
+	const [nextPageUrl, setNextPageUrl] = useState('')
+	const [status, setStatus] = useState('loading')
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
 
+	const nextData = () => {
+		setLoading(false);
+		axios
+			.get(nextPageUrl, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setProducts(res.data.favourites)
+				setNextPageUrl(res.data.favourites.next_page_url)
+				console.log('called next page: ', nextPageUrl)
+				setAd(ad.concat(...res.data.favourites.data))
+			})
+	}
+
+
 	let url = "https://dev.bellefu.com/api/user/product/favourite/list";
 	useEffect(() => {
-		if (currentPage) {
 			axios
 				.get(`${url}`, {
 					headers: {
@@ -54,20 +73,23 @@ export default function FavouriteAdTable() {
 						Accept: "application/json"
 					}
 				})
-				.then((response) => {
+				.then((res) => {
 					setLoading(false);
-					setAd(response.data);
-					setError("");
-					console.log(response.data);
+					setProducts(res.data.favourites)
+					console.log(res.data.favourites.data)
+					setAd(res.data.favourites.data);
+					setNextPageUrl(res.data.favourites.next_page_url)
+					if(res.data.favourites.data.length < 1){
+						setStatus('No Favourite Ad')
+					}
 				})
 				.catch((error) => {
+					setStatus('No Favourite Ad')
 					setLoading(false);
-					setAd({});
-					setError("Something went worng");
-					console.log(error);
+					setAd([]);
 				});
-		}
-	}, [currentPage]);
+		
+	}, []);
 
 	return (
 		<div>
@@ -99,24 +121,24 @@ export default function FavouriteAdTable() {
 							{loading ? (
 								<Preloader />
 							) : (
-								ad.length > 0 &&
+								
 								ad.map((data) => (
 									<tr key={data.id}>
 										<td className="uk-text-center">
-											<Image src={pic} style={styles.image} />
+											<Image src={data.images[0]} style={styles.image} />
 										</td>
 										<td>
-											<p style={styles.titel}>{data.current_page.data.titel}</p>
+											<p style={styles.titel}>{data.title}</p>
 											<Badge
 												variant="danger"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "featured"
+														  data.plan === "featured"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "higlighted"
+														  data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -125,13 +147,13 @@ export default function FavouriteAdTable() {
 											<Badge
 												variant="warning"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "ugent"
+														  data.plan === "ugent"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "higlighted"
+														  data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -140,13 +162,13 @@ export default function FavouriteAdTable() {
 											<Badge
 												variant="success"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "ugent"
+														  data.plan === "ugent"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "featured"
+														  data.plan === "featured"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -156,24 +178,24 @@ export default function FavouriteAdTable() {
 											<div className="mt-3">
 												<AiOutlineTag style={styles.icon} className="mr-2" />
 												<span style={styles.category} className="ml-2 mt-3">
-													{data.current_page.data.category.name}
+													{data.category.name}
 												</span>
 												<span style={styles.subCategory} className="ml-2 mt-5">
-													{data.current_page.data.subcategory.name}
+													{data.subcategory.name}
 												</span>
 											</div>
 											<div className="mt-3">
 												<GoLocation style={styles.icon} className="mr-1" />
 												<span style={styles.location} className="ml-1 ">
-													{data.current_page.data.address}
+													{data.address}
 												</span>
 												<IoMdTime style={styles.icon} className="mr-1 ml-1" />
 												<span style={styles.date} className="ml-1">
 													02-May-23
 												</span>
 												<span className="ml-2" style={styles.price}>
-													{data.current_page.data.currency_symbol}
-													{data.current_page.data.price}
+													{data.currency_symbol}
+													{data.price}
 												</span>
 											</div>
 										</td>
@@ -210,17 +232,24 @@ export default function FavouriteAdTable() {
 							)}
 						</tbody>
 					</table>
-					<div className={(`${currentPage} ? d-none : d-block`, "text-center")}>
-						<p>No Favourite Ad</p>
-					</div>
-					<div className="justify-content-end">
-						<Pagination
-							totalRecords={totalRecords}
-							pageLimit={pageLimit}
-							pageRangeDisplayed={1}
-							onChangePage={setCurrentPage}
-						/>
-					</div>
+					<InfiniteScroll
+						dataLength={ad.length}
+						next={nextData}
+						hasMore={products.current_page !== products.last_page ? true : false}
+						loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
+						endMessage={
+						<p style={{ textAlign: 'center' }}>
+							
+						</p>
+						}
+						>
+					</InfiniteScroll>
+					{ad.length < 1 && (
+						<div className={"text-center"}>
+							<p>{status}</p>
+						</div>
+					)}
+					
 				</Card.Body>
 			</Card>
 		</div>

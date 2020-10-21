@@ -28,17 +28,13 @@ const convertTooltip = (props) => (
 
 export default function PremiunAds(props) {
 	const [productsData, setProductsData] = useState([]);
-
-	const userSignin = useSelector((state) => state.userSignin);
-	const { user } = userSignin;
-
-	let apiUrl = "https://dev.bellefu.com/api/product/home/premium/latest";
+	let apiUrl = `https://dev.bellefu.com/api/product/home/premium/latest?country=${props.country.country_slug}`;
 
 	const loadData = () => {
 		axios
 			.get(apiUrl, {
 				headers: {
-					// Authorization: user ? `Bearer ${user.token}` : 'hh',
+					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
@@ -128,7 +124,7 @@ useEffect(() => {
 															</Badge>
 														</Col>
 														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-															<Fav {...props} user={user} data={data} />
+															<Fav {...props} user={props.user} data={data} />
 														</Col>
 													</Row>
 												</Card.ImgOverlay>
