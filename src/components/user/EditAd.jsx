@@ -233,7 +233,7 @@ function EditAd(props) {
 		[categoryData.length],
 		[subcategoryData.length]
 	);
-	useEffect(async() => {
+	useEffect(() => {
 		fetchProduct()
 	}, []);
 	return (
