@@ -11,8 +11,13 @@ import LatestAd from "../Ads/LatestAd";
 import MobileCategory from "../categories/MobileCategory";
 import { Link } from "react-router-dom";
 import {BsArrowRight} from "react-icons/bs"
+import { useSelector } from "react-redux";
 
 export default function LandingPage(props) {
+	const userSignin = useSelector((state) => state.userSignin);
+	const userCountry = useSelector((state) => state.userCountry);
+	const { user } = userSignin;
+	const country = userCountry;
 	return (
 		<div>
 			<HeaderNav />
@@ -49,7 +54,7 @@ export default function LandingPage(props) {
 									</Link>
 								</Col>
 							</Row>
-							<PremiunAds/>
+							<PremiunAds country={country} user={user}/>
 						</div>
 						<div className="mt-5">
 							<Row>
@@ -64,7 +69,7 @@ export default function LandingPage(props) {
 									</Link>
 								</Col>
 							</Row>
-							<LatestAd />
+							<LatestAd country={country} user={user} />
 						</div>
 					</Col>
 				</Row>

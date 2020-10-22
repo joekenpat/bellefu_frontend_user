@@ -16,6 +16,7 @@ import { GoLocation, GoPencil } from "react-icons/go";
 import { MdDateRange } from "react-icons/md";
 import { IoMdTrash } from "react-icons/io";
 import pic from "../images/pic.jpg";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (delete)
 const deleteTooltip = (props) => (
@@ -34,40 +35,84 @@ const editTooltip = (props) => (
 const pageLimit = 10;
 export default function ExpiredAdTable() {
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [ad, setAd] = useState({});
-	const [totalRecords, setTotalRecords] = useState({});
-	const [currentPage, setCurrentPage] = useState(1);
+	const [ad, setAd] = useState([]);
+	const [products, setProducts] = useState([])
+	const [nextPageUrl, setNextPageUrl] = useState('')
+	const [status, setStatus] = useState('loading')
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
-	let url = "https://dev.bellefu.com/api/user/product/favourite/list";
+	let url = "https://dev.bellefu.com/api/user/product/expired";
+
+	const nextData = () => {
+		setLoading(false);
+		axios
+			.get(nextPageUrl, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setProducts(res.data.products)
+				setNextPageUrl(res.data.products.next_page_url)
+				console.log('called next page: ', nextPageUrl)
+				setAd(ad.concat(...res.data.products.data))
+			})
+	}
 
 	useEffect(() => {
-		if (currentPage) {
-			axios
-				.get(`${url}`, {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-						"Content-Type": "application/json",
-						Accept: "application/json",
-						
-					}
-				})
-				.then((response) => {
-					setLoading(false);
-					setAd(response.data);
-					setError("");
-					console.log(response.data);
-				})
-				.catch((error) => {
-					setLoading(false);
-					setAd({});
-					setError("Something went worng");
-					console.log(error);
-				});
-		}
-	}, [currentPage]);
+		axios
+			.get(`${url}`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setLoading(false);
+				setProducts(res.data.products)
+				console.log(res.data.products.data)
+				setAd(res.data.products.data);
+				setNextPageUrl(res.data.products.next_page_url)
+			})
+			.catch((error) => {
+				setStatus('No Expired Ad')
+				setLoading(false);
+				setAd([]);
+			});
+	
+}, []);
+
+
+useEffect(() => {
+	axios
+		.get(`${url}`, {
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+				"Content-Type": "application/json",
+				Accept: "application/json"
+			}
+		})
+		.then((res) => {
+			setLoading(false);
+			setProducts(res.data.products)
+			console.log(res.data.products.data)
+			setAd(res.data.products.data);
+			setNextPageUrl(res.data.products.next_page_url)
+			if(res.data.products.data.length < 1){
+				setStatus('No Expired Ad')
+			}
+		})
+		.catch((error) => {
+			setStatus('No Expired Ad')
+			setLoading(false);
+			setAd([]);
+		});
+
+}, []);
 
 	return (
 		<div>
@@ -95,11 +140,11 @@ export default function ExpiredAdTable() {
 						{loading ? (
 								<Preloader />
 							) : (
-								ad.length > 0 &&
+								
 								ad.map((data) => (
 							<tr>
 								<td className="uk-text-center">
-									<Image src={pic} style={styles.image} />
+									<Image src={data.images[0]} style={styles.image} />
 								</td>
 								<td>
 									<p style={styles.titel}>
@@ -109,13 +154,13 @@ export default function ExpiredAdTable() {
 									<Badge
 												variant="danger"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "featured"
+														  data.plan === "featured"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "higlighted"
+														  data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -124,13 +169,13 @@ export default function ExpiredAdTable() {
 											<Badge
 												variant="warning"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "ugent"
+														  data.plan === "ugent"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "higlighted"
+														  data.plan === "higlighted"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -139,13 +184,13 @@ export default function ExpiredAdTable() {
 											<Badge
 												variant="success"
 												className={`${
-													data.current_page.data.plan === "free"
+													data.plan === "free"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "ugent"
+														  data.plan === "ugent"
 														? "d-none"
 														: "d-block" ||
-														  data.current_page.data.plan === "featured"
+														  data.plan === "featured"
 														? "d-none"
 														: "d-block"
 												}`}>
@@ -206,17 +251,23 @@ export default function ExpiredAdTable() {
 									)}
 						</tbody>
 					</table>
-					<div className={`${currentPage} ? d-none : d-block`, "text-center"}>
-						<p>No Expired Ad</p>
-					</div>
-					<div className="justify-content-end">
-						<Pagination
-							totalRecords={totalRecords}
-							pageLimit={pageLimit}
-							pageRangeDisplayed={1}
-							onChangePage={setCurrentPage}
-						/>
-					</div>
+					<InfiniteScroll
+						dataLength={ad.length}
+						next={nextData}
+						hasMore={products.current_page !== products.last_page ? true : false}
+						loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
+						endMessage={
+						<p style={{ textAlign: 'center' }}>
+							
+						</p>
+						}
+						>
+					</InfiniteScroll>
+					{ad.length < 1 && (
+						<div className={"text-center"}>
+							<p>{status}</p>
+						</div>
+					)}
 				</Card.Body>
 			</Card>
 		</div>

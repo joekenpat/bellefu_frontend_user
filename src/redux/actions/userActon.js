@@ -35,6 +35,7 @@ export const signin = (identifier, password) => async (dispatch) => {
 		if (token) {
 			dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
 			dispatch(loadCountry(data.location_info))
+			axios.defaults.headers.common['Authorization'] = token
 			Cookie.remove('country')
 			Cookie.set('country', JSON.stringify(data.location_info))
 			Cookie.set("user", JSON.stringify(data));
@@ -80,6 +81,7 @@ export const signup = (
 			dispatch(loadCountry(data.location_info))
 			Cookie.remove('country')
 			Cookie.set('country', JSON.stringify(data.location_info))
+			axios.defaults.headers.common['Authorization'] = token
 			Cookie.set("user", JSON.stringify(data));
 		}
 		dispatch({ type: USER_SIGNUP_FAIL, payload: data.message });
