@@ -29,7 +29,7 @@ export default function WithCountry(WrappedComponent) {
         }, [])
 
         return (
-            <WrappedComponent />
+            <WrappedComponent userCountry={userCountry} />
         )
     }
     

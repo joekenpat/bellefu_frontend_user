@@ -9,7 +9,10 @@ import {
 	OverlayTrigger,
 	Badge,
 	Tooltip,
-	Button
+	Button,
+	InputGroup,
+	FormControl,
+	Modal
 } from "react-bootstrap";
 import { AiFillHeart } from "react-icons/ai";
 import { BsArrowLeftRight } from "react-icons/bs";
@@ -26,6 +29,9 @@ import Fav from "../Ads/Fav";
 import Price from "../Ads/Price";
 import { useSelector } from "react-redux";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Flag from "react-world-flags";
+import DesktopInput from "../slideshow/DesktopInput";
+import MyVerticallyCenteredModal from "../Ads/StateModal";
 const queryString = require("query-string");
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -73,6 +79,11 @@ export default function CategoryPage(props) {
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
+	const [state, setState] = useState({})
+	const [states, setStates] = useState([])
+	const [modalShow, setModalShow] = React.useState(false);
+	const [lgas, setLgas] = useState([])
+	const [lga, setLga] = useState({})
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const userCountry = useSelector((state) => state.userCountry);
@@ -90,6 +101,15 @@ export default function CategoryPage(props) {
 		filterString = new URLSearchParams(filterData).toString();
 		dataUrl = apiUrl + "?" + filterString;
 	};
+
+	const loadStates = () => {
+		axios.get(`https://dev.bellefu.com/api/${props.userCountry.country_iso2}/state/list`)
+		.then((res) => {
+			setStates(res.data.states)
+		}).catch((e) => {
+			console.log('an error occured: ', e)
+		})
+	}
 	const loadData = (page = 1) => {
 		setLoading(true);
 		axios
@@ -210,12 +230,19 @@ const loadSubCategory = () => {
 
 	useEffect(() => {
 		loadData(1);
+		loadStates()
 	}, [])
 	return (
 		<div>
 			<HeaderNav />
 			<Container>
+				
 				<Row>
+					<Col xs={12}>
+					<div style={{ marginTop: "100px" }}>
+						< DesktopInput lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
+					</div>
+					</Col>
 					<Col
 						lg={3}
 						md={12}
@@ -809,8 +836,20 @@ const loadSubCategory = () => {
 						</div>
 					</Col>
 				</Row>
+				
 			</Container>
 			<BottomNav />
+			<MyVerticallyCenteredModal
+				country={userCountry}
+				lgas={lgas}
+				setLgas={setLgas}
+				setLga={setLga}
+				states={states}
+				show={modalShow}
+				state={state}
+				setState={setState}
+				onHide={() => setModalShow(false)}
+			/>
 		</div>
 	);
 }

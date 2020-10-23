@@ -38,6 +38,7 @@ export default function Verification() {
 		})
 		.then((res) => {
 			setLoading(false)
+			console.log(res.data.user)
 			setNumber(res.data.user.phone)
 			if(res.data.user.phone_verification === null || res.data.user.phone_verification.status === 'pending'){
 				setHeaderTitle('Phone Verification')
@@ -103,26 +104,28 @@ export default function Verification() {
 
 	const onPhoneComplete = (e)=> {
 		setLoading(true)
-		Axios
-		.post('https://dev.bellefu.com/api/user/verification/confirm/phone_otp', {verification_code: Number(phoneCode)}, {
-			headers: {
-				Authorization: `Bearer ${user.token}`,
-				'Content-Type': 'application/json',
-				Accept: 'application/json'
-			}
-		})
-		.then(res => {
-			console.log(res)
-			setLoading(false)
-			setHeaderTitle('ID Verification')
-			setComponentToShow('id')
-			setError('');
-		})
-		.catch(error => {
-			console.log(error)
-			setLoading(false)
-			setError(error.response.data);
-		});
+		// if(phoneCode.length === 6){
+				Axios
+			.post('https://dev.bellefu.com/api/user/verification/confirm/phone_otp', {verification_code: Number(phoneCode)}, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				}
+			})
+			.then(res => {
+				console.log(res)
+				setLoading(false)
+				setHeaderTitle('ID Verification')
+				setComponentToShow('id')
+				setError('');
+			})
+			.catch(error => {
+				console.log(error)
+				setLoading(false)
+				setError(error.response.data);
+			});
+		// }
 	} 
 
 	const onIdSubmit = (e)=> {
