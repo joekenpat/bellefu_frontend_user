@@ -66,7 +66,7 @@ function PostAd(props) {
         };
 
         let real_ad_data = jsonToFormData(productData, options);
-        
+
         let url = 'https://dev.bellefu.com/api/user/product/save';
         axios
             .post(url, real_ad_data, {

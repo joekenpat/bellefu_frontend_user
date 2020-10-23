@@ -33,6 +33,9 @@ import store from "./redux/store";
 import EditAd from "./components/user/EditAd";
 import EditAdPage from "./components/app/EditAdPage";
 
+import MessageChatPage from "./components/app/MessageChatPage"
+import  MessageListPage  from "./components/app/MessageListPage"
+
 function App(props) {
 	return (
 		
@@ -44,6 +47,13 @@ function App(props) {
 					<Route exact path="/register" component={WithCountry(RegistrationFormPage)} />
 					<Route exact path="/login" component={WithCountry(LoginFormPage)} />
 					<Route exact path="/product_detail/:id" component={AdViewPage}/>
+					{/* <Route
+						exact
+						path="/edit_ad/:slug"
+						render={(props) => (
+							<EditAdPage {...props} />
+						)}
+						/> */}
 					<Switch>
 						<PrivateRoute
 							exact
@@ -70,6 +80,7 @@ function App(props) {
 
 						<PrivateRoute exact path="/post_ad" component={WithCountry(PostAdPage)} />
 						<PrivateRoute {...props} exact path="/edit_ad/:slug" component={WithCountry(EditAdPage)} />
+
 						<PrivateRoute
 							exact
 							path="/payment/:slug/:plan"
@@ -90,6 +101,8 @@ function App(props) {
 							path="/verification"
 							component={WithCountry(VerificationPage)}
 						/> 
+						<PrivateRoute exact path="/chat"  component={MessageChatPage}/>
+						<PrivateRoute exact path="/messages"  component={MessageListPage}/>
 					</Switch>
 					<div className="d-none d-lg-block  d-md-none" style={{paddingTop: "50px"}}>
 					<Footer/>
