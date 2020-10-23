@@ -7,8 +7,9 @@ import ImageUploader from 'react-images-upload';
 import {useSelector} from 'react-redux';
 import Preloader from './Preloader';
 import Axios from "axios";
+import jsonToFormData from 'json-form-data';
 
-export default function Verification() {
+export default function Verification(props) {
 
 //======USER GLOBAL STATE FROM REDUX
     const userSignin = useSelector(state => state.userSignin);
@@ -25,6 +26,7 @@ export default function Verification() {
 	const [componentToShow, setComponentToShow] = useState('')
 	const [requestLoading, setRequestLoading] = useState(false)
 	const [showCodeInput, setShowCodeInput] = useState(false)
+	const [pendingID, setPendingID] = useState(false)
 	
 	let url = 'https://dev.bellefu.com/api/user/profile/details';
 
@@ -46,7 +48,10 @@ export default function Verification() {
 			} else if (res.data.user.id_verification === null || res.data.user.phone_verification.status !== 'completed'){
 				setHeaderTitle('ID Verification')
 				setComponentToShow('id')
-			} else if (res.data.user.kyc_verification === null || res.data.user.kyc_verification.status === 'pending'){
+			} else if(res.data.user.phone_verification.status !== 'pending'){
+				setPendingID(true)
+			}
+			else if (res.data.user.kyc_verification === null || res.data.user.kyc_verification.status === 'pending'){
 				setHeaderTitle('KYC Verification')
 				setComponentToShow('kyc')
 			}
@@ -102,38 +107,11 @@ export default function Verification() {
 		setPhoneCode(e)
 	} 
 
-	const onPhoneComplete = (e)=> {
-		setLoading(true)
-		// if(phoneCode.length === 6){
-				Axios
-			.post('https://dev.bellefu.com/api/user/verification/confirm/phone_otp', {verification_code: Number(phoneCode)}, {
-				headers: {
-					Authorization: `Bearer ${user.token}`,
-					'Content-Type': 'application/json',
-					Accept: 'application/json'
-				}
-			})
-			.then(res => {
-				console.log(res)
-				setLoading(false)
-				setHeaderTitle('ID Verification')
-				setComponentToShow('id')
-				setError('');
-			})
-			.catch(error => {
-				console.log(error)
-				setLoading(false)
-				setError(error.response.data);
-			});
-		// }
-	} 
-
-	const onIdSubmit = (e)=> {
-		setLoading(true)
-		let formData = new FormData()
-		formData.append('id_images', idImage)
+	useEffect(() => {
+		if(phoneCode.length === 6){
+			setLoading(true)
 		Axios
-		.post('https://dev.bellefu.com/api/user/verification/request/id', formData, {
+		.post('https://dev.bellefu.com/api/user/verification/confirm/phone_otp', {verification_code: Number(phoneCode)}, {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 				'Content-Type': 'application/json',
@@ -143,14 +121,54 @@ export default function Verification() {
 		.then(res => {
 			console.log(res)
 			setLoading(false)
-			setHeaderTitle('KYC Verification')
-			setComponentToShow('kyc')
+			setHeaderTitle('ID Verification')
+			setComponentToShow('id')
 			setError('');
 		})
 		.catch(error => {
 			console.log(error)
 			setLoading(false)
-			setError(error.response.data);
+			setError(error.response.data.message);
+		});
+	}
+	}, [phoneCode.length])
+
+
+	const onIdSubmit = async (e)=> {
+		setLoading(true)
+		let options = {
+            initialFormData: new FormData(),
+            showLeafArrayIndexes: true,
+            includeNullValues: false,
+            mapping: function(value) {
+                if (typeof value === 'boolean') {
+                    return +value ? '1' : '0';
+                }
+                return value;
+            }
+		};
+		
+		let data = jsonToFormData({id_images: idImage}, options);
+        
+		  
+		Axios
+		.post('https://dev.bellefu.com/api/user/verification/request/id', data, {
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		})
+		.then(res => {
+			console.log(res)
+			setLoading(false)
+			setPendingID(true)
+			setError('');
+		})
+		.catch(error => {
+			console.log(error)
+			setLoading(false)
+			setError(error.response.data.message);
 		});
 	} 
 
@@ -176,7 +194,7 @@ export default function Verification() {
 		.catch(error => {
 			console.log(error)
 			setLoading(false)
-			setError(error.response.data);
+			setError(error.response.data.message);
 		});
 	} 
 
@@ -216,7 +234,7 @@ export default function Verification() {
 						
 						<div style={{display: showCodeInput ? 'block' : 'none'}}>
 							<div>
-								<ReactCodeInput type="number" fields={6} onChange={onPhoneChange} onComplete={onPhoneComplete} autoFocus={true} />
+								<ReactCodeInput type="number" fields={6} onChange={onPhoneChange} autoFocus={true} />
 							</div>
 							<div style={{display: 'flex', justifyContent: 'center', marginTop: '5px'}}>
 								<Spinner style={{display: requestLoading ? 'block' : 'none'}} animation="grow" />
@@ -253,8 +271,16 @@ export default function Verification() {
 							</Button>
 						</div>
 					</div>
+					<div style={{display: pendingID ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
+						<div className="mt-3">
+						<Alert variant='primary'>
+							Your ID verification is pending. If accepted, the last step is KYC request.
+						</Alert>
+						</div>
+
+					</div>
 					{/* for KYC verification */}
-					<div style={{alignSelf: 'center', display: componentToShow === 'kyc' ? 'block' : 'none'}} className="mt-3">
+					<div style={{alignSelf: 'center', display: componentToShow === 'kyc' && !pendingID ? 'block' : 'none'}} className="mt-3">
 						<Button onClick={onKycSubmit} className="callToAction" size="md">
 							Request KYC
 						</Button>
