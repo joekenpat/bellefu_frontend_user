@@ -40,8 +40,10 @@ export default function BottomNav() {
 				</Navbar.Brand>
 
 				<Navbar.Brand className="text-center mr-auto  ml-auto">
+				<Link to="/messages" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 					<FiMail style={styles.icon} />
 					<p style={styles.text_icon}>Message</p>
+				</Link>
 				</Navbar.Brand>
 
 				<Navbar.Brand href="#home">

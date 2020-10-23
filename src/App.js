@@ -32,6 +32,8 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import EditAd from "./components/user/EditAd";
 import EditAdPage from "./components/app/EditAdPage";
+import MessageChatPage from "./components/app/MessageChatPage"
+import  MessageListPage  from "./components/app/MessageListPage"
 
 function App(props) {
 	return (
@@ -97,6 +99,8 @@ function App(props) {
 							path="/verification"
 							component={WithCountry(VerificationPage)}
 						/> 
+						<PrivateRoute exact path="/chat"  component={MessageChatPage}/>
+						<PrivateRoute exact path="/messages"  component={MessageListPage}/>
 					</Switch>
 					<div className="d-none d-lg-block  d-md-none" style={{paddingTop: "50px"}}>
 					<Footer/>
