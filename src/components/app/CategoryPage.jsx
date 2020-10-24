@@ -29,6 +29,7 @@ import Fav from "../Ads/Fav";
 import Price from "../Ads/Price";
 import { useSelector } from "react-redux";
 import InfiniteScroll from 'react-infinite-scroll-component';
+
 import Flag from "react-world-flags";
 import DesktopInput from "../slideshow/DesktopInput";
 import MyVerticallyCenteredModal from "../Ads/StateModal";
@@ -80,6 +81,7 @@ export default function CategoryPage(props) {
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
+
 	const [state, setState] = useState({})
 	const [states, setStates] = useState([])
 	const [modalShow, setModalShow] = React.useState(false);

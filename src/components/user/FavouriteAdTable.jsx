@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "reactjs-hooks-pagination";
 import Preloader from "./Preloader";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import {
 	Card,
-	Badge,
-	Image,
-	Button,
 	Tooltip,
-	OverlayTrigger
 } from "react-bootstrap";
-import { AiOutlineTag, AiOutlineEye } from "react-icons/ai";
-import { GiHeartMinus } from "react-icons/gi";
-import { GoLocation } from "react-icons/go";
-import { IoMdTime } from "react-icons/io";
-import pic from "../images/pic.jpg";
+
 import InfiniteScroll from 'react-infinite-scroll-component';
+import FavouriteItem from "./FavouriteItem";
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (unlike ad)
@@ -34,8 +26,9 @@ const viewTooltip = (props) => (
 );
 
 const pageLimit = 10;
-export default function FavouriteAdTable() {
+export default function FavouriteAdTable(props) {
 	const [loading, setLoading] = useState(true);
+	const [loadingg, setLoadingg] = useState(false);
 	const [ad, setAd] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
@@ -43,6 +36,12 @@ export default function FavouriteAdTable() {
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
+
+	const onAdDelete = (slug) => {
+		setAd((ads) =>
+      	ads.filter((ad) => ad.slug !== slug)
+    );
+	}
 
 	const nextData = () => {
 		setLoading(false);
@@ -93,6 +92,9 @@ export default function FavouriteAdTable() {
 
 	return (
 		<div>
+			{loadingg && (
+				<Preloader />
+			)}
 			<Card className="border-0">
 				<Card.Body>
 					<table className="uk-table uk-table-responsive uk-table-divider">
@@ -123,111 +125,7 @@ export default function FavouriteAdTable() {
 							) : (
 								
 								ad.map((data) => (
-									<tr key={data.id}>
-										<td className="uk-text-center">
-											<Image src={data.images[0]} style={styles.image} />
-										</td>
-										<td>
-											<p style={styles.titel}>{data.title}</p>
-											<Badge
-												variant="danger"
-												className={`${
-													data.plan === "free"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "featured"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "higlighted"
-														? "d-none"
-														: "d-block"
-												}`}>
-												Ugent
-											</Badge>
-											<Badge
-												variant="warning"
-												className={`${
-													data.plan === "free"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "ugent"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "higlighted"
-														? "d-none"
-														: "d-block"
-												}`}>
-												Featured
-											</Badge>
-											<Badge
-												variant="success"
-												className={`${
-													data.plan === "free"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "ugent"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "featured"
-														? "d-none"
-														: "d-block"
-												}`}>
-												Higlighted
-											</Badge>
-
-											<div className="mt-3">
-												<AiOutlineTag style={styles.icon} className="mr-2" />
-												<span style={styles.category} className="ml-2 mt-3">
-													{data.category.name}
-												</span>
-												<span style={styles.subCategory} className="ml-2 mt-5">
-													{data.subcategory.name}
-												</span>
-											</div>
-											<div className="mt-3">
-												<GoLocation style={styles.icon} className="mr-1" />
-												<span style={styles.location} className="ml-1 ">
-													{data.address}
-												</span>
-												<IoMdTime style={styles.icon} className="mr-1 ml-1" />
-												<span style={styles.date} className="ml-1">
-													02-May-23
-												</span>
-												<span className="ml-2" style={styles.price}>
-													{data.currency_symbol}
-													{data.price}
-												</span>
-											</div>
-										</td>
-										<td>
-											<Badge
-												style={{ backgroundColor: "#b8e6b8", color: "white" }}
-												className="ml-2">
-												active
-											</Badge>
-										</td>
-										<td>
-											<div className="btn-group" role="group">
-												<OverlayTrigger
-													placement="bottom"
-													delay={{ show: 50, hide: 100 }}
-													overlay={viewTooltip}>
-													<Button size="lg" variant="light">
-														<AiOutlineEye style={{ color: "green" }} />
-													</Button>
-												</OverlayTrigger>
-
-												<OverlayTrigger
-													placement="bottom"
-													delay={{ show: 50, hide: 100 }}
-													overlay={unlikeTooltip}>
-													<Button size="lg" variant="light">
-														<GiHeartMinus style={{ color: "red" }} />
-													</Button>
-												</OverlayTrigger>
-											</div>
-										</td>
-									</tr>
+									<FavouriteItem setLoadingg={setLoadingg} key={data.id} onAdDelete={onAdDelete} styles={styles} data={data} viewTooltip={viewTooltip} unlikeTooltip={unlikeTooltip} {...props} user={user}/>
 								))
 							)}
 						</tbody>

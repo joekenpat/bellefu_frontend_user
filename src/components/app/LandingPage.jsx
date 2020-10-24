@@ -12,6 +12,7 @@ import MobileCategory from "../categories/MobileCategory";
 import { Link } from "react-router-dom";
 import {BsArrowRight} from "react-icons/bs"
 import { useSelector } from "react-redux";
+
 import { useEffect } from "react";
 import Axios from "axios";
 import { useState } from "react";
@@ -39,6 +40,7 @@ export default function LandingPage(props) {
 			console.log('an error occured: ', e)
 		})
 	}, [])
+
 	return (
 		<div>
 			<HeaderNav />
