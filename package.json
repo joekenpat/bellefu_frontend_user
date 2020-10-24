@@ -10,6 +10,7 @@
     "bootstrap": "^4.5.3",
     "js-cookie": "^2.2.1",
     "json-form-data": "^1.7.2",
+    "minisearch": "^3.0.1",
     "moment": "^2.29.1",
     "netlify": "^4.8.0",
     "netlify-cli": "^2.65.1",

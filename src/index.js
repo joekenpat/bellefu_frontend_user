@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Ripple from "./components/Loading/Ripple";
 
 //REDUX STATE
 import { Provider } from "react-redux";
@@ -11,8 +12,9 @@ import store from "./redux/store";
 ReactDOM.render(
   <React.StrictMode>
    <Provider store={store}>
-
-    <App />
+    <Suspense fallback={<Ripple size="lg" screen />}>
+          <App />
+      </Suspense>
    </Provider>
   
   </React.StrictMode>,
