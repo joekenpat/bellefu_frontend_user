@@ -45,7 +45,7 @@ export default function LandingPage(props) {
 		<div>
 			<HeaderNav />
 			<DesktopSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
-			<MobileSlideShow />
+			<MobileSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
 			<Container>
 				<Row>
 					<Col md={4} lg={4} xl={4}>
