@@ -38,7 +38,7 @@ export default function DesktopInput(props) {
 								</IconContext.Provider>
 							</span>
 							{Object.keys(props.state).length === 0 ? (
-								<span style={{fontSize: '16px'}} className="ml-2">Where</span>
+								<span style={{fontSize: '16px'}} className="ml-2">Where?  {props.country.country_name}</span>
 							) : (
 
 								<span style={{fontSize: '16px'}} className="ml-2">{Object.keys(props.lga).length > 0 ? `${props.lga.name}, ${props.state.name}, ${props.country.country_name}` : `${props.state.name}, ${props.country.country_name}`}</span>

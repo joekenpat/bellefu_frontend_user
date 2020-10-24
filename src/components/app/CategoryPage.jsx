@@ -32,6 +32,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Flag from "react-world-flags";
 import DesktopInput from "../slideshow/DesktopInput";
 import MyVerticallyCenteredModal from "../Ads/StateModal";
+import MobileInput from "../slideshow/MobileInput";
 const queryString = require("query-string");
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -239,8 +240,11 @@ const loadSubCategory = () => {
 				
 				<Row>
 					<Col xs={12}>
-					<div style={{ marginTop: "100px" }}>
-						< DesktopInput lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
+					<div className="d-none d-lg-block" style={{ marginTop: "100px" }}>
+						<DesktopInput lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
+					</div>
+					<div className="d-block d-lg-none" style={{ marginTop: "100px" }}>
+						<MobileInput lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
 					</div>
 					</Col>
 					<Col
@@ -249,9 +253,9 @@ const loadSubCategory = () => {
 						xs={12}
 						sm={12}
 						style={{ paddingLeft: "3px", paddingRight: "3px" }}>
-						<div style={{ marginTop: "100px" }}>
+						<div>
 								{/* ======FOR DESKTOP FILLTER====== */}
-							<div className="d-none d-lg-block  d-md-none">
+							<div style={{ marginTop: "80px" }} className="d-none d-lg-block  d-md-none">
 								<Form onSubmit={onSubmitHandle}>
 									<Card className="border-0">
 										<Container>
@@ -405,7 +409,7 @@ const loadSubCategory = () => {
 							</div>
 
 							{/* ======FOR MOBILE FILLTER====== */}
-							<div className=" d-lg-none  d-xs-block d-sm-block d-mb-block ">
+							<div style={{ marginTop: "10px" }} className=" d-lg-none  d-xs-block d-sm-block d-mb-block ">
 								<Accordion>
 									<Accordion.Toggle
 										as={Card.Header}
@@ -594,7 +598,7 @@ const loadSubCategory = () => {
 					<Col lg={9} md={12} xs={12} sm={12}>
 						{/* =========FOR ITEM DESKTOPEVIEW======= */}
 						<div
-							style={{ marginTop: "100px" }}
+							style={{ marginTop: "80px" }}
 							className="d-none d-lg-block  d-md-none">
 							
 								{loading ? 

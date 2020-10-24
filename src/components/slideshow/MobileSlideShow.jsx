@@ -1,23 +1,15 @@
 import React from "react";
 import { Carousel, Card, Form, Container, Button } from "react-bootstrap";
 import banner from "../images/banner.png";
-import Select from "react-select";
+
 import { width } from "dom-helpers";
 import { left } from "@popperjs/core";
+import MobileInput from "./MobileInput";
 
 
 
-const options = [
-	{ value: "Aro food", label: "Agro food" },
-	{ value: "Agro job", label: "Agro job" },
-	{ value: "Agro tools", label: "Agro tools" },
-	{ value: "Agro training", label: "Vanilla" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "vanilla", label: "Vanilla" },
-	{ value: "vanilla", label: "Vanilla" }
-]
-export default function MobileSlideShow() {
+
+export default function MobileSlideShow(props) {
 	return (
 		<div>
 			<Carousel
@@ -39,28 +31,7 @@ export default function MobileSlideShow() {
 					<Carousel.Caption  style={{ left: "10px", right: "10px" }} >
 						<h3 style={{ color: "white" }}>Buy And Sale</h3>
 
-						<Form >
-						<Form.Group >
-							<Card style={styles.from_card} className="border-0">
-								<Select
-									options={options}
-									components={{ DropdownIndicator: () => null, IndicatorSeparator:() => null }}
-									placeholder={"What are you looking for?"}
-									styles={selectStyles}
-								/>
-							</Card>
-							</Form.Group>
-							<Form.Group>
-								<Card style={styles.from_card} className="border-0">
-									<Form.Control style={styles.input} placeholder="First name" />
-								</Card>
-							</Form.Group>
-							<Form.Group>
-								<Button style={styles.btn} variant="warning" size="lg" block>
-									Search
-								</Button>
-							</Form.Group>
-						</Form>
+						<MobileInput country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow}/>
 					</Carousel.Caption>
 				</Carousel.Item>
 			</Carousel>
