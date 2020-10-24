@@ -8,7 +8,7 @@ import {
 	Tooltip,
 } from "react-bootstrap";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import ExpiredAdItem from "./ExpiredAdItem";
+import ExpiredAdItem from "./ExpiredAdItem.jsx";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (delete)
 const deleteTooltip = (props) => (
