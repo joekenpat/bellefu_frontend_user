@@ -5,18 +5,10 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import {
 	Card,
-	Badge,
-	Image,
-	Button,
 	Tooltip,
-	OverlayTrigger
 } from "react-bootstrap";
-import { AiOutlineTag } from "react-icons/ai";
-import { GoLocation, GoPencil } from "react-icons/go";
-import { MdDateRange } from "react-icons/md";
-import { IoMdTrash } from "react-icons/io";
-import pic from "../images/pic.jpg";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ExpiredAdItem from "./ExpiredAdItem";
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (delete)
 const deleteTooltip = (props) => (
@@ -33,12 +25,19 @@ const editTooltip = (props) => (
 );
 
 const pageLimit = 10;
-export default function ExpiredAdTable() {
+export default function ExpiredAdTable(props) {
 	const [loading, setLoading] = useState(true);
+	const [loadingg, setLoadingg] = useState(false);
 	const [ad, setAd] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
 	const [status, setStatus] = useState('loading')
+
+	const onAdDelete = (slug) => {
+		setAd((ads) =>
+      	ads.filter((ad) => ad.slug !== slug)
+    );
+	}
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
@@ -116,6 +115,9 @@ useEffect(() => {
 
 	return (
 		<div>
+			{loadingg && (
+				<Preloader />
+			)}
 			<Card className="border-0">
 				<Card.Body>
 					<table  class="uk-table uk-table-responsive uk-table-divider">
@@ -142,111 +144,7 @@ useEffect(() => {
 							) : (
 								
 								ad.map((data) => (
-							<tr>
-								<td className="uk-text-center">
-									<Image src={data.images[0]} style={styles.image} />
-								</td>
-								<td>
-									<p style={styles.titel}>
-										Freshly processed onions for worldwide bulk delivery Freshly
-									</p>
-
-									<Badge
-												variant="danger"
-												className={`${
-													data.plan === "free"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "featured"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "higlighted"
-														? "d-none"
-														: "d-block"
-												}`}>
-												Ugent
-											</Badge>
-											<Badge
-												variant="warning"
-												className={`${
-													data.plan === "free"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "ugent"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "higlighted"
-														? "d-none"
-														: "d-block"
-												}`}>
-												Featured
-											</Badge>
-											<Badge
-												variant="success"
-												className={`${
-													data.plan === "free"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "ugent"
-														? "d-none"
-														: "d-block" ||
-														  data.plan === "featured"
-														? "d-none"
-														: "d-block"
-												}`}>
-												Higlighted
-											</Badge>
-
-									<div className="mt-3">
-										<AiOutlineTag style={styles.icon} className="mr-2" />
-										<span style={styles.category} className="ml-2 mt-3">
-											Agricultural Produce
-										</span>
-										<span style={styles.subCategory} className="ml-2 mt-5">
-											Grains
-										</span>
-									</div>
-									<div className="mt-3">
-										<GoLocation style={styles.icon} className="mr-1" />
-										<span style={styles.location} className="ml-1 ">
-											port harcourt
-										</span>
-										<MdDateRange style={styles.icon} className="mr-1 ml-1" />
-										<span style={styles.date} className="ml-1 ">
-											Expiring: 02-May-23
-										</span>
-										<span  className="ml-2" style={styles.price}>$100</span>
-									</div>
-								</td>
-								<td>
-									<Badge
-										style={{ backgroundColor: "#b8e6b8", color: "white" }}
-										className="ml-2">
-										active
-									</Badge>
-								</td>
-								<td>
-									<div className="btn-group" role="group">
-										<OverlayTrigger
-											placement="bottom"
-											delay={{ show: 50, hide: 100 }}
-											overlay={editTooltip}>
-											<Button size="lg" variant="light">
-												<GoPencil style={{ color: "green" }} />
-											</Button>
-										</OverlayTrigger>
-
-										<OverlayTrigger
-											placement="bottom"
-											delay={{ show: 50, hide: 100 }}
-											overlay={deleteTooltip}>
-											<Button size="lg" variant="light">
-												<IoMdTrash style={{ color: "red" }} />
-											</Button>
-										</OverlayTrigger>
-									</div>
-								</td>
-							</tr>
+										<ExpiredAdItem setLoadingg={setLoadingg} key={data.id} onAdDelete={onAdDelete} styles={styles} data={data} editTooltip={editTooltip} deleteTooltip={deleteTooltip} {...props} user={user}  />
 									))
 									)}
 						</tbody>
