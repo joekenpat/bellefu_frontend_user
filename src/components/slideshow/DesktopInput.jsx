@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, Col, Button } from "react-bootstrap";
 import Select from "react-select";
+import {FaMapMarkerAlt} from 'react-icons/fa'
+import {IconContext} from 'react-icons'
 
 
 
@@ -14,9 +16,9 @@ const options = [
 	{ value: "vanilla", label: "Vanilla" },
 	{ value: "vanilla", label: "Vanilla" }
 ];
-export default function DesktopInput() {
+export default function DesktopInput(props) {
 	return (
-		<div>
+		<div style={{backgroundColor: 'white'}}>
 			<Form>
 				<Form.Row>
 					<Col lg={5} md={5} sm={12} clasName="mr-0 ml-0">
@@ -29,9 +31,22 @@ export default function DesktopInput() {
 					</Col>
 
 					<Col lg={5} md={5} sm={12} clasName="mr-0 ml-0">
-						<Form.Control style={styles.input} placeholder="First name" />
-					</Col>
+						<div onClick={props.setModalShow} className="cursor" style={styles.input}>
+							<span >
+								<IconContext.Provider value={{ color: "#808080", size: '17px', style:{paddingBottom: '3px'}}}>
+									<FaMapMarkerAlt/>
+								</IconContext.Provider>
+							</span>
+							{Object.keys(props.state).length === 0 ? (
+								<span style={{fontSize: '16px'}} className="ml-2">Where</span>
+							) : (
 
+								<span style={{fontSize: '16px'}} className="ml-2">{Object.keys(props.lga).length > 0 ? `${props.lga.name}, ${props.state.name}, ${props.country.country_name}` : `${props.state.name}, ${props.country.country_name}`}</span>
+							)
+						}
+						</div>
+					</Col>
+						{/* props.state.slug, props.lga.slug, props.country.country_slug */}
 					<Col lg={2} md={2} sm={12} clasName="mr-0 ml-0">
 						<Button style={styles.btn} variant="warning">
 							Search
@@ -86,7 +101,10 @@ const styles = {
 		borderRadius: "none",
 		height: "68px",
 		fontSize: "20px",
-		color: "black"
+		color: "#808080",
+		display: 'flex',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
 	},
 	btn: {
 		height: "50px",

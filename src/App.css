@@ -1,34 +1,46 @@
-html{
-    background-color:  whitesmoke
+html {
+  background-color: whitesmoke;
 }
-body{
-    background-color: whitesmoke  ;
-   align-content: flex-start
+body {
+  background-color: whitesmoke;
+  align-content: flex-start;
 }
-.preLoader{
-    width: 40px;
-    vertical-align: 49%;
-    left: 46.5%;
+.preLoader {
+  width: 40px;
+  vertical-align: 49%;
+  left: 46.5%;
 }
-.preLoaderContent > .modal-dialog > .modal-content{
-    background-color: transparent !important;
-    border: 0;
+.preLoaderContent > .modal-dialog > .modal-content {
+  background-color: transparent !important;
+  border: 0;
 }
 
 .cursor {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .flag {
-    width: 15px;
-    height: 15px;
+  width: 15px;
+  height: 15px;
+}
+
+.callToAction {
+  background-color: #ffa500;
+  color: "white";
+  border: none;
+  transition: 0.2s all ease-out;
+}
+
+.callToAction:hover {
+  background-color: #ffa500;
+  opacity: 0.8;
 }
 
 .text {
-    color: #ffa500;
+  color: #ffa500;
 }
 
 .country:hover {
-    color: #ffa500;
-    transition: 0.2s all ease-in;
+  color: #ffa500;
+  transition: 0.2s all ease-in;
 }

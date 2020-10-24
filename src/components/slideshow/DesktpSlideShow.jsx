@@ -3,7 +3,7 @@ import { Carousel, Card} from "react-bootstrap";
 import DesktopInput from "./DesktopInput"
 import banner from "../images/banner.png";
 
-export default function DesktpSlideShow() {
+export default function DesktpSlideShow(props) {
 	return (
 		<div>
 			<Carousel
@@ -26,7 +26,7 @@ export default function DesktpSlideShow() {
 						<div style={{ marginTop: "-18%" }}>
 							<h3 style={{ color: "white" }}>Buy And Sell</h3>
 							<Card style={styles.from_card} className="border-0">
-								< DesktopInput />
+								< DesktopInput country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow} />
 							</Card>
 						</div>
 					</Carousel.Caption>

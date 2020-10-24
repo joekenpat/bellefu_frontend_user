@@ -32,6 +32,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import EditAd from "./components/user/EditAd";
 import EditAdPage from "./components/app/EditAdPage";
+
 import MessageChatPage from "./components/app/MessageChatPage"
 import  MessageListPage  from "./components/app/MessageListPage"
 
@@ -57,7 +58,7 @@ function App(props) {
 						<PrivateRoute
 							exact
 							path="/user_dashboard"
-							component={UserDashbordPage}
+							component={WithCountry(UserDashbordPage)}
 						/>
 						 <PrivateRoute exact path="/profile" component={WithCountry(UserProfilePage)} />
 						<PrivateRoute exact path="/user_ad" component={WithCountry(UserAdPage)} />
@@ -78,7 +79,8 @@ function App(props) {
 						/>
 
 						<PrivateRoute exact path="/post_ad" component={WithCountry(PostAdPage)} />
-						<PrivateRoute {...props} exact path="/edit_ad/:slug" component={EditAdPage} />
+						<PrivateRoute {...props} exact path="/edit_ad/:slug" component={WithCountry(EditAdPage)} />
+
 						<PrivateRoute
 							exact
 							path="/payment/:slug/:plan"

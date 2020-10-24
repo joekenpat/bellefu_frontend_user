@@ -14310,6 +14310,11 @@ react-transition-group@^4.3.0, react-transition-group@^4.4.0, react-transition-g
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-verification-code-input@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/react-verification-code-input/-/react-verification-code-input-1.2.6.tgz#737fd784fa53974da2dabf247b134417a25981e8"
+  integrity sha512-irhaUmaVz01kVCB01tjuNcP4ILEwZjRF4FcIdiWoh457DbT38rJGX/14HkFuLDAvay70HsdhJwF/uEsqYv8eaw==
+
 react-world-flags@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/react-world-flags/-/react-world-flags-1.4.0.tgz#1634f9e39510309d94675cb1eaee37c9ecc44d28"

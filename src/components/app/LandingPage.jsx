@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Card, Col, Row } from "react-bootstrap";
+import { Container, Card, Col, Row} from "react-bootstrap";
 import HeaderNav from "../navigations/HeaderNav";
 import BottomNav from "../navigations/BottomNav";
 import MainDesktop from "../categories/MainDesktop";
@@ -13,15 +13,38 @@ import { Link } from "react-router-dom";
 import {BsArrowRight} from "react-icons/bs"
 import { useSelector } from "react-redux";
 
+import { useEffect } from "react";
+import Axios from "axios";
+import { useState } from "react";
+import MyVerticallyCenteredModal from "../Ads/StateModal";
+
+
+
+
 export default function LandingPage(props) {
+	const [modalShow, setModalShow] = React.useState(false);
 	const userSignin = useSelector((state) => state.userSignin);
 	const userCountry = useSelector((state) => state.userCountry);
+	const [states, setStates] = useState([])
+	const [state, setState] = useState({})
+	const [lgas, setLgas] = useState([])
+	const [lga, setLga] = useState({})
 	const { user } = userSignin;
 	const country = userCountry;
+
+	useEffect(() => {
+		Axios.get(`https://dev.bellefu.com/api/${country.country_iso2}/state/list`)
+		.then((res) => {
+			setStates(res.data.states)
+		}).catch((e) => {
+			console.log('an error occured: ', e)
+		})
+	}, [])
+
 	return (
 		<div>
 			<HeaderNav />
-			<DesktopSlideShow />
+			<DesktopSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
 			<MobileSlideShow />
 			<Container>
 				<Row>
@@ -73,6 +96,17 @@ export default function LandingPage(props) {
 						</div>
 					</Col>
 				</Row>
+				<MyVerticallyCenteredModal
+					country={props.userCountry}
+					states={states}
+					show={modalShow}
+					lgas={lgas}
+					setLgas={setLgas}
+					setLga={setLga}
+					state={state}
+					setState={setState}
+					onHide={() => setModalShow(false)}
+				/>
 			</Container>
 
 			<BottomNav />

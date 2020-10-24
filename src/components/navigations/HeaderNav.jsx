@@ -139,7 +139,7 @@ export default function HeaderNav(props) {
 				</Modal.Header>
 				<Modal.Body>
 					<Container>
-						<Row>
+						<Row  style={{height: '300px', overflowY: 'scroll'}}>
 							{countries.map((data, index) => (
 								<Col key={index} style={{marginTop: '10px'}} className="cursor country" sm={4}>
 									<div onClick={() => onFlagClick(data.iso2, data.name)}>
