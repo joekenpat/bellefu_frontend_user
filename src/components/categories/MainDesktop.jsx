@@ -10,8 +10,9 @@ export default function MainDesktop() {
 	// ==============CATEGORY LIST STATE =========
 
 	const [categoryData, setCategoryData] = useState([]);
+	const [loading, setLoading]= useState(true)
 
-	let categoryId = categoryData.map((x) => x.slug);
+
 	const loadCategory = () => {
 		axios
 			.get("https://dev.bellefu.com/api/category/list", {
@@ -21,8 +22,8 @@ export default function MainDesktop() {
 				}
 			})
 			.then((res) => {
-				setCategoryData(res.data.categories.data);
-				//    setError("");
+				setCategoryData(res.data.categories);
+				setLoading(false)
 			})
 			.catch((error) => {
 				//    setError("Something went worng");
@@ -32,41 +33,21 @@ export default function MainDesktop() {
 
 	// ==============SUBCATEGORY LIST STATE =========
 
-	const [subcategoryData, setSubCategoryData] = useState([]);
-	const [notShow, setNotShow] = useState(true);
-	const loadSubCategory = () => {
-		axios
-			.get(`https://dev.bellefu.com/api/subcategory/listfor/${categoryId}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json"
-				}
-			})
-			.then((res) => {
-				setSubCategoryData(res.data.subcategories.data);
-				setNotShow(false);
-				//   setError("");
-			})
-			.catch((error) => {
-				//   setError("Something went worng");
-				console.log(error);
-			});
-	};
 
 	useEffect(
 		() => {
-			console.log(categoryData.map((x) => x.slug));
 			loadCategory();
-			loadSubCategory();
 		},
-		[categoryData.length],
-		[subcategoryData.length]
+		[]
 	);
 	return (
 		<div>
 			{/* =======THIS IS FOR AGRICULTURAL TOOLS====== */}
-
-			{categoryData.map((data) => (
+			{loading ? (
+				<div />
+			) : (
+				<div>
+					{categoryData && categoryData.map((data) => (
 				<Accordion key={data.slug}>
 					<Card className="border-0">
 						<Accordion.Toggle
@@ -81,7 +62,7 @@ export default function MainDesktop() {
 									/>
 								</Col>
 								<Col sm={8}>
-									<label className="mr-1" style={{ fontSize: "0.9em" }}>
+									<label className="mr-1" style={{ fontSize: "0.65em" }}>
 										{data.name}
 									</label>
 								</Col>
@@ -96,7 +77,7 @@ export default function MainDesktop() {
 						{/* =============SUB CATRGOTY=============== */}
 						<Accordion.Collapse eventKey="0">
 							<Card.Body>
-								{subcategoryData.map((data) => (
+								{data.subcategories.map((data) => (
 									<ListGroup.Item key={data.slug}>
 										<Link
 											to={`/product_list?subcategory=${data.slug}`}
@@ -121,6 +102,11 @@ export default function MainDesktop() {
 					</Card>
 				</Accordion>
 			))}
+				</div>
+			)
+		}
+
+			
 		</div>
 	);
 }

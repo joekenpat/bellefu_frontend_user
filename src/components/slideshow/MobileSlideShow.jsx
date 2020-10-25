@@ -1,6 +1,6 @@
 import React from "react";
 import { Carousel, Card, Form, Container, Button } from "react-bootstrap";
-import banner from "../images/banner.png";
+import banner from "../images/Bellefu_home_banner_1.png";
 
 import { width } from "dom-helpers";
 import { left } from "@popperjs/core";
@@ -26,10 +26,10 @@ export default function MobileSlideShow(props) {
 						className="d-block w-100"
 						src={banner}
 						alt="First slide"
-						style={{ height: "400px" }}
+						style={{ height: "400px", objectFit: 'cover' }}
 					/>
 					<Carousel.Caption  style={{ left: "10px", right: "10px" }} >
-						<h3 style={{ color: "white" }}>Buy And Sale</h3>
+						<h3 style={{ color: "white", fontSize: '20px', paddingBottom: '10px' }}>Bellefu - digital agro connect...</h3>
 
 						<MobileInput country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow}/>
 					</Carousel.Caption>

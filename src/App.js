@@ -35,6 +35,7 @@ import EditAdPage from "./components/app/EditAdPage";
 
 import MessageChatPage from "./components/app/MessageChatPage"
 import  MessageListPage  from "./components/app/MessageListPage"
+import Subcategory from "./components/app/Subcategory";
 
 function App(props) {
 	return (
@@ -46,7 +47,8 @@ function App(props) {
 					<Route exact path="/product_list/" component={WithCountry(CategoryPage)} />
 					<Route exact path="/register" component={WithCountry(RegistrationFormPage)} />
 					<Route exact path="/login" component={WithCountry(LoginFormPage)} />
-					<Route exact path="/product_detail/:id" component={AdViewPage}/>
+					<Route exact path="/product_detail/:id" component={WithCountry(AdViewPage)}/>
+					<Route {...props} exact path="/subcategory/:category_id" component={WithCountry(Subcategory)}/>
 					{/* <Route
 						exact
 						path="/edit_ad/:slug"

@@ -6,15 +6,20 @@ import {
 	Row,
 	OverlayTrigger,
 	Badge,
-	Tooltip
+	Tooltip,
+	Accordion,
+	Button
 } from "react-bootstrap";
 import pic from "../images/pic.jpg";
-
+import { FaCommentDots, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import { IconContext } from 'react-icons/lib';
 import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
+import MobileAds from "./MobileAds";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -28,7 +33,9 @@ const convertTooltip = (props) => (
 
 export default function PremiunAds(props) {
 	const [productsData, setProductsData] = useState([]);
-	let apiUrl = `https://dev.bellefu.com/api/product/home/premium/latest?country=${props.country.country_slug}`;
+	const [products, setProducts] = useState([])
+	const [nextPageUrl, setNextPageUrl] = useState('')
+	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${props.country.country_slug}`;
 
 	const loadData = () => {
 		axios
@@ -41,18 +48,36 @@ export default function PremiunAds(props) {
 			})
 			.then((res) => {
 				console.log(res.data.premium_products)
-				setProductsData(res.data.premium_products);
+				setProducts(res.data.products)
+				setProductsData(res.data.products.data);
+				setNextPageUrl(res.data.products.next_page_url)
 			})
 			.catch((error) => {
 				console.log(error);
 			});
 	};
 
+	const nextData = () => {
+		axios
+			.get(nextPageUrl, {
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setProducts(res.data.products)
+				setNextPageUrl(res.data.products.next_page_url)
+				setProductsData(productsData.concat(...res.data.products.data))
+				console.log(productsData)
+			})
+	}
+
 	
 
 useEffect(() => {
 	loadData();
-}, [productsData.length])
+}, [])
 
 	return (
 		<div>
@@ -60,12 +85,12 @@ useEffect(() => {
 			{ productsData.map((data) => (
 										<Col
 											key={data.slug}
-											xs={6}
-											sm={6}
-											md={3}
-											lg={3}
-											xl={3}
-											className=" my-1 px-1">
+											xs={12}
+											sm={12}
+											md={6}
+											lg={4}
+											xl={4}
+											className="card-shadow my-2 px-1">
 												
 											<Card className="border-0 rounded-lg">
 												<Card.Img
@@ -86,18 +111,18 @@ useEffect(() => {
 																		? "d-none"
 																		: "d-block" || data.plan === "higlighted"
 																		? "d-none"
-																		: "d-block" || data.plan === "Ugent"
+																		: "d-block" || data.plan === "urgent"
 																		? "d-block"
 																		: "d-none"
 																}`}>
-																Ugent
+																Urgent
 															</Badge>
 															<Badge
 																variant="warning"
 																className={`${
 																	data.plan === "free"
 																		? "d-none"
-																		: "d-block" || data.plan === "ugent"
+																		: "d-block" || data.plan === "urgent"
 																		? "d-none"
 																		: "d-block" || data.plan === "higlighted"
 																		? "d-none"
@@ -105,14 +130,14 @@ useEffect(() => {
 																		? "d-block"
 																		: "d-none"
 																}`}>
-																}`}> Featured
+																 Featured
 															</Badge>
 															<Badge
 																variant="success"
 																className={`${
 																	data.plan === "free"
 																		? "d-none"
-																		: "d-block" || data.plan === "ugent"
+																		: "d-block" || data.plan === "urgent"
 																		? "d-none"
 																		: "d-block" || data.plan === "featured"
 																		? "d-none"
@@ -145,13 +170,28 @@ useEffect(() => {
 													
 												</Card.Body>
 											</Card>
-											<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
-											<Price styles={styles} data={data} {...props} convertTooltip={convertTooltip} />
+											<div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
+												<Price styles={styles} data={data} {...props} convertTooltip={convertTooltip} />
 											</div>
+											<MobileAds data={data} convertTooltip={convertTooltip} />
 										</Col>
 									))
 							}
-							</Row>
+			</Row>
+			<div className="mt-4">
+			<InfiniteScroll
+				dataLength={productsData.length}
+				next={nextData}
+				hasMore={products.current_page !== products.last_page ? true : false}
+				loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
+				endMessage={
+				<p style={{ textAlign: 'center' }}>
+					<b>Yay! You have seen it all</b>
+				</p>
+				}
+				>
+			</InfiniteScroll>
+			</div>
 		</div>
 	);
 }

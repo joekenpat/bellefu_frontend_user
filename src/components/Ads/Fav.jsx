@@ -30,7 +30,9 @@ const Fav = (props) => {
 
     return (
         <div>
-            <AiFillHeart
+
+			    <div className="d-none d-lg-block">
+                <AiFillHeart
                 style={{color: isRed ? 'red' : '#ffa500', marginBottom: "-220px",
                 fontSize: "30px",
                 cursor: "pointer",
@@ -39,6 +41,18 @@ const Fav = (props) => {
                 backgroundColor: "white",}}
                 onClick={(e) => toggleFav(e, props.data.slug, props.data.is_user_favourite)}
             />
+                </div>
+                <div className="d-block d-lg-none">
+                <AiFillHeart
+                style={{color: isRed ? 'red' : '#ffa500',
+                fontSize: "30px",
+                cursor: "pointer",
+                padding: "2px",
+                borderRadius: "50px",
+                backgroundColor: "white",}}
+                onClick={(e) => toggleFav(e, props.data.slug, props.data.is_user_favourite)}
+            />
+                </div>
         </div>
     )
 }
