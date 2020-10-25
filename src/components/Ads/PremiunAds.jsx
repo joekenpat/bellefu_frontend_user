@@ -91,8 +91,15 @@ useEffect(() => {
 											lg={4}
 											xl={4}
 											className="card-shadow my-2 px-1">
-												
-											<Card className="border-0 rounded-lg">
+											<Link to={{
+													pathname: `/product_detail/${data.slug}`,
+													state: data.slug
+												}}
+												style={{
+													color: "inherit",
+													textDecoration: "inherit"
+												}}>
+											<Card className="d-none cursor d-md-block border-0 rounded-lg">
 												<Card.Img
 													style={styles.image}
 													variant="top"
@@ -170,10 +177,11 @@ useEffect(() => {
 													
 												</Card.Body>
 											</Card>
+											</Link>
 											<div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
 												<Price styles={styles} data={data} {...props} convertTooltip={convertTooltip} />
 											</div>
-											<MobileAds data={data} convertTooltip={convertTooltip} />
+											<MobileAds  {...props} data={data} convertTooltip={convertTooltip} />
 										</Col>
 									))
 							}

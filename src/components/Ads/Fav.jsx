@@ -31,7 +31,7 @@ const Fav = (props) => {
     return (
         <div>
 
-			    <div className="d-none d-lg-block">
+			    <div className="d-none d-md-block">
                 <AiFillHeart
                 style={{color: isRed ? 'red' : '#ffa500', marginBottom: "-220px",
                 fontSize: "30px",
@@ -42,7 +42,7 @@ const Fav = (props) => {
                 onClick={(e) => toggleFav(e, props.data.slug, props.data.is_user_favourite)}
             />
                 </div>
-                <div className="d-block d-lg-none">
+                <div className="d-block d-md-none">
                 <AiFillHeart
                 style={{color: isRed ? 'red' : '#ffa500',
                 fontSize: "30px",

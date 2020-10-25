@@ -49,29 +49,31 @@ export default function MainDesktop() {
 				<div>
 					{categoryData && categoryData.map((data) => (
 				<Accordion key={data.slug}>
-					<Card className="border-0">
+					<Card className="border-0 cursor">
 						<Accordion.Toggle
 							as={Card.Header}
 							style={{ backgroundColor: "white" }}
 							eventKey="0">
-							<Row type="button">
-								<Col sm={2}>
+							<div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'column'}} type="button">
+								<div style={{alignSelf: 'center'}}>
 									<Image
 										src={`https://dev.bellefu.com/images/categories/${data.slug}/${data.image}`}
 										roundedCircle
 									/>
-								</Col>
-								<Col sm={8}>
-									<label className="mr-1" style={{ fontSize: "0.65em" }}>
-										{data.name}
-									</label>
-								</Col>
-								<Col sm={2}>
-									<IoMdArrowDropright
-										style={{ color: "#ffa500", fontSize: "50px" }}
-									/>
-								</Col>
-							</Row>
+								</div>
+								<div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+									<div className="pt-1">
+										<label className="mr-1" style={{ fontSize: "0.65em" }}>
+											{data.name}
+										</label>
+									</div>
+									<div>
+										<IoMdArrowDropright
+											style={{ color: "#ffa500", fontSize: "20px" }}
+										/>
+									</div>
+								</div>
+							</div>
 						</Accordion.Toggle>
 
 						{/* =============SUB CATRGOTY=============== */}
@@ -82,17 +84,19 @@ export default function MainDesktop() {
 										<Link
 											to={`/product_list?subcategory=${data.slug}`}
 											style={{ color: "inherit", textDecoration: "inherit" }}>
-											<p style={{ fontSize: "0.9em" }}>{data.name}</p>
+											<p style={{ fontSize: "0.66em", textAlign: 'center' }}>{data.name}</p>
 											<div style={{ marginTop: "-38px" }}>
 												<br />
 											</div>
 											<p
 												style={{
-													fontSize: "0.9em",
+													textAlign: 'center',
+													fontSize: "0.6em",
 													opacity: "0.5",
-													marginBottom: "-0px"
+													marginBottom: "-0px",
+													color: 'gray'
 												}}>
-												{data.products_count}
+												{data.products_count} ads
 											</p>
 										</Link>
 									</ListGroup.Item>

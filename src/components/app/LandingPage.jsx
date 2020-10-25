@@ -50,7 +50,7 @@ export default function LandingPage(props) {
 			<Container style={{marginTop: '60px'}}>
 				<Row>
 					<Col xs={12} md={2}>
-						<Card style={{marginTop: '75px'}} className="d-none d-lg-block ">
+						<Card style={{marginTop: '80px'}} className="d-none d-lg-block ">
 							<MainDesktop />
 						</Card>
 					</Col>
@@ -65,7 +65,7 @@ export default function LandingPage(props) {
 									<h4 className="mb-5">Trending Ads</h4>
 								</Col>
 							</Row>
-							<PremiunAds country={country} user={user}/>
+							<PremiunAds {...props} country={country} user={user}/>
 						</div>
 
 					</Col>

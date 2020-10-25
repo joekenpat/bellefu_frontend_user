@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container } from "react-bootstrap";
+import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner } from "react-bootstrap";
 import SideNav from "./SideNav";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
@@ -20,10 +20,21 @@ const renderTooltip = (props) => (
 //THIS IS A HEADER COMPOENT
 export default function HeaderNav(props) {
 	const dispatch = useDispatch();
+	const [loadingCountry, setLoadingCountry] = useState(false)
 	const country = useSelector((state) => state.userCountry);
 
 	const [show, setShow] = useState(false)
 	const [countries, setCountries] = useState([])
+
+	const onShow = () => {
+		setTimeout(() => {
+			setLoadingCountry(true)
+			setTimeout(() => {
+				setLoadingCountry(false)
+			}, 4000)
+		}, 10)
+		setShow(true)
+	}
 
 	const url = 'https://dev.bellefu.com/api/country/list'
 
@@ -61,10 +72,14 @@ export default function HeaderNav(props) {
 						placement="right"
 						delay={{ show: 250, hide: 400 }}
 						overlay={renderTooltip}>
-						<Button onClick={() => setShow(!show)} variant="outline-warning" style={styles.contrey_btn}>
+						<Button onClick={onShow} variant="outline-warning" style={styles.contrey_btn}>
 							<Flag style={{width: '12px', height: '12px'}} code={country.country_iso2} />{'  '}country
 						</Button>
+						
 					</OverlayTrigger>
+					{loadingCountry && (
+						<Spinner style={{marginLeft: '3px', height: '20px', width: '20px'}} animation="grow" />
+					)}
 				</Navbar.Brand>
 
 				<Navbar.Collapse className="justify-content-end">

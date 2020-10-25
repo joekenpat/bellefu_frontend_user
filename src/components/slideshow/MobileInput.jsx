@@ -18,7 +18,7 @@ const options = [
 
 const MobileInput = (props) => {
     return (
-        <Form>
+        <Form >
             <Form.Group >
                 <Card style={styles.from_card} className="border-0">
                     <Select
@@ -29,7 +29,7 @@ const MobileInput = (props) => {
                     />
                 </Card>
             </Form.Group>
-            <Form.Group style={{backgroundColor: 'white'}}>
+            <Form.Group style={{backgroundColor: 'white', borderRadius: '5px'}}>
                 <div onClick={props.setModalShow} className="cursor" style={styles.input}>
                     <span className="pl-2">
                         <IconContext.Provider value={{ color: "#808080", size: '17px'}}>
@@ -62,7 +62,7 @@ const selectStyles = {
 		...styles,
 		backgroundColor: "white",
 		border: "none",
-		borderRadius: "none",
+		borderRadius: "50px",
 		height: "48px",
 		fontSize: "13px",
 		boxShadow: "none"

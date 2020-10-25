@@ -43,11 +43,11 @@ function App(props) {
 			<div className="App">
 				<Router>
 			
-					<Route exact path="/" component={WithCountry(LandingPage)} />
-					<Route exact path="/product_list/" component={WithCountry(CategoryPage)} />
-					<Route exact path="/register" component={WithCountry(RegistrationFormPage)} />
-					<Route exact path="/login" component={WithCountry(LoginFormPage)} />
-					<Route exact path="/product_detail/:id" component={WithCountry(AdViewPage)}/>
+					<Route {...props} exact path="/" component={WithCountry(LandingPage)} />
+					<Route {...props} exact path="/product_list/" component={WithCountry(CategoryPage)} />
+					<Route {...props} exact path="/register" component={WithCountry(RegistrationFormPage)} />
+					<Route {...props} exact path="/login" component={WithCountry(LoginFormPage)} />
+					<Route {...props} exact path="/product_detail/:id" component={WithCountry(AdViewPage)}/>
 					<Route {...props} exact path="/subcategory/:category_id" component={WithCountry(Subcategory)}/>
 					{/* <Route
 						exact
@@ -58,53 +58,61 @@ function App(props) {
 						/> */}
 					<Switch>
 						<PrivateRoute
+							 {...props}
 							exact
 							path="/user_dashboard"
 							component={WithCountry(UserDashbordPage)}
 						/>
-						 <PrivateRoute exact path="/profile" component={WithCountry(UserProfilePage)} />
-						<PrivateRoute exact path="/user_ad" component={WithCountry(UserAdPage)} />
+						 <PrivateRoute {...props} exact path="/profile" component={WithCountry(UserProfilePage)} />
+						<PrivateRoute {...props} exact path="/user_ad" component={WithCountry(UserAdPage)} />
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/pending_ad"
 							component={WithCountry(UserPendingAdPage)}
 						/>
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/favourite_ad"
 							component={WithCountry(UserFavouriteAdPage)}
 						/>
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/expried_ad"
 							component={WithCountry(UserExpriedAdPage)}
 						/>
 
-						<PrivateRoute exact path="/post_ad" component={WithCountry(PostAdPage)} />
+						<PrivateRoute {...props} exact path="/post_ad" component={WithCountry(PostAdPage)} />
 						<PrivateRoute {...props} exact path="/edit_ad/:slug" component={WithCountry(EditAdPage)} />
 
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/payment/:slug/:plan"
 							component={WithCountry(PostAdPaymentPage)}
 						/>
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/post_sucess/:slug/:is_upgradable//:pathname"
 							component={WithCountry(PostAdSuccessMessagePage)}
 						/>
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/upgrade_success"
 							component={WithCountry(UpgradeSuccess)}
 						/>
 						<PrivateRoute
+						 {...props}
 							exact
 							path="/verification"
 							component={WithCountry(VerificationPage)}
 						/> 
-						<PrivateRoute exact path="/chat"  component={MessageChatPage}/>
-						<PrivateRoute exact path="/messages"  component={MessageListPage}/>
+						<PrivateRoute {...props} exact path="/chat"  component={MessageChatPage}/>
+						<PrivateRoute {...props} exact path="/messages"  component={MessageListPage}/>
 					</Switch>
 					<div className="d-none d-lg-block  d-md-none" style={{paddingTop: "50px"}}>
 					<Footer/>
