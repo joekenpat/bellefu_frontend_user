@@ -33,7 +33,7 @@ function LogInForm(props) {
 		e.preventDefault();
 		dispatch(signin(identifier, password)).then(() => {
 
-			props.history.push("/user_dashboard");
+			props.history.push("/");
 			window.location.reload(true)
 		})
 	};

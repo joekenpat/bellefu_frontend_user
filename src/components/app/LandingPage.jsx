@@ -31,6 +31,7 @@ export default function LandingPage(props) {
 	const [lga, setLga] = useState({})
 	const { user } = userSignin;
 	const country = userCountry;
+	
 
 	useEffect(() => {
 		Axios.get(`https://dev.bellefu.com/api/${country.country_iso2}/state/list`)
@@ -46,54 +47,38 @@ export default function LandingPage(props) {
 			<HeaderNav />
 			<DesktopSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
 			<MobileSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
-			<Container>
+			<Container style={{marginTop: '60px'}}>
 				<Row>
-					<Col md={4} lg={4} xl={4}>
-						<Card className="mt-3 d-none d-lg-block ">
+					<Col xs={12} md={2}>
+						<Card style={{marginTop: '75px'}} className="d-none d-lg-block ">
 							<MainDesktop />
 						</Card>
 					</Col>
-					<Col md={12} lg={8} xl={8}>
-						<div className="mt-3 d-none d-lg-block ">
-							<Card className="border-0">
-								<div className="p-2">
-									<AdSlide />
-								</div>
-							</Card>
-						</div>
+					<Col xs={12} md={7}>
+						
 						<div className="mt-2 d-lg-none d-sm-block d-md-block">
 							<MobileCategory />
 						</div>
-						<div className="mt-5">
+						<div className="mt-5 mt-md-0">
 							<Row>
-								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-									<h4 className="mb-5">Premium Ad</h4>
-								</Col>
-								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-									<Link to="/product_list?plan=featured" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
-										<p style={{ color: "#ffa500" }}>
-										View More<BsArrowRight/>
-										</p>
-									</Link>
+								<Col xs={6}>
+									<h4 className="mb-5">Trending Ads</h4>
 								</Col>
 							</Row>
 							<PremiunAds country={country} user={user}/>
 						</div>
-						<div className="mt-5">
-							<Row>
-								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-									<h4 className="mb-5">Latest Ad</h4>
-								</Col>
-								<Col xs={12} sm={12} md={6} lg={6} xl={6}>
-									<Link to="/product_list" className="d-flex flex-row-reverse" style={{ color: "inherit", textDecoration: "inherit" }}>
-										<p style={{ color: "#ffa500" }}>
-											View More<BsArrowRight/>
-										</p>
-									</Link>
-								</Col>
-							</Row>
-							<LatestAd country={country} user={user} />
-						</div>
+
+					</Col>
+					<Col xs={12} lg={3}>
+						{[1,2,3].map((data, index) => (
+							<div key={index} style={{marginTop: index > 0 ? '5px' : '70px'}}>
+								<div className="d-none d-lg-block ">
+									<div className="p-2">
+										<AdSlide />
+									</div>
+								</div>
+							</div>
+						))}
 					</Col>
 				</Row>
 				<MyVerticallyCenteredModal

@@ -63,6 +63,27 @@ body {
   animation: 0.75s snackOut 1 forwards;
 }
 
+.image {
+  height: 120px !important;
+  object-fit: cover !important;
+}
+
+.accordion-click:focus {
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.card-shadow {
+  -webkit-box-shadow: -3px 4px 9px -1px rgba(33, 33, 33, 0.17);
+  -moz-box-shadow: -3px 4px 9px -1px rgba(33, 33, 33, 0.17);
+  box-shadow: -3px 4px 9px -1px rgba(33, 33, 33, 0.17);
+}
+
+.font {
+  text-shadow: "2px 4px 6px orange" !important;
+}
+
 @keyframes snackIn {
   from {
     display: flex;

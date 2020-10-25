@@ -145,6 +145,7 @@ export default function HeaderNav(props) {
 									<div onClick={() => onFlagClick(data.iso2, data.name)}>
 										<Flag className="flag" code={data.iso2} /> {data.name}
 									</div>
+									
 								</Col>
 							))}
 						</Row>

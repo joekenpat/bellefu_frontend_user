@@ -34,6 +34,7 @@ import Flag from "react-world-flags";
 import DesktopInput from "../slideshow/DesktopInput";
 import MyVerticallyCenteredModal from "../Ads/StateModal";
 import MobileInput from "../slideshow/MobileInput";
+import MobileAds from "../Ads/MobileAds";
 const queryString = require("query-string");
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -166,7 +167,7 @@ const [categoryData, setCategoryData] = useState([])
 		}
 	})
 	.then((res) => {
-		setCategoryData(res.data.categories.data)
+		setCategoryData(res.data.categories)
 		setError("");
 	})
 	.catch((error) => {
@@ -189,7 +190,7 @@ const loadSubCategory = () => {
    })
    .then((res) => {
 	   
-	   setSubCategoryData(res.data.subcategories.data)
+	   setSubCategoryData(res.data.subcategories)
 	   setNotShow(false)
 	   setError("");
    })
@@ -734,93 +735,14 @@ const loadSubCategory = () => {
 									productsData.map((data) => (
 										<Col
 											key={data.slug}
-											xs={6}
-											sm={6}
+											xs={12}
+											sm={12}
 											md={3}
 											lg={3}
 											xl={3}
 											className=" my-1 px-1">
-											<Card className="border-0 rounded-lg">
-												<Card.Img
-													style={styles.image}
-													variant="top"
-													src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
-												/>
-
-												<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-													<Row>
-														<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-															<Badge
-																variant="danger"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "featured"
-																		? "d-none"
-																		: "d-block" || data.plan === "higlighted"
-																		? "d-none"
-																		: "d-block" || data.plan === "Ugent"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																Ugent
-															</Badge>
-															<Badge
-																variant="warning"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "ugent"
-																		? "d-none"
-																		: "d-block" || data.plan === "higlighted"
-																		? "d-none"
-																		: "d-block" || data.plan === "Featured"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																}`}> Featured
-															</Badge>
-															<Badge
-																variant="success"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "ugent"
-																		? "d-none"
-																		: "d-block" || data.plan === "featured"
-																		? "d-none"
-																		: "d-block" || data.plan === "Higlighted"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																Higlighted
-															</Badge>
-														</Col>
-														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-														<Fav {...props} user={user} data={data} />
-														</Col>
-													</Row>
-												</Card.ImgOverlay>
-
-												<Card.Body style={styles.titleBody}>
-													<Link
-														to={{
-															pathname: `/product_detail/${data.slug}`,
-															state: data.slug
-														}}
-														style={{
-															color: "inherit",
-															textDecoration: "inherit"
-														}}>
-														<p style={styles.title}>{data.title}</p>
-													</Link>
-
-													
-												</Card.Body>
-											</Card>
-											<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
-											<Price styles={styles} data={data} convertTooltip={convertTooltip} />
-											</div>
+											
+											<MobileAds data={data} convertTooltip={convertTooltip} />
 										</Col>
 									))
 								)}

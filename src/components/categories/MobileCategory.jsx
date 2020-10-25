@@ -16,7 +16,7 @@ export default function MobileCategory() {
 				}
 			})
 			.then((res) => {
-				setCategoryData(res.data.categories.data);
+				setCategoryData(res.data.categories);
 				//    setError("");
 			})
 			.catch((error) => {
@@ -26,15 +26,15 @@ export default function MobileCategory() {
 	};
 	useEffect(() => {
 		loadCategory();
-	}, [categoryData.length]);
+	}, []);
 	return (
 		<div>
 			<Row>
-				{categoryData.map((data) => (
+				{categoryData && categoryData.map((data) => (
 					<Col key={data.slug} xs={4} sm={4} md={4} className=" my-1 px-1">
 						<Card style={{ height: "100%" }} className="border-0">
 							<Link
-								to={`/product_list?category=${data.slug}`}
+								to={`/subcategory/${data.slug}`}
 								style={{ color: "inherit", textDecoration: "inherit" }}>
 								<Card.Body className="text-center">
 									<Image

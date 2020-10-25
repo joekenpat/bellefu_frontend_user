@@ -22,7 +22,7 @@ const AdTableItem = (props) => {
       props.setLoadingg(true)
     Axios.get(`https://dev.bellefu.com/api/user/product/delete/${slug}`, {
         headers: {
-            Authorization: `Bearer ${props.user.token}`,
+            Authorization: `Bearer ${props.token}`,
             "Content-Type": "application/json",
             Accept: "application/json"
         }

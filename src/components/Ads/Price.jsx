@@ -14,7 +14,7 @@ const Price = (props) => {
     }
     return(
         <span>
-            <span className="mr-1 ml-1 " style={props.styles.price}>
+            {/* <span className="mr-1 ml-1 " style={props.styles.price}>
                 {convert ? (
                     <span>
                         {props.data.alt_price_info.alt_symbol}
@@ -46,7 +46,29 @@ const Price = (props) => {
                     }}
                 />
             </OverlayTrigger>
-            )}
+            )} */}
+            <span className="mr-1 ml-1 " style={props.styles.price}>
+                $ 120
+            </span>
+           
+            {/* {props.data.alt_price_info && ( */}
+                <OverlayTrigger
+                style={{zindex: 999}}
+                placement="bottom"
+                delay={{ show: 50, hide: 100 }}
+                overlay={props.convertTooltip}>
+                <BsArrowLeftRight
+                    onClick={onConvert}
+                    className="cursor ml-1"
+                    style={{
+                        fontSize: "0.9em",
+                        cursor: "pointer",
+                        fontSize: "20px",
+                        color: "#ffa500"
+                    }}
+                />
+            </OverlayTrigger>
+            {/* )} */}
         </span>
     )
 }
