@@ -180,6 +180,11 @@ function EditAd(props) {
 			});
 	};
 
+	const onCategoryChange = (e) => {
+        setCategory(e.target.value)
+        loadSubCategory(e.target.value)
+    }
+
 	// ==============CATEGORY LIST STATE =========
 
 	const [categoryData, setCategoryData] = useState([]);
@@ -192,7 +197,7 @@ function EditAd(props) {
 				}
 			})
 			.then((res) => {
-				setCategoryData(res.data.categories.data);
+				setCategoryData(res.data.categories);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -203,7 +208,7 @@ function EditAd(props) {
 
 	const [subcategoryData, setSubCategoryData] = useState([]);
 	const [notShow, setNotShow] = useState(true);
-	const loadSubCategory = () => {
+	const loadSubCategory = (category) => {
 		axios
 			.get(
 				`https://dev.bellefu.com/api/subcategory/listfor/${category}`,
@@ -225,16 +230,9 @@ function EditAd(props) {
 	// TO GET PATHNAME
 	let location = useLocation();
 
-	useEffect(
-		() => {
-			loadCategory();
-			loadSubCategory();
-		},
-		[categoryData.length],
-		[subcategoryData.length]
-	);
 	useEffect(() => {
 		fetchProduct()
+		loadCategory()
 	}, []);
 	return (
 		<div>
@@ -271,14 +269,15 @@ function EditAd(props) {
 								</Form.Label>
 
 								<select
-									class="uk-select"
+									className="uk-select cursor"
 									name="category"
 									value={category}
-									onChange={(e) => onChangeHandler(e)}
-									onClick={(e) => onChangeHandler(e)}>
-									<option>---select category---</option>
+									onChange={onCategoryChange}
+									>
+									<option hidden>{'>>>>'} select category {"<<<<"}</option>
 									{categoryData.map((data) => (
 										<option
+										className="cursor"
 											key={data.slug}
 											value={data.slug}
 											selected={category === data.slug ? true : false}>
@@ -297,14 +296,15 @@ function EditAd(props) {
 									<b>Choose Sub Category</b>
 								</Form.Label>
 								<select
-									class="uk-select"
+									className="uk-select cursor"
 									name="subcategory"
 									value={subcategory}
 									onChange={(e) => onChangeHandler(e)}
 									disabled={notShow}>
-									<option>---select subcategory---</option>
+									<option hidden>{'>>>>'} select subcategory {"<<<<"}</option>
 									{subcategoryData.map((data) => (
 										<option
+										className="cursor"
 											key={data.slug}
 											value={data.slug}
 											selected={subcategory === data.slug ? true : false}>
@@ -531,7 +531,7 @@ function EditAd(props) {
 										value="urgent"
 										aria-label="Urgent"
 										onChange={(e) => onChangeHandler(e)}
-										label="Ugent"
+										label="Urgent"
 										id="formHorizontalRadios2"
 									/>
 								</div>

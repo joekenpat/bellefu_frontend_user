@@ -18,7 +18,7 @@ const options = [
 ];
 export default function DesktopInput(props) {
 	return (
-		<div style={{backgroundColor: 'white'}}>
+		<div style={{backgroundColor: 'white', borderRadius: '7px'}}>
 			<Form>
 				<Form.Row>
 					<Col lg={5} md={5} sm={12} clasName="mr-0 ml-0">
@@ -47,7 +47,7 @@ export default function DesktopInput(props) {
 						</div>
 					</Col>
 						{/* props.state.slug, props.lga.slug, props.country.country_slug */}
-					<Col lg={2} md={2} sm={12} clasName="mr-0 ml-0">
+					<Col  lg={2} md={2} sm={12} clasName="mr-0 ml-0">
 						<Button style={styles.btn} variant="warning">
 							Search
 						</Button>
@@ -68,7 +68,7 @@ const selectStyles = {
 		height: "68px",
 		fontSize: "17px",
 		border: "none",
-		borderRadius: "none",
+		borderRadius: "50px",
 		boxShadow: "none"
 	}),
 	option: (styles) => {
@@ -98,7 +98,6 @@ const selectStyles = {
 const styles = {
 	input: {
 		border: "none",
-		borderRadius: "none",
 		height: "68px",
 		fontSize: "20px",
 		color: "#808080",

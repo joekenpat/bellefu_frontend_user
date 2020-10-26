@@ -602,7 +602,7 @@ const loadSubCategory = () => {
 						{/* =========FOR ITEM DESKTOPEVIEW======= */}
 						<div
 							style={{ marginTop: "80px" }}
-							className="d-none d-lg-block  d-md-none">
+							className="d-none d-lg-block">
 							
 								{loading ? 
 									<Preloader />
@@ -727,7 +727,7 @@ const loadSubCategory = () => {
 						{/* =========FOR ITEM MOBILEVIEW======= */}
 						<div
 							style={{ marginTop: "15px" }}
-							className="d-lg-none d-xs-block d-sm-block d-md-block">
+							className="d-lg-none d-xs-block">
 							<Row>
 								{loading ? (
 									<Preloader />
@@ -742,7 +742,7 @@ const loadSubCategory = () => {
 											xl={3}
 											className=" my-1 px-1">
 											
-											<MobileAds data={data} convertTooltip={convertTooltip} />
+											<MobileAds {...props} data={data} convertTooltip={convertTooltip} />
 										</Col>
 									))
 								)}

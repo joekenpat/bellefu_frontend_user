@@ -23,21 +23,48 @@ import Fav from "./Fav";
 const MobileAds = (props) => {
 return (
     <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column">
-    <div style={{borderBottom: '1px solid gray'}}>
+        <div style={{borderBottom: '1px solid gray'}}>
+            
         <Row>
             <Col xs={5}>
-                <img className="image" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
+                <Link to={{
+                        pathname: `/product_detail/${props.data.slug}`,
+                        state: props.data.slug
+                    }}
+                    style={{
+                        color: "inherit",
+                        textDecoration: "inherit"
+                    }}>
+                    <img className="image" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
+                </Link>
             </Col>
             <Col xs={7}>
                 <div className="p-2">
-                    <div style={{fontWeight: 'bold'}}>{props.data.title.substring(0, 20)}</div>
-                    <div className="mt-1">
-                    <Price styles={styles} data={props.data} {...props} convertTooltip={props.convertTooltip}/>
-                    </div>
+                    <Link to={{
+                        pathname: `/product_detail/${props.data.slug}`,
+                        state: props.data.slug
+                    }}
+                    style={{
+                        color: "inherit",
+                        textDecoration: "inherit"
+                    }}>
+                        <div style={{fontWeight: 'bold'}}>{props.data.title.substring(0, 20)}</div>
+                    </Link>
+                        <div className="mt-1">
+                        <Price styles={styles} data={props.data} {...props} convertTooltip={props.convertTooltip}/>
+                        </div>
                     <div className="mt-1">
                         <Fav {...props} user={props.user} data={props.data} />
                     </div>
                     <div className="mt-1">
+                    <Link to={{
+                    pathname: `/product_detail/${props.data.slug}`,
+                    state: props.data.slug
+                }}
+                style={{
+                    color: "inherit",
+                    textDecoration: "inherit"
+                }}>
                     <Badge
                                 variant="danger"
                                 className={`${
@@ -83,6 +110,7 @@ return (
                                 }`}>
                                 Higlighted
                             </Badge>
+                    </Link>
                     </div>
                 </div>
             </Col>
