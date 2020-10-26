@@ -74,6 +74,23 @@ body {
   box-shadow: none;
 }
 
+.skel-mask-container {
+  position: relative;
+}
+
+.skel-mask-navv {
+  background: #b5b5b5;
+  /*  */
+}
+.skel-mask {
+  background: #e6e6e6;
+  /*  */
+}
+
+.skel-mask-all {
+  right: 0;
+}
+
 .card-shadow {
   -webkit-box-shadow: -3px 4px 9px -1px rgba(33, 33, 33, 0.17);
   -moz-box-shadow: -3px 4px 9px -1px rgba(33, 33, 33, 0.17);

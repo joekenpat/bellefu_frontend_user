@@ -46,6 +46,11 @@ function PostAd(props) {
         loadSubCategory();
     };
 
+    const onCategoryChange = (e) => {
+        setProductData({...productData, category: e.target.value})
+        loadSubCategory(e.target.value)
+    }
+
     //======USER GLOBAL STATE FROM REDUX
     const userSignin = useSelector(state => state.userSignin);
     const {user} = userSignin;
@@ -102,7 +107,7 @@ function PostAd(props) {
                 }
             })
             .then(res => {
-                setCategoryData(res.data.categories.data);
+                setCategoryData(res.data.categories);
             })
             .catch(error => {
                 console.log(error);
@@ -113,15 +118,16 @@ function PostAd(props) {
 
     const [subcategoryData, setSubCategoryData] = useState([]);
     const [notShow, setNotShow] = useState(true);
-    const loadSubCategory = () => {
+    const loadSubCategory = (category) => {
         axios
-            .get(`https://dev.bellefu.com/api/subcategory/listfor/${productData.category}`, {
+            .get(`https://dev.bellefu.com/api/subcategory/listfor/${category}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 }
             })
             .then(res => {
+                console.log(res)
                 setSubCategoryData(res.data.subcategories.data);
                 setNotShow(false);
             })
@@ -135,12 +141,11 @@ function PostAd(props) {
     useEffect(
         () => {
             loadCategory();
-			loadSubCategory();
-			console.log(productSuccess)
         },
-        [categoryData.length],
-        [subcategoryData.length]
+        []
     );
+
+
     return (
         <div>
             {success && success.is_upgradable === true ? (
@@ -172,14 +177,15 @@ function PostAd(props) {
                                 </Form.Label>
 
                                 <select
-                                    class="uk-select"
+                                    className="uk-select cursor"
                                     name="category"
                                     value={category}
-                                    onChange={e => onChangeHandler(e)}
-                                    onClick={e => onChangeHandler(e)}>
-                                    <option>---select category---</option>
+                                    onChange={onCategoryChange}
+                                    >
+                                    <option hidden>{'>>>>'} select category {"<<<<"}</option>
                                     {categoryData.map(data => (
                                         <option
+                                        className="cursor"
                                             key={data.slug}
                                             value={data.slug}
                                             selected={category === data.slug ? true : false}>
@@ -194,14 +200,15 @@ function PostAd(props) {
                                     <b>Choose Sub Category</b>
                                 </Form.Label>
                                 <select
-                                    class="uk-select"
+                                    className="uk-select cursor"
                                     name="subcategory"
                                     value={subcategory}
                                     onChange={e => onChangeHandler(e)}
                                     disabled={notShow}>
-                                    <option>---select subcategory---</option>
+                                    <option hidden>{'>>>>'} select subcategory {"<<<<"}</option>
                                     {subcategoryData.map(data => (
                                         <option
+                                        className="cursor"
                                             key={data.slug}
                                             value={data.slug}
                                             selected={subcategory === data.slug ? true : false}>
@@ -371,7 +378,7 @@ function PostAd(props) {
                                         value="urgent"
                                         aria-label="Urgent"
                                         onChange={e => onChangeHandler(e)}
-                                        label="Ugent"
+                                        label="Urgent"
                                         id="formHorizontalRadios2"
                                     />
                                 </div>
