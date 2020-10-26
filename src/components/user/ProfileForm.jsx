@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Form, Col, Row, Accordion, Button } from "react-bootstrap";
-import { AiOutlineUser, AiOutlinePhone } from "react-icons/ai";
+import { AiOutlineUser, AiOutlinePhone, AiOutlineUpload } from "react-icons/ai";
 import { GiWorld } from "react-icons/gi";
 import { FaRegAddressCard } from "react-icons/fa";
 import { GoLocation } from "react-icons/go";
@@ -15,7 +15,7 @@ import Preloader from "./Preloader";
 
 export default function ProfileForm() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [snack, setsnack] = useState({
     view: false,
     type: "",
@@ -24,6 +24,7 @@ export default function ProfileForm() {
   const userSignin = useSelector((state) => state.userSignin);
   const { user } = userSignin;
   const [bio, setBio] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [updateData, setUpdateData] = useState({
     first_name: "",
     last_name: "",
@@ -33,7 +34,6 @@ export default function ProfileForm() {
     admin2_code: "",
     country_code: "",
     address: "",
-    avatar: "",
   });
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function ProfileForm() {
       country_code: user.user.country_code,
       address: user.user.address,
     });
-
+    setAvatar(user.user.avatar);
     setBio(user.user.bio);
   }, [user]);
   const handleOnChange = (event) => {
@@ -58,11 +58,11 @@ export default function ProfileForm() {
     }));
   };
   const handleSubmmit = (event) => {
-	event.preventDefault();
-	setLoading(true)
+    event.preventDefault();
+    setLoading(true);
     Axios.post(
       "https://dev.bellefu.com/api/user/profile/update",
-      { ...updateData, bio },
+      { ...updateData, bio, avatar },
       {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -72,7 +72,7 @@ export default function ProfileForm() {
       }
     )
       .then(() => {
-		setLoading(false)
+        setLoading(false);
         setsnack({
           view: true,
           type: "success",
@@ -100,7 +100,7 @@ export default function ProfileForm() {
         });
       })
       .catch((err) => {
-		setLoading(false)
+        setLoading(false);
         setsnack({
           view: true,
           type: "error",
@@ -117,11 +117,10 @@ export default function ProfileForm() {
       });
   };
 
+
   return (
     <div>
-		{loading && (
-			<Preloader />
-		)}
+      {loading && <Preloader />}
       {snack.view && <SnackBar type={snack.type}>{snack.message}</SnackBar>}
       <Form onSubmit={handleSubmmit}>
         <Card className="border-0">
@@ -133,7 +132,10 @@ export default function ProfileForm() {
             <Row>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>First Name</Form.Label>
-                <div class="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <div
+                  class="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div className="input-group-prepend">
                     <span class="input-group-text">
                       <AiOutlineUser />
@@ -150,7 +152,10 @@ export default function ProfileForm() {
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>Last Name</Form.Label>
-                <div class="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <div
+                  class="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div className="input-group-prepend">
                     <span class="input-group-text">
                       <AiOutlineUser />
@@ -168,7 +173,10 @@ export default function ProfileForm() {
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>Phone Number</Form.Label>
-                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <div
+                  className="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <AiOutlinePhone />
@@ -185,8 +193,11 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Admin Code 1</Form.Label>
-                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <Form.Label style={styles.label}>State</Form.Label>
+                <div
+                  className="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div class="input-group-prepend">
                     <span class="input-group-text"></span>
                   </div>
@@ -201,8 +212,11 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Admin Code 2</Form.Label>
-                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <Form.Label style={styles.label}>Local Government</Form.Label>
+                <div
+                  className="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div class="input-group-prepend">
                     <span class="input-group-text"></span>
                   </div>
@@ -219,7 +233,10 @@ export default function ProfileForm() {
 
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>City Code</Form.Label>
-                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <div
+                  className="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <GiWorld />
@@ -237,7 +254,10 @@ export default function ProfileForm() {
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>Country Code</Form.Label>
-                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <div
+                  className="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <GiWorld />
@@ -255,7 +275,10 @@ export default function ProfileForm() {
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>Address</Form.Label>
-                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                <div
+                  className="input-group mb-3 shadow-none"
+                  style={{ height: "50px" }}
+                >
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <FaRegAddressCard />
@@ -273,23 +296,51 @@ export default function ProfileForm() {
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Form.Label style={styles.label}>About Me</Form.Label>
-                <ReactQuill value={bio} onChange={setBio} name="bio" row="3" style={{ height: "300px", marginBottom: "100px" }} />
+                <ReactQuill
+                  value={bio}
+                  onChange={setBio}
+                  name="bio"
+                  row="3"
+                  style={{ height: "300px", marginBottom: "100px" }}
+                />
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Form.Label style={styles.label} className="mr-3">
                   Upload Image
                 </Form.Label>
                 <div uk-form-custom="target: true">
-                  <input
-                    onChange={(e) => {
-                      setUpdateData((prev) => ({
-                        ...prev,
-                        avatar: e.target.files[0],
-                      }));
+                  <label
+                    style={{
+                      padding: "5px 10px",
+                      backgroundColor: "#eee",
+                      border: "1px solid #666",
+                      borderRadius: "4px",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
                     }}
-                    type="file"
-                  />
-                  <input class="uk-input uk-form-width-medium" name="avatar" type="text" placeholder="Select file" disabled />
+                  >
+                    <input
+                      style={{ display: "none" }}
+                      type="file"
+                      name="avatar"
+                      onChange={(event) => {
+                        const { files } = event.target;
+                        setAvatar(files[0]);
+                      }}
+                    />
+                    {avatar === "" || avatar === null ? (
+                      <>
+                        Select an image{" "}
+                        <AiOutlineUpload
+                          style={{ fontSize: 24, marginLeft: 10 }}
+                        />
+                      </>
+                    ) : (
+                      avatar.name
+                    )}
+                  </label>
                 </div>
               </Col>
             </Row>
@@ -303,10 +354,18 @@ export default function ProfileForm() {
                   <Card.Header style={{ backgroundColor: "white" }}>
                     <Row>
                       <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <p style={{ opacity: "0.7" }}>Notify me by e-mail when a ad gets posted that is relevant to my choice</p>
+                        <p style={{ opacity: "0.7" }}>
+                          Notify me by e-mail when a ad gets posted that is
+                          relevant to my choice
+                        </p>
                       </Col>
                       <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <Accordion.Toggle style={styles.btn} as={Button} variant="outline-warning" eventKey="0">
+                        <Accordion.Toggle
+                          style={styles.btn}
+                          as={Button}
+                          variant="outline-warning"
+                          eventKey="0"
+                        >
                           Subscribe Now
                         </Accordion.Toggle>
                       </Col>
@@ -314,12 +373,22 @@ export default function ProfileForm() {
                   </Card.Header>
                   <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                      <Form.Check type="checkbox" id="autoSizingCheck2" label="Agro tools" style={styles.check} />
+                      <Form.Check
+                        type="checkbox"
+                        id="autoSizingCheck2"
+                        label="Agro tools"
+                        style={styles.check}
+                      />
                     </Card.Body>
                   </Accordion.Collapse>
                 </Card>
               </Accordion>
-              <Button type="submit" style={styles.btnUpdate} variant="warning" size="sm">
+              <Button
+                type="submit"
+                style={styles.btnUpdate}
+                variant="warning"
+                size="sm"
+              >
                 Update
               </Button>
             </Card.Body>

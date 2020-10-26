@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { AiFillHeart } from "react-icons/ai";
 import axios from 'axios'
+import { useSelector } from "react-redux";
+
 
 const Fav = (props) => {
-	const [isRed, setIsRed] = useState(props.data.is_user_favourite ? true : false)
+    const userSignin = useSelector((state) => state.userSignin);
+    const { user } = userSignin;
+    const [isRed, setIsRed] = useState(user ? props.data.is_user_favourite ? true : false : false)
 
     const toggleFav = (e, product_slug, isFav, color) => {
-		if(!props.user) {
+		if(!user.token) {
 			props.history.push('/login')
 		}
 		setIsRed(!isRed)
 		axios
 			.get(`https://dev.bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
 				headers: {
-					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
+					Authorization: user.token ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}

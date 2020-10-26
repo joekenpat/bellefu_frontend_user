@@ -220,7 +220,7 @@ function PostAd(props) {
                             </Col>
                             <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                                 <Form.Label className="mt-3" style={{opacity: '0.4', fontSize: '0.8em'}}>
-                                    <b>Address</b>
+                                    <b>Location</b>
                                 </Form.Label>
                                 <Form.Control
                                     name="address"

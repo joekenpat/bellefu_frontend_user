@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Image, Col } from "react-bootstrap";
+import { Card, Row, Image, Col, Container } from "react-bootstrap";
 import agro_tools from "../images/agro_tools.png";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -28,11 +28,11 @@ export default function MobileCategory() {
 		loadCategory();
 	}, []);
 	return (
-		<div>
+		<Container>
 			<Row>
 				{categoryData && categoryData.map((data) => (
 					<Col key={data.slug} xs={4} sm={4} md={4} className=" my-1 px-1">
-						<Card style={{ height: "100%" }} className="border-0">
+						<Card style={{ height: "100%" }} className="border-0 category-shadow">
 							<Link
 								to={`/subcategory/${data.slug}`}
 								style={{ color: "inherit", textDecoration: "inherit" }}>
@@ -50,6 +50,6 @@ export default function MobileCategory() {
 					</Col>
 				))}
 			</Row>
-		</div>
+		</Container>
 	);
 }

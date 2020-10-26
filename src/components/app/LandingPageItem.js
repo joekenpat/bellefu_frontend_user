@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import {BsArrowRight} from "react-icons/bs"
 import { useSelector } from "react-redux";
 
+
 import { useEffect } from "react";
 import Axios from "axios";
 import { useState } from "react";
@@ -47,7 +48,7 @@ export default function LandingPageItem(props) {
 			<HeaderNav />
 			<DesktopSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
 			<MobileSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
-			<Container style={{marginTop: '60px'}}>
+			<Container style={{marginTop: '30px'}}>
 				<Row>
 					<Col xs={12} md={2}>
 						<Card style={{marginTop: '80px'}} className="d-none d-lg-block ">
@@ -56,13 +57,13 @@ export default function LandingPageItem(props) {
 					</Col>
 					<Col xs={12} md={7}>
 						
-						<div className="mt-2 d-lg-none d-sm-block d-md-block">
-							<MobileCategory />
+						<div className="d-lg-none d-sm-block d-md-block">
+							<MobileCategory {...props} />
 						</div>
 						<div className="mt-5 mt-md-0">
 							<Row>
 								<Col xs={6}>
-									<h4 className="mb-5">Trending Ads</h4>
+									<h4 className="mb-5 ml-2">Trending Ads</h4>
 								</Col>
 							</Row>
 							<PremiunAds {...props} country={country} user={user}/>
@@ -70,15 +71,14 @@ export default function LandingPageItem(props) {
 
 					</Col>
 					<Col xs={12} lg={3}>
-						{[1,2,3].map((data, index) => (
-							<div key={index} style={{marginTop: index > 0 ? '5px' : '70px'}}>
-								<div className="d-none d-lg-block ">
-									<div className="p-2">
-										<AdSlide />
-									</div>
-								</div>
+
+						<div style={{marginTop: '70px'}} className="d-none d-lg-block ">
+							<div className="p-2">
+								<AdSlide />
 							</div>
-						))}
+						</div>
+							
+						
 					</Col>
 				</Row>
 				<MyVerticallyCenteredModal

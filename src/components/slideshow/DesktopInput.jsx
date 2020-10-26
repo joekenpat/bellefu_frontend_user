@@ -1,29 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Col, Button } from "react-bootstrap";
 import Select from "react-select";
 import {FaMapMarkerAlt} from 'react-icons/fa'
 import {IconContext} from 'react-icons'
+import { Link } from "react-router-dom";
+import Axios from "axios";
 
 
 
-const options = [
-	{ value: "Aro food", label: "Agro food" },
-	{ value: "Agro job", label: "Agro job" },
-	{ value: "Agro tools", label: "Agro tools" },
-	{ value: "Agro training", label: "Vanilla" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "vanilla", label: "Vanilla" },
-	{ value: "vanilla", label: "Vanilla" }
-];
 export default function DesktopInput(props) {
+	const [categoryData, setCategoryData] = useState([]);
+	const [category, setCategory] = useState({})
+	const options = [];
+
+	const handleChange = (option) => {
+		setCategory(option)
+	}
+
+
+	const loadCategory = () => {
+		Axios
+			.get("https://dev.bellefu.com/api/category/list", {
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				let data = res.data.categories;
+			
+				for(var i = 0; i < data.length; i++){
+					options.push({value: data[i].slug, label: data[i].name})
+				}
+				setCategoryData(options)
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	useEffect(() => {
+		loadCategory()
+	}, [])
+
+	const handleClick = () => {
+		setTimeout(() => {
+			window.location.reload()
+		}, 500)
+	}
 	return (
 		<div style={{backgroundColor: 'white', borderRadius: '7px'}}>
 			<Form>
 				<Form.Row>
 					<Col lg={5} md={5} sm={12} clasName="mr-0 ml-0">
 						<Select
-							options={options}
+							name="category"
+							onChange={handleChange}
+							options={categoryData}
 							components={{ DropdownIndicator: () => null }}
 							placeholder={"What are you looking for?"}
 							styles={selectStyles}
@@ -48,9 +81,14 @@ export default function DesktopInput(props) {
 					</Col>
 						{/* props.state.slug, props.lga.slug, props.country.country_slug */}
 					<Col  lg={2} md={2} sm={12} clasName="mr-0 ml-0">
-						<Button style={styles.btn} variant="warning">
-							Search
-						</Button>
+						<Link style={{
+										color: "inherit",
+										textDecoration: "inherit"
+									}} to={`/product_list?state=${props.state.slug}&lga=${props.lga.slug}&country=${props.country.country_slug}&category=${category.value}`}>
+							<Button onClick={handleClick} style={styles.btn} variant="warning">
+								Search
+							</Button>
+						</Link>
 					</Col>
 				</Form.Row>
 			</Form>
