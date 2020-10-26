@@ -16,13 +16,6 @@ function LogInForm(props) {
 	const userSignin = useSelector((state) => state.userSignin);
 	const { loading, user, error } = userSignin;
 
-	// useEffect(() => {
-	// 	if (user) {
-	// 		window.location.reload(true)
-	// 		props.history.push("/user_dashboard");
-	// 	}
-	// 	return () => {};
-	// }, [user]);
 
 	const { identifier, password } = formData;
 	const onChangeHandler = (e) => {

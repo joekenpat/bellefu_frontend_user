@@ -45,7 +45,7 @@ const Subcategory = (props) => {
                 <div style={{marginTop: '75px'}}>
                     {subcategories.map((data, index) => (
                         <div style={{borderBottom: '1px solid gray'}} className="py-2" key={index}>
-                            <Link to={`/product_list?subcategory=${data.slug}`}>
+                            <Link to={`/product_list?subcategory=${data.slug}&category=${props.match.params.category_id}&country=${props.userCountry.country_slug}`}>
                                 <div className="pl-4">
                                     <div style={{fontWeight: 'bold', color: 'black'}}>{data.name}</div>
                                     <div className="mt-1" style={{color: 'gray', fontSize: '12px'}}>{data.products_count} ads</div>

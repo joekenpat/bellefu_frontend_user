@@ -105,7 +105,7 @@ export default function PremiunAds(props) {
 													? "d-block"
 													: "d-none"
 											}`}>
-											}`}> Featured
+											Featured
 										</Badge>
 										<Badge
 											variant="success"

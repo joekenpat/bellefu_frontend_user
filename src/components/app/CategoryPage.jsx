@@ -93,8 +93,18 @@ export default function CategoryPage(props) {
 	const userCountry = useSelector((state) => state.userCountry);
 	const { user } = userSignin;
 
+	let params = queryString.parse(props.location.search)
+	console.log('the queries: ', params)
+
+	
+	let countryy = params.country ? `country=${params.country}` : ''
+	let lgaa = params.lga ? `&country=${params.lga}` : ''
+	let statee = params.state ? `&country=${params.state}` : ''
+	let subcategoryy = params.subcategory ? `&country=${params.subcategory}` : ''
+	let categoryy = params.category ? `&country=${params.category}` : ''
+
 	let dataUrl = "";
-	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${userCountry.country_slug}`;
+	let apiUrl = `https://dev.bellefu.com/api/product/list?${countryy}${lgaa}${statee}${subcategoryy}${categoryy}`;
 
 	let location = useLocation();
 	const parsed = queryString.parse(location.search);
@@ -622,7 +632,7 @@ const loadSubCategory = () => {
 											lg={3}
 											xl={3}
 											className=" my-1 px-1">
-											<Card className="border-0 rounded-lg">
+											<Card className="border-0 rounded-lg pc-card-shadow">
 												<Card.Img
 													style={styles.image}
 													variant="top"

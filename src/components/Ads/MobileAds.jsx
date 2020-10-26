@@ -8,7 +8,8 @@ import {
 	Badge,
 	Tooltip,
 	Accordion,
-	Button
+	Button,
+    Container
 } from "react-bootstrap";
 import pic from "../images/pic.jpg";
 import { FaCommentDots, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
@@ -22,7 +23,8 @@ import Fav from "./Fav";
 
 const MobileAds = (props) => {
 return (
-    <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column">
+    <Container>
+    <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column card-shadow ">
         <div style={{borderBottom: '1px solid gray'}}>
             
         <Row>
@@ -35,7 +37,7 @@ return (
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-                    <img className="image" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
+                    <img width="100%" className="image" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
                 </Link>
             </Col>
             <Col xs={7}>
@@ -115,8 +117,8 @@ return (
                 </div>
             </Col>
         </Row>
-    </div>
-    <div>
+        </div>
+        <div>
         <Row>
             <Col className="py-1" xs={6} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
                 <div>
@@ -139,7 +141,7 @@ return (
                         <Card.Body>
                             <div >
                                 <div>
-                                    <a href="https://wa.me/2348130813007">
+                                    <a href={`https://wa.me/${props.data.user.phone}`}>
                                         <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                                             <FaWhatsapp className="cursor"/>
                                         </IconContext.Provider>
@@ -147,7 +149,7 @@ return (
                                     </a>
                                 </div>
                                 <div className="mt-1">
-                                <a href="tel:2348130813007">
+                                <a href={`tel:${props.data.user.phone}`}>
                                     <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                                         <FaMobileAlt className="cursor"/>
                                     </IconContext.Provider>
@@ -164,6 +166,7 @@ return (
         </Row>
     </div>
 </div>
+    </Container>
 )
 }
 

@@ -57,13 +57,15 @@ export default function MainDesktop() {
 							<div style={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'column'}} type="button">
 								<div style={{alignSelf: 'center'}}>
 									<Image
+										height="40px"
+										width="40px"
 										src={`https://dev.bellefu.com/images/categories/${data.slug}/${data.image}`}
 										roundedCircle
 									/>
 								</div>
 								<div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
 									<div className="pt-1">
-										<label className="mr-1" style={{ fontSize: "0.65em" }}>
+										<label className="mr-1" style={{ fontSize: "0.77em" }}>
 											{data.name}
 										</label>
 									</div>

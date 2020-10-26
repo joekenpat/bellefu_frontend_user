@@ -1,28 +1,63 @@
-import React from 'react';
+import Axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
+import { Link } from 'react-router-dom';
 import Select from "react-select";
 
 
-const options = [
-	{ value: "Aro food", label: "Agro food" },
-	{ value: "Agro job", label: "Agro job" },
-	{ value: "Agro tools", label: "Agro tools" },
-	{ value: "Agro training", label: "Vanilla" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "Agro training", label: "Agro training" },
-	{ value: "vanilla", label: "Vanilla" },
-	{ value: "vanilla", label: "Vanilla" }
-]
+
 
 const MobileInput = (props) => {
+	const [categoryData, setCategoryData] = useState([]);
+	const [category, setCategory] = useState({})
+	const options = [];
+
+	const handleChange = (option) => {
+		setCategory(option)
+	}
+
+
+	const loadCategory = () => {
+		Axios
+			.get("https://dev.bellefu.com/api/category/list", {
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				let data = res.data.categories;
+			
+				for(var i = 0; i < data.length; i++){
+					options.push({value: data[i].slug, label: data[i].name})
+				}
+				setCategoryData(options)
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	useEffect(() => {
+		loadCategory()
+	}, [])
+
+
+	const handleClick = () => {
+		setTimeout(() => {
+			window.location.reload()
+		}, 500)
+	}
     return (
         <Form >
             <Form.Group >
                 <Card style={styles.from_card} className="border-0">
                     <Select
-                        options={options}
+						name="category"
+						onChange={handleChange}
+                        options={categoryData}
                         components={{ DropdownIndicator: () => null, IndicatorSeparator:() => null }}
                         placeholder={"What are you looking for?"}
                         styles={selectStyles}
@@ -46,9 +81,14 @@ const MobileInput = (props) => {
                 </div>
             </Form.Group>
             <Form.Group>
-                <Button style={styles.btn} variant="warning" size="lg" block>
+			<Link style={{
+					color: "inherit",
+					textDecoration: "inherit"
+				}} to={`/product_list?state=${props.state.slug}&lga=${props.lga.slug}&country=${props.country.country_slug}&category=${category.value}`}>
+                <Button onClick={handleClick} style={styles.btn} variant="warning" size="lg" block>
                     Search
                 </Button>
+			</Link>
             </Form.Group>
         </Form>
     )

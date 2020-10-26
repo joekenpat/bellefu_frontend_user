@@ -47,7 +47,6 @@ export default function PremiunAds(props) {
 				}
 			})
 			.then((res) => {
-				console.log(res.data.premium_products)
 				setProducts(res.data.products)
 				setProductsData(res.data.products.data);
 				setNextPageUrl(res.data.products.next_page_url)
@@ -90,24 +89,34 @@ useEffect(() => {
 											md={6}
 											lg={4}
 											xl={4}
-											className="card-shadow my-2 px-1">
-											<Link to={{
+											className="my-2 px-1">
+											<Card className="d-none cursor d-md-block border-0 pc-card-shadow">
+												<Link to={{
 													pathname: `/product_detail/${data.slug}`,
 													state: data.slug
-												}}
-												style={{
-													color: "inherit",
-													textDecoration: "inherit"
-												}}>
-											<Card className="d-none cursor d-md-block border-0 rounded-lg">
+													}}
+													style={{
+														color: "inherit",
+														textDecoration: "inherit"
+													}}>
+
 												<Card.Img
 													style={styles.image}
 													variant="top"
 													src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
 												/>
-
+												</Link>
 												<Card.ImgOverlay style={{ marginTop: "-15px" }}>
 													<Row>
+														<Link to={{
+																pathname: `/product_detail/${data.slug}`,
+																state: data.slug
+															}}
+															style={{
+																color: "inherit",
+																textDecoration: "inherit"
+															}}>
+
 														<Col xs={8} sm={8} md={8} lg={8} xl={8}>
 															<Badge
 																variant="danger"
@@ -155,6 +164,7 @@ useEffect(() => {
 																Higlighted
 															</Badge>
 														</Col>
+														</Link>
 														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
 															<Fav {...props} user={props.user} data={data} />
 														</Col>
@@ -171,13 +181,13 @@ useEffect(() => {
 															color: "inherit",
 															textDecoration: "inherit"
 														}}>
-														<p style={styles.title}>{data.title}</p>
+														<p className="product-title">{data.title}</p>
 													</Link>
 
 													
 												</Card.Body>
 											</Card>
-											</Link>
+											
 											<div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
 												<Price styles={styles} data={data} {...props} convertTooltip={convertTooltip} />
 											</div>
@@ -210,15 +220,7 @@ const styles = {
 		padding: "5px",
 		borderRadius: "10px"
 	},
-	title: {
-		opacity: "0.9",
-		fontSize: "14px",
-		width: "150px",
-		whiteSpace: "nowrap",
-		overflow: "hidden",
-		textOverflow: "ellipsis",
-		marginTop: "-6px"
-	},
+	
 	titleBody: {
 		padding: "5px",
 		paddingLeft: "10px"
