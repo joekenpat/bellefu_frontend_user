@@ -36,27 +36,22 @@ import EditAdPage from "./components/app/EditAdPage";
 import MessageChatPage from "./components/app/MessageChatPage"
 import  MessageListPage  from "./components/app/MessageListPage"
 import Subcategory from "./components/app/Subcategory";
+import ScrollToTop from "./ScrollToTop";
 
 function App(props) {
 	return (
 		
 			<div className="App">
 				<Router>
-			
+					<ScrollToTop />
+				<Switch>
 					<Route {...props} exact path="/" component={WithCountry(LandingPage)} />
 					<Route {...props} exact path="/product_list/" component={WithCountry(CategoryPage)} />
 					<Route {...props} exact path="/register" component={WithCountry(RegistrationFormPage)} />
 					<Route {...props} exact path="/login" component={WithCountry(LoginFormPage)} />
 					<Route {...props} exact path="/product_detail/:id" component={WithCountry(AdViewPage)}/>
 					<Route {...props} exact path="/subcategory/:category_id" component={WithCountry(Subcategory)}/>
-					{/* <Route
-						exact
-						path="/edit_ad/:slug"
-						render={(props) => (
-							<EditAdPage {...props} />
-						)}
-						/> */}
-					<Switch>
+					
 						<PrivateRoute
 							 {...props}
 							exact

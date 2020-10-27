@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from "react";
-import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner } from "react-bootstrap";
+import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner, Dropdown } from "react-bootstrap";
 import SideNav from "./SideNav";
-import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import Cookie from "js-cookie";
 import axios from 'axios';
 import Flag from 'react-world-flags';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUserCountry} from '../../redux/actions/userCountry'
+import { IconContext } from "react-icons/lib";
+import { FaUsers } from "react-icons/fa";
+const apiKey = process.env.key;
+const googleTranslate = require("google-translate")('');
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (CHANGE CONTRY)
@@ -25,6 +28,32 @@ export default function HeaderNav(props) {
 
 	const [show, setShow] = useState(false)
 	const [countries, setCountries] = useState([])
+	const [languageCodes, setLanguageCodes] = useState([])
+	const [language, setLanguage] = useState(Cookie.get("language") !== 'undefined' ? Cookie.get("language") : "en")
+	const [text, setText] = useState('Post Free Ad')
+  
+
+	const translate = async (lang) => {
+		setLanguage(lang)
+	}
+
+	useEffect(() => {
+		googleTranslate.getSupportedLanguages("en", function(err, languageCodes) {
+			setLanguageCodes(languageCodes); 
+		  });
+	}, [])
+	  
+	useEffect(() => {
+		googleTranslate.translate(text, language, function(err, translation) {
+			if(language === 'en'){
+				setText('Post Free Ad')
+			} else {
+
+				setText(translation.translatedText)
+			}
+			Cookie.set('language', language, { expires: 1 })
+		});
+	}, [language])
 
 	const onShow = () => {
 		setTimeout(() => {
@@ -65,7 +94,7 @@ export default function HeaderNav(props) {
 		<div>
 			<Navbar style={styles.head} className=" shadow-sm fixed-top">
 				<Navbar.Brand as={Link} to="/">
-					<img src={logo} style={styles.logo} />
+					<img src="https://dev.bellefu.com/images/misc/logo.png" style={styles.logo} />
 				</Navbar.Brand>
 				<Navbar.Brand>
 					<OverlayTrigger
@@ -83,6 +112,23 @@ export default function HeaderNav(props) {
 				</Navbar.Brand>
 
 				<Navbar.Collapse className="justify-content-end">
+					<a
+						
+						href="https://www.facebook.com/groups/bellefu"
+						className="d-none d-lg-block farmers-club pt-4 pr-3"
+						style={{color: 'white', paddingBottom: '10px'}}>
+							<IconContext.Provider value={{ color: "white", size: '20px', style: {paddingBottom: '5px'}}}>
+								<FaUsers className="cursor" />
+							</IconContext.Provider>
+					{' '}Farmer's Club
+					</a>
+					<a
+						target="_blank"
+						href="https://blog.bellefu.com"
+						className="d-none d-lg-block farmers-club"
+						style={{color: 'white', paddingBottom: '12px'}}>
+						Blog
+					</a>
 					<Nav.Link
 						as={Link}
 						to="/user_dashboard"
@@ -129,18 +175,30 @@ export default function HeaderNav(props) {
 						style={styles.auth}>
 						Register
 					</Nav.Link>
+					<Navbar.Brand styles={styles.language}>
+						<Dropdown>
+							<Dropdown.Toggle variant="warning" style={styles.post_free_add_btn} id="dropdown-basic">
+								{language}
+							</Dropdown.Toggle>
+
+							<Dropdown.Menu style={{height: '280px', overflowY: 'scroll'}}>
+								{languageCodes.length > 1 && languageCodes.map((code) => (
+								<Dropdown.Item style={{fontSize: '12px'}} onClick={() => translate(code.language)} key={code.language}>{code.name}</Dropdown.Item>
+
+								))}
+
+							</Dropdown.Menu>
+						</Dropdown>
+						
+					</Navbar.Brand>
 					<Navbar.Brand className="d-none d-lg-block  d-md-none">
 						<Link to="/post_ad">
 						<Button variant="warning" style={styles.post_free_add_btn}>
-							Post Free Ad
+							{text}
 						</Button>
 						</Link>
 					</Navbar.Brand>
-					<Navbar.Brand styles={styles.language}>
-						<Button variant="warning" style={styles.post_free_add_btn}>
-							EN
-						</Button>
-					</Navbar.Brand>
+					
 					<Navbar.Brand className="d-lg-none d-xs-block  d-sm-block d-md-block">
 						<SideNav />
 					</Navbar.Brand>

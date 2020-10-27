@@ -144,7 +144,9 @@ export default function DashboradInfo() {
     <div>
       <Card className="border-0 text-center" style={{ padding: "20px" }}>
         {loading ? (
+          <div style={{height: '100vh', width: '100%'}}>
           <Preloader />
+        </div>
         ) : (
           <Row>
             <Col xs={6} sm={6} md={6} lg={2} xl={2}>

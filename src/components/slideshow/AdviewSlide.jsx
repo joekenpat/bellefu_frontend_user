@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Badge, Card } from "react-bootstrap";
-import pic from "../images/pic.jpg";
 
 import {
 	IoIosArrowDropleftCircle,

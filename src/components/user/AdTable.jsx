@@ -130,7 +130,9 @@ export default function AdTable(props) {
 						</thead>
 						<tbody>
 							{loading ? (
+								<div style={{height: '100vh', width: '100%'}}>
 								<Preloader />
+								</div>
 							) : (
 								
 								ad.map((data) => (

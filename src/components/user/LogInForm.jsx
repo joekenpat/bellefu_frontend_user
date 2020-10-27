@@ -34,7 +34,11 @@ function LogInForm(props) {
 	return (
 		<div>
 			 {/* {user ? <Redirect to="/user_dashboard" />: null} */}
-			{loading && <Preloader />}
+			{loading && (
+				<div style={{height: '100vh', width: '100%'}}>
+				<Preloader />
+			</div>
+			)}
 			{error && (
 				<div class="alert alert-danger" role="alert">
 					<strong>{error.message}</strong>

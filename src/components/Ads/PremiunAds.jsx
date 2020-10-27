@@ -10,8 +10,7 @@ import {
 	Accordion,
 	Button
 } from "react-bootstrap";
-import pic from "../images/pic.jpg";
-import { FaCommentDots, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import { FaCommentDots, FaMapMarkerAlt, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -182,6 +181,14 @@ useEffect(() => {
 															textDecoration: "inherit"
 														}}>
 														<p className="product-title">{data.title}</p>
+														<div style={{display: 'flex', justifyContent: 'flex-start'}}>
+															<div>
+															<IconContext.Provider value={{ color: "gray", size: '10px'}}>
+																<FaMapMarkerAlt className="cursor" />
+															</IconContext.Provider>
+															</div>
+															<div style={{color: 'gray', fontSize: '12px', marginTop: '5px'}} className="ml-1 product-title">{data.address}</div>
+														</div>
 													</Link>
 
 													

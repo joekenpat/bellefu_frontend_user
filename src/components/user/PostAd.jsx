@@ -163,7 +163,11 @@ function PostAd(props) {
                         success.is_upgradable}/${location.pathname}`}
                 />
             ) : null}
-            {loading ? <Preloader /> : null}
+            {loading && (
+                <div style={{height: '100vh', width: '100%'}}>
+                <Preloader />
+            </div>
+            )}
             <Form onSubmit={onSubmitHandle}>
                 <Card className="border-0">
                     <Card.Header className="border-0" style={{backgroundColor: '#76ba1b'}}>

@@ -64,7 +64,11 @@ import Preloader from "./Preloader";
 
 	return (
 		<div>
-			{loading && <Preloader />}
+			{loading && (
+				<div style={{height: '100vh', width: '100%'}}>
+				<Preloader />
+			</div>
+			)}
 			
 			<Card className="border-0">
 				<Card.Body>

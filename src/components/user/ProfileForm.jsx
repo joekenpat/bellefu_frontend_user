@@ -120,7 +120,11 @@ export default function ProfileForm() {
 
   return (
     <div>
-      {loading && <Preloader />}
+      {loading && (
+        <div style={{height: '100vh', width: '100%'}}>
+        <Preloader />
+      </div>
+      )}
       {snack.view && <SnackBar type={snack.type}>{snack.message}</SnackBar>}
       <Form onSubmit={handleSubmmit}>
         <Card className="border-0">

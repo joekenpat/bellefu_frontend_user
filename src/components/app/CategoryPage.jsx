@@ -98,10 +98,10 @@ export default function CategoryPage(props) {
 
 	
 	let countryy = params.country ? `country=${params.country}` : ''
-	let lgaa = params.lga ? `&country=${params.lga}` : ''
-	let statee = params.state ? `&country=${params.state}` : ''
-	let subcategoryy = params.subcategory ? `&country=${params.subcategory}` : ''
-	let categoryy = params.category ? `&country=${params.category}` : ''
+	let lgaa = params.lga ? `&lga=${params.lga}` : ''
+	let statee = params.state ? `&state=${params.state}` : ''
+	let subcategoryy = params.subcategory ? `&subcategory=${params.subcategory}` : ''
+	let categoryy = params.category ? `&category=${params.category}` : ''
 
 	let dataUrl = "";
 	let apiUrl = `https://dev.bellefu.com/api/product/list?${countryy}${lgaa}${statee}${subcategoryy}${categoryy}`;
@@ -127,7 +127,7 @@ export default function CategoryPage(props) {
 	const loadData = (page = 1) => {
 		setLoading(true);
 		axios
-			.get(`${dataUrl}&page=${page}`, {
+			.get(`${apiUrl}&page=${page}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Accept: "application/json"
@@ -615,7 +615,11 @@ const loadSubCategory = () => {
 							className="d-none d-lg-block">
 							
 								{loading ? 
-									<Preloader />
+									(
+										<div style={{height: '100vh', width: '100%'}}>
+						<Preloader />
+					</div>
+									)
 								 :  
 								 (
 									 <div>
@@ -740,7 +744,9 @@ const loadSubCategory = () => {
 							className="d-lg-none d-xs-block">
 							<Row>
 								{loading ? (
+									<div style={{height: '100vh', width: '100%'}}>
 									<Preloader />
+								</div>
 								) : (
 									productsData.map((data) => (
 										<Col

@@ -59,7 +59,7 @@ export default function MainDesktop() {
 									<Image
 										height="40px"
 										width="40px"
-										src={`https://dev.bellefu.com/images/categories/${data.slug}/${data.image}`}
+										src={`https://dev.bellefu.com/images/categories/${data.image}`}
 										roundedCircle
 									/>
 								</div>

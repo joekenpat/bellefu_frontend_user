@@ -99,7 +99,11 @@ export default function PostAdPayment() {
 				/>
 			) : null}
 			<Container>
-			{loading ? <Preloader /> : null}
+			{loading && (
+				<div style={{height: '100vh', width: '100%'}}>
+				<Preloader />
+			</div>
+			)}
 				<Form onSubmit={onSubmitHandle}>
 					<Card className="border-0">
 						<Card.Header

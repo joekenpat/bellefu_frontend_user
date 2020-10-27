@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { Button, Card, Form, Nav } from 'react-bootstrap';
+import { FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
@@ -90,6 +90,20 @@ const MobileInput = (props) => {
                 </Button>
 			</Link>
             </Form.Group>
+			{props.landingpage && (
+				<Form.Group style={{paddingTop: '10px'}}>
+				<a  target="_blank" style={{
+						color: "inherit",
+						textDecoration: "inherit"
+					}} href="https://www.facebook.com/groups/bellefu">
+					<IconContext.Provider value={{ color: "white", size: '20px', style: {paddingBottom: '5px'}}}>
+						<FaUsers className="cursor" />
+					</IconContext.Provider>
+					{' '}Farmer's Club
+				</a>
+				</Form.Group>
+			)}
+			
         </Form>
     )
 }
@@ -135,6 +149,9 @@ const selectStyles = {
 const styles = {
 	from_card: {
 		height: "50px",	
+	},
+	auth: {
+		color: "white"
 	},
 	input: {
 		border: "none",

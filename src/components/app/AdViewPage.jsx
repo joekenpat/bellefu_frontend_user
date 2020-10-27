@@ -42,7 +42,9 @@ export default function AdViewPage(props) {
 			<HeaderNav />
 			<Container>
 			{loading ? (
-					<Preloader />
+					<div style={{height: '100vh', width: '100%'}}>
+						<Preloader />
+					</div>
 				) : (
 			<Row>
 				<Col xs={12} sm={12} md={12} lg={12} xl={12}>

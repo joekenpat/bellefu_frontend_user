@@ -63,7 +63,8 @@ export default function LandingPageItem(props) {
 						<div className="mt-5 mt-md-0">
 							<Row>
 								<Col xs={6}>
-									<h4 className="mb-5 ml-2">Trending Ads</h4>
+									<h4 className="mb-5 ml-2 d-none d-sm-block">Trending Ads</h4>
+									<h4 style={{fontSize: '20px'}} className="mb-5 ml-2 d-block d-sm-none">Trending Ads</h4>
 								</Col>
 							</Row>
 							<PremiunAds {...props} country={country} user={user}/>

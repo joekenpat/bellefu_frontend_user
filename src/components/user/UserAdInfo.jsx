@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Image, Col } from "react-bootstrap";
+import { Card, Row, Image, Col, Accordion, Button } from "react-bootstrap";
 import avater_placeholder from "../images/avater_placeholder.jpg";
 import { IoIosTime, IoMdMailOpen, IoIosChatbubbles } from "react-icons/io";
 import { AiFillPhone } from "react-icons/ai";
 import Moment from "react-moment";
+import { FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
+import { IconContext } from "react-icons/lib";
 
 export default function UserAdInfo(props) {
 	const [userprofile, setProfileState] = useState(props);
@@ -87,15 +89,47 @@ export default function UserAdInfo(props) {
 										</span>
 									</a>
 								</div>
-								<div style={{paddingLeft: '80px'}} className="mt-2">
-									<IoIosChatbubbles style={styles.icon} className="mr-3" />{" "}
-									<a
-										style={{color: 'black'}}
-										href="#">
-										<span style={styles.text}>
-											<span>Message Seller</span>
-										</span>
-									</a>
+								<div style={{paddingLeft: '70px'}} className="mt-2">
+								<Accordion>
+									
+										<Accordion.Toggle as={Button} variant="link" style={{color: 'black', border: 'none', backgroundColor: 'transparent'}}  eventKey="0">
+											<IoIosChatbubbles style={styles.icon} className="mr-3" />{" "}
+										
+											<span style={styles.text}>
+												<span>Message Seller</span>
+											</span>
+										
+										</Accordion.Toggle>
+										<Accordion.Collapse eventKey="0">
+										<div className="pl-3">
+											<div className="mt-2">
+												<a href={`https://wa.me/${userprofile.user && userprofile.user.phone}`}>
+													<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
+														<FaWhatsapp className="cursor"/>
+													</IconContext.Provider>
+													<span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Whatsapp</span>
+												</a>
+											</div>
+											<div className="mt-1 d-block d-lg-none">
+											<a href={`tel:${userprofile.user && userprofile.user.phone}`}>
+												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
+													<FaMobileAlt className="cursor"/>
+												</IconContext.Provider>
+												<span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Call</span>
+											</a>
+											</div>
+											<div className="mt-1">
+											<a href="#">
+												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
+													<FaRegCommentDots className="cursor"/>
+												</IconContext.Provider>
+												<span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Chat</span>
+											</a>
+											</div>
+										</div>
+										</Accordion.Collapse>
+								</Accordion>
+									
 								</div>
 							</div>
 						</Col>

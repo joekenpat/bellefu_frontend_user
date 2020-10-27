@@ -1,11 +1,7 @@
 import React from 'react'
 import { Carousel, Card } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-import banner from "../images/banner.png";
-import bellefu1 from '../images/bellefu-external-ad-1.jpeg'
-import bellefu2 from '../images/bellefu-external-ad-2.jpeg'
-import bellefu3 from '../images/bellefu-external-ad-3.jpeg'
-import bellefu4 from '../images/bellefu-external-ad-4.jpeg'
+
 
 export default function AdSlide() {
     return (
@@ -15,7 +11,7 @@ export default function AdSlide() {
 				
 				<img
 					className="d-block w-100"
-					src={bellefu1}
+					src="https://dev.bellefu.com/images/misc/bellefu1.jpeg"
 					alt="First slide"
 					style={{ height: "200px" }}
 				/>
@@ -28,7 +24,7 @@ export default function AdSlide() {
             
 				<img
 					className="d-block w-100"
-					src={bellefu2}
+					src="https://dev.bellefu.com/images/misc/bellefu2.jpeg"
 					alt="First slide"
 					style={{ height: "200px" }}
 				/>
@@ -41,7 +37,7 @@ export default function AdSlide() {
             
 			<img
 				className="d-block w-100"
-				src={bellefu3}
+				src="https://dev.bellefu.com/images/misc/bellefu3.jpeg"
 				alt="First slide"
 				style={{ height: "200px" }}
 			/>
@@ -54,7 +50,7 @@ export default function AdSlide() {
             
 			<img
 				className="d-block w-100"
-				src={bellefu4}
+				src="https://dev.bellefu.com/images/misc/bellefu4.jpeg"
 				alt="First slide"
 				style={{ height: "200px" }}
 			/>
