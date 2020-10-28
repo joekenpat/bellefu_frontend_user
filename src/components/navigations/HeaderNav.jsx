@@ -9,8 +9,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateUserCountry} from '../../redux/actions/userCountry'
 import { IconContext } from "react-icons/lib";
 import { FaUsers } from "react-icons/fa";
-const apiKey = process.env.key;
-const googleTranslate = require("google-translate")('');
+import Axios from "axios";
+// const translate = require('translate-google');
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (CHANGE CONTRY)
@@ -38,22 +38,25 @@ export default function HeaderNav(props) {
 	}
 
 	useEffect(() => {
-		googleTranslate.getSupportedLanguages("en", function(err, languageCodes) {
-			setLanguageCodes(languageCodes); 
-		  });
+		Axios.get('https://translation.googleapis.com/language/translate/v2/languages')
+		.then((res) => {
+			console.log(res)
+			// setLanguageCodes(languageCodes); 
+		}).catch((e) => 
+		console.log('error from country: ',e))
 	}, [])
 	  
-	useEffect(() => {
-		googleTranslate.translate(text, language, function(err, translation) {
-			if(language === 'en'){
-				setText('Post Free Ad')
-			} else {
+	// useEffect(() => {
+	// 	googleTranslate.translate(text, language, function(err, translation) {
+	// 		if(language === 'en'){
+	// 			setText('Post Free Ad')
+	// 		} else {
 
-				setText(translation.translatedText)
-			}
-			Cookie.set('language', language, { expires: 1 })
-		});
-	}, [language])
+	// 			setText(translation.translatedText)
+	// 		}
+	// 		Cookie.set('language', language, { expires: 1 })
+	// 	});
+	// }, [language])
 
 	const onShow = () => {
 		setTimeout(() => {

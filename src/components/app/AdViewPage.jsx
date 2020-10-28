@@ -70,7 +70,7 @@ export default function AdViewPage(props) {
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
-						<AdSafetyTip/>
+						<AdSafetyTip data={productsDataDetail}/>
 					</div>
 				</Col>
 					</Row>
