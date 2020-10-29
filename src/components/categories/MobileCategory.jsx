@@ -5,7 +5,7 @@ import Cookie from 'js-cookie'
 
 import MobileCategoryItem from "./MobileCategoryItem";
 
-export default function MobileCategory() {
+export default function MobileCategory(props) {
 	const [categoryData, setCategoryData] = useState([]);
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 
@@ -33,7 +33,7 @@ export default function MobileCategory() {
 		<Container>
 			<Row>
 				{categoryData && categoryData.map((data) => (
-					<MobileCategoryItem language={language} data={data} key={data.slug} />
+					<MobileCategoryItem id={props.id} language={language} data={data} key={data.slug} />
 				))}
 			</Row>
 		</Container>

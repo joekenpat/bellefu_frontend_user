@@ -39,10 +39,11 @@ export const signin = (identifier, password) => async (dispatch) => {
 			Cookie.remove('country')
 			Cookie.set('country', JSON.stringify(data.location_info))
 			Cookie.set("user", JSON.stringify(data));
-			console.log(data)
 
+		} else {
+
+			dispatch({ type: USER_SIGNIN_FAIL, payload: data.errors });
 		}
-		dispatch({ type: USER_SIGNIN_FAIL, payload: data.errors });
 	} catch (error) {
 		dispatch({ type: USER_SIGNIN_FAIL, payload: error.response.data });
 	}
@@ -83,8 +84,10 @@ export const signup = (
 			Cookie.set('country', JSON.stringify(data.location_info))
 			axios.defaults.headers.common['Authorization'] = token
 			Cookie.set("user", JSON.stringify(data));
+		} else {
+
+			dispatch({ type: USER_SIGNUP_FAIL, payload: data.message });
 		}
-		dispatch({ type: USER_SIGNUP_FAIL, payload: data.message });
 	} catch (error) {
 		dispatch({ type: USER_SIGNUP_FAIL, payload: error.response.data });
 	}

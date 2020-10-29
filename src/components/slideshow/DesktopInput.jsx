@@ -8,10 +8,10 @@ import Axios from "axios";
 import Cookie from 'js-cookie'
 import { useEffect } from "react";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 
 export default function DesktopInput(props) {
+	const [id, setId] = useState('')
 	const [categoryData, setCategoryData] = useState([]);
 	const [category, setCategory] = useState({})
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
@@ -25,28 +25,40 @@ export default function DesktopInput(props) {
 		'Where?',
 		'Search'
 	])
-	const translate = new Translate({key: id})
 	const options = [];
 
 	const handleChange = (option) => {
 		setCategory(option)
 	}
 
-	const getLanguage = () => {
-        if(language === 'en'){
-            setText(originalText)
-        } else {
+	
 
-            translate.translate(text, language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
+
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		if(language === 'en' || id.length < 2){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [id, language])
 
 
 	const loadCategory = () => {
@@ -71,7 +83,7 @@ export default function DesktopInput(props) {
 	};
 
 	useEffect(() => {
-		getLanguage()
+		load()
 		loadCategory()
 	}, [])
 

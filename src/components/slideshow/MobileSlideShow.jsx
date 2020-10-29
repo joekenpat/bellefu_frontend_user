@@ -30,7 +30,7 @@ export default function MobileSlideShow(props) {
 					<Carousel.Caption  style={{ left: "10px", right: "10px" }} >
 						<h3 style={{ color: "white", fontSize: '20px', paddingBottom: '10px' }}>Bellefu - digital agro connect...</h3>
 
-						<MobileInput landingpage={true} country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow}/>
+						<MobileInput id={props.id} landingpage={true} country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow}/>
 					</Carousel.Caption>
 				</Carousel.Item>
 			</Carousel>

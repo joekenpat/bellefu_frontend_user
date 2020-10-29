@@ -18,44 +18,49 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
+import Axios from "axios";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 
 const MobileAds = (props) => {
+    const [id, setId] = useState('')
     const [text, setText] = useState([
 		props.data.title,
-        props.data.plan
+        props.data.plan,
+        'Chat',
+        'Whatsapp',
+        'Call'
     ])
     const [originalText, setOriginalText] = useState([
 		props.data.title,
-        props.data.plan
+        props.data.plan,
+        'Chat',
+        'Whatsapp',
+        'Call'
     ])
 
-    const translate = new Translate({key: id})
 
-    const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
 
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, props.language])
     
-    useEffect(() => {
-        if(!props.text) {
-
-            getLanguage()
-        }
-    }, [])
+    
 return (
     <Container>
     <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column card-shadow">
@@ -132,7 +137,7 @@ return (
                         <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                             <FaCommentDots className="cursor" />
                         </IconContext.Provider>
-                        <span className="ml-1" style={{color: 'black', textDecoration: 'none', fontSize: '12px'}}>Chat</span>
+                        <span className="ml-1" style={{color: 'black', textDecoration: 'none', fontSize: '12px'}}>{text[2]}</span>
                     </a>
                 </div>
             </Col>
@@ -142,7 +147,7 @@ return (
                         <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                             <FaWhatsapp className="cursor"/>
                         </IconContext.Provider>
-                        <span style={{color: 'black', textDecoration: 'none', fontSize: '12px'}} className="ml-1">Whatsapp</span>
+                        <span style={{color: 'black', textDecoration: 'none', fontSize: '12px'}} className="ml-1">{text[3]}</span>
                     </a>
                 </div>
             </Col>
@@ -152,7 +157,7 @@ return (
                         <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                             <FaMobileAlt className="cursor"/>
                         </IconContext.Provider>
-                        <span style={{color: 'black', textDecoration: 'none', fontSize: '12px'}} className="ml-1">Call</span>
+                        <span style={{color: 'black', textDecoration: 'none', fontSize: '12px'}} className="ml-1">{text[4]}</span>
                     </a>
                 </div>
             </Col>

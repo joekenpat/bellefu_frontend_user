@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import Cookie from 'js-cookie'
 const {Translate} = require('@google-cloud/translate').v2;
 
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 
 const CategorySubcategoryItem = (props) => {
@@ -14,24 +13,27 @@ const CategorySubcategoryItem = (props) => {
     const [originalText, setOriginalText] = useState([
 		props.data.name
     ])
-    const translate = new Translate({key: id})
 
-    const getLanguage = () => {
-		translate.translate(text, props.language)
-		.then((res) => {
-			
-				setText(res[0])
-			
-		}).catch((e) => {
-			setText(originalText)
-		})
+  
+    const trans = async() => {
+      const translate = await new Translate({key: props.id})
+      if(props.language === 'en'){
+        setText(originalText)
+      } else {
+  
+        translate.translate(text, props.language)
+          .then((res) => {
+            setText(res[0])
+          
+        }).catch(() => {
+          setText(originalText)
+          })
+      }
     }
-    
-    useEffect(() => {
-        if(props.language !== 'en'){
-            getLanguage()
-            }
-    }, [])
+      
+    useEffect( () => {
+      trans()
+    }, [props.id, props.language])
 return (
     <option
         value={props.data.slug}

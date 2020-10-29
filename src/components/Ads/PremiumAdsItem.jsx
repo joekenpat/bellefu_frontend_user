@@ -20,11 +20,11 @@ import Fav from "./Fav";
 import MobileAds from "./MobileAds";
 
 import { useEffect } from 'react';
+import Axios from 'axios';
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 const PremiumAdsItem = (props) => {
-    
+    const [id, setId] = useState('')
 	const [text, setText] = useState([
 		props.data.title,
         props.data.plan
@@ -34,28 +34,28 @@ const PremiumAdsItem = (props) => {
         props.data.plan
     ])
     
-    
-    const translate = new Translate({key: id})
 
-    const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
 
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
-    
-    useEffect(() => {
-        getLanguage()
-    }, [])
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+    }, [props.id, props.language])
+   
     
     return (
         <Col
@@ -141,7 +141,7 @@ const PremiumAdsItem = (props) => {
             <div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
                 <Price styles={props.styles} data={props.data} {...props} convertTooltip={props.convertTooltip} />
             </div>
-            <MobileAds text={text}  {...props} data={props.data} convertTooltip={props.convertTooltip} />
+            <MobileAds id={props.id} text={text}  {...props} data={props.data} convertTooltip={props.convertTooltip} />
         </Col>
     )
 }

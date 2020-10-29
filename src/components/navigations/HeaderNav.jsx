@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateUserCountry, languagee} from '../../redux/actions/userCountry'
 import { IconContext } from "react-icons/lib";
 import { FaUsers } from "react-icons/fa";
+import Axios from "axios";
 const {Translate} = require('@google-cloud/translate').v2;
 
 
@@ -37,15 +38,13 @@ const languages = [
 	
 ]
 
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 //THIS IS A HEADER COMPOENT
 export default function HeaderNav(props) {
 	const dispatch = useDispatch();
 	const [loadingCountry, setLoadingCountry] = useState(false)
 	const country = useSelector((state) => state.userCountry);
-	const userLanguage = useSelector((state) => state.language);
-
+	
 
 	const [show, setShow] = useState(false)
 	const [countries, setCountries] = useState([])
@@ -74,30 +73,46 @@ export default function HeaderNav(props) {
 		'Select Your Country'
 	])
 
-	const translate = new Translate({key: id})
+	
   
 
 	const translatee = (lang) => {
 		setLanguage(lang)
 		setNumber(1)
 	}
-	  
-	useEffect(() => {
-		translate.translate(text, language)
+
+	const [id, setId] = useState('')
+
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
-			
-				setText(res[0])
-				Cookie.set('language', language)
-				if(number > 0){
-					window.location.reload()
-				}
+			setId(res.data.key)
+		})
+	}
+
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		translate.translate(text, language)
+			.then((res) => {
+				
+					setText(res[0])
+					Cookie.set('language', language)
+					if(number > 0){
+						window.location.reload()
+					}
 			
 		}).catch(() => {
 			setText(originalText)
-			setLanguage('en')
-			Cookie.set('language', language)
-		})
-	}, [language])
+			})
+	}
+
+	useEffect(() => {
+		load()
+	}, [])
+	  
+	useEffect( () => {
+		trans()
+	}, [id, language])
 
 	const onShow = () => {
 		setTimeout(() => {

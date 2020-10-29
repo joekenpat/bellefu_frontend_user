@@ -26,12 +26,16 @@ const convertTooltip = (props) => (
 
 
 export default function PremiunAds(props) {
-    const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	const [id, setId] = useState('')
+
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
 	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${props.country.country_slug}`;
 
+	
+	
 	const loadData = () => {
 		axios
 			.get(apiUrl, {
@@ -77,7 +81,7 @@ useEffect(() => {
 		<div>
 			<Row>
 			{ productsData.map((data) => (
-				<PremiumAdsItem language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
+				<PremiumAdsItem id={props.id} language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
 									))
 							}
 			</Row>

@@ -6,14 +6,34 @@ import { signin } from "../../redux/actions/userActon";
 import Preloader from "./Preloader";
 
 import { useEffect } from 'react';
+import SuccessModal from "./LoginSuccessModal";
+import SnackBar from "../SnackBar/SnackBar";
+import Axios from "axios";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 
 function LogInForm(props) {
+	const dispatch = useDispatch();
+	const [id, setId] = useState('')
+
+	const userSignin = useSelector((state) => state.userSignin);
+	const { loading, user, error } = userSignin;
 	const [formData, setFormData] = useState({
 		identifier: "",
 		password: ""
 	});
+	const [firstName, setFirstName] = useState('')
+	const [show, setShow] = useState(false);
+	const [isVerified, setIsVerified] = useState(false)
+	const [snack, setsnack] = useState({
+		view: false,
+		type: "",
+		message: "",
+	  });
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+	let url1 = 'https://dev.bellefu.com/api/user/profile/details';
+
 	
 	const [text, setText] = useState([
 		'Welcome Back',
@@ -21,7 +41,12 @@ function LogInForm(props) {
 		'Sign Up Now',
 		'Email or Phone',
 		'Password',
-		'Login'
+		'Login',
+		'Login Successful',
+		'Welcome',
+		"we're pleased to have you here.",
+		'Verify Phone Number',
+		'Continue Browsing'
 	])
 	const [originalText, setOriginalText] = useState([
 		'Welcome Back',
@@ -29,35 +54,80 @@ function LogInForm(props) {
 		'Sign Up Now',
 		'Email or Phone',
 		'Password',
-		'Login'
+		'Login',
+		'Login Successful',
+		'Welcome',
+		"we're pleased to have you here.",
+		'Verify Phone Number',
+		'Continue Browsing'
 	])
 
-	const translate = new Translate({key: id})
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
 
-	const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		if(props.language === 'en' || id.length < 2){
+			setText(originalText)
+		} else {
 
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
-    
-    useEffect(() => {
-        getLanguage()
-    }, [])
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [id, props.language])
 
-	const dispatch = useDispatch();
+	useEffect(() => {
+		load()
+	}, [])
+	
+	useEffect(() => {
+		if(user){
+			setsnack({
+				view: true,
+				type: "success",
+				message: text[6],
+			  });
+	  
+			  setTimeout(() => {
+				setsnack({
+				  view: false,
+				  type: "",
+				  message: "",
+				});
+			  }, 3000);
+			Axios.get(url1, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				}
+			}).then((res) => {
+				setFirstName(res.data.user.profile.first_name)
+				if(res.data.user.phone_verification !== null){
+					setIsVerified(true)
+				} 
+				handleShow()
+				
+			}).catch(() => {
+				window.location.push('/')
+			})
+		}
+	}, [user])
 
-	const userSignin = useSelector((state) => state.userSignin);
-	const { loading, user, error } = userSignin;
+	
 
 
 	const { identifier, password } = formData;
@@ -69,8 +139,6 @@ function LogInForm(props) {
 		e.preventDefault();
 		dispatch(signin(identifier, password)).then(() => {
 
-			props.history.push("/");
-			window.location.reload(true)
 		})
 	};
 
@@ -87,6 +155,10 @@ function LogInForm(props) {
 					<strong>{error.message}</strong>
 				</div>
 			)}
+			{snack.view && <SnackBar type={snack.type}>{snack.message}</SnackBar>}
+
+			{show && <SuccessModal welcome={text[7]} welcome2={text[8]} verify={text[9]} browse={text[10]} name={firstName} isVerified={isVerified} handleShow={handleShow} show={show} handleClose={handleClose} />}
+
 			<Card className="border-0">
 				<Card.Body>
 					<h4 className="text-center">

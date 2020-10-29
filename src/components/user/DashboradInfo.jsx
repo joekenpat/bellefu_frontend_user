@@ -11,7 +11,7 @@ import Axios from "axios";
 import Ripple from "../Loading/Ripple";
 import { useEffect } from 'react';
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 
 export default function DashboradInfo(props) {
   const [loading, setLoading] = useState(true);
@@ -55,27 +55,27 @@ export default function DashboradInfo(props) {
 		'Hidden Ads',
 	])
 
-	const translate = new Translate({key: id})
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
 
-	const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
-
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-              console.log(e)
-                setText(originalText)
-            })
-        }
-    }
-
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+  }, [props.id, props.language])
+  
   useEffect(() => {
-    getLanguage()
 	fetchDashboard()
   }, []);
 

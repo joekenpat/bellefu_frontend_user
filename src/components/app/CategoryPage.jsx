@@ -39,7 +39,6 @@ import Cookie from 'js-cookie'
 import CategoryPageItem from "./CategoryPageItem";
 import CategorySubcategoryItem from "./CategorySubcategoryItem";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 const queryString = require("query-string");
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -52,6 +51,7 @@ const convertTooltip = (props) => (
 export default function CategoryPage(props) {
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 	// ========FOR FITER FROM STATE AND FUNCTION START HERE ==================================//
+	const [id, setId] = useState('')
 	const [filterData, setFilterData] = useState({
 		min_price: "",
 		country: "",
@@ -284,27 +284,35 @@ const loadSubCategory = () => {
 		'Apply Filter'
     ])
 
-    const translate = new Translate({key: id})
 
-    const getLanguage = () => {
-        if(language === 'en'){
-            setText(originalText)
-        } else {
+    const load = async () => {
+		await axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
 
-            translate.translate(text, language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		if(language === 'en' || id.length < 2){
+			setText(originalText)
+		} else {
 
+			translate.translate(text, language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	useEffect( () => {
+		trans()
+	}, [id, language])
 
 	useEffect(() => {
-		getLanguage()
+		load()
 		loadData(1);
 		loadStates()
 	}, [])
@@ -316,10 +324,10 @@ const loadSubCategory = () => {
 				<Row>
 					<Col xs={12}>
 					<div className="d-none d-lg-block" style={{ marginTop: "100px" }}>
-						<DesktopInput lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
+						<DesktopInput id={id} lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
 					</div>
 					<div className="d-block d-lg-none" style={{ marginTop: "100px" }}>
-						<MobileInput lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
+						<MobileInput id={id} lga={lga} country={props.userCountry} state={state} setModalShow={setModalShow} />
 					</div>
 					</Col>
 					<Col
@@ -354,7 +362,7 @@ const loadSubCategory = () => {
 														<option>{text[4]}</option>
 														{ 
 														categoryData.map((data) => (
-															<CategorySubcategoryItem language={language} key={data.slug} category={category} data={data} />
+															<CategorySubcategoryItem  id={id} language={language} key={data.slug} category={category} data={data} />
 														))}
 													</select>
 													
@@ -377,7 +385,7 @@ const loadSubCategory = () => {
 														<option>{text[0]}</option>
 														{ 
 														subcategoryData.map((data) => (
-															<CategorySubcategoryItem language={language} key={data.slug} subcategory={subcategory} data={data} />
+															<CategorySubcategoryItem id={id} language={language} key={data.slug} subcategory={subcategory} data={data} />
 														))}
 														
 													</select>
@@ -678,7 +686,7 @@ const loadSubCategory = () => {
 									  
 									<Row>
 									{productsData.map((data) => (
-										<CategoryPageItem language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
+										<CategoryPageItem id={id} language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
 									))}
 								  	</Row>
 									  <InfiniteScroll
@@ -719,7 +727,7 @@ const loadSubCategory = () => {
 											xl={3}
 											className=" my-1 px-1">
 											
-											<MobileAds language={language} {...props} data={data} convertTooltip={convertTooltip} />
+											<MobileAds id={id} language={language} {...props} data={data} convertTooltip={convertTooltip} />
 										</Col>
 									))
 								)}

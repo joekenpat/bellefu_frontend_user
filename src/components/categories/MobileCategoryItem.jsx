@@ -2,35 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Image, Col, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 
 const MobileCategoryItem = (props) => {
-    const translate = new Translate({key: id})
     const [text, setText] = useState([
 		props.data.name,
     ])
     const [originalText, setOriginalText] = useState([
 		props.data.name,
     ])
-    const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
+    const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
 
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
-    
-    useEffect(() => {
-        getLanguage()
-    }, [])
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, props.language])
     return (
         <Col xs={4} sm={4} md={4} className=" my-1 px-1">
             <Card style={{ height: "100%" }} className="border-0 category-shadow">

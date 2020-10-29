@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboradInfo from "../user/DashboradInfo";
 import DashBoardNav from "../user/DashBoardNav";
 import ProfileForm from "../user/ProfileForm"
@@ -8,9 +8,22 @@ import BottomNav from "../navigations/BottomNav";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Cookie from 'js-cookie'
+import Axios from "axios";
 
 export default function UserDashbordPage() {
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	const [id, setId] = useState('')
+
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
+
+	useEffect(() => {
+		load()
+	}, [])
 
 	return (
 		<div>
@@ -27,7 +40,7 @@ export default function UserDashbordPage() {
 								}}>
 								Dashboard
 							</h3>
-							<DashBoardNav language={language} />
+							<DashBoardNav id={id} language={language} />
 						</div>
 						{/* ======FOR MOBILE DASHBOARDNAV====== */}
 						<div className=" d-lg-none  d-xs-block d-sm-block d-md-block ">
@@ -65,7 +78,7 @@ export default function UserDashbordPage() {
 								</Accordion.Toggle>
 								<Accordion.Collapse eventKey="0">
 									<Card.Body>
-										<DashBoardNav language={language} />
+										<DashBoardNav id={id} language={language} />
 									</Card.Body>
 								</Accordion.Collapse>
 							</Accordion>
@@ -76,17 +89,17 @@ export default function UserDashbordPage() {
 						<div
 							style={{ marginTop: "17.7%" }}
 							className="d-none d-lg-block  d-md-none">
-							<DashboradInfo language={language} />
+							<DashboradInfo id={id} language={language} />
 						</div>
 						{/* ======FOR MOBILE VIEW======== */}
 						<div
 							style={{ marginTop: "5%" }}
 							className=" d-lg-none  d-xs-block d-sm-block d-md-block ">
-							<DashboradInfo language={language} />
+							<DashboradInfo id={id} language={language} />
 						</div>
 						
 						<div className="mt-3">
-							<ProfileForm language={language}/>
+							<ProfileForm id={id} language={language}/>
 						</div>
 					</Col>
 				</Row>

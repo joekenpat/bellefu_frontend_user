@@ -30,8 +30,17 @@ export default function LandingPageItem(props) {
 	const [state, setState] = useState({})
 	const [lgas, setLgas] = useState([])
 	const [lga, setLga] = useState({})
+	const [id, setId] = useState('')
+
 	const { user } = userSignin;
 	const country = userCountry;
+
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
 	
 
 	useEffect(() => {
@@ -41,24 +50,25 @@ export default function LandingPageItem(props) {
 		}).catch((e) => {
 			console.log('an error occured: ', e)
 		})
+		load()
 	}, [])
 
 	return (
 		<div>
 			<HeaderNav />
-			<DesktopSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
-			<MobileSlideShow country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
+			<DesktopSlideShow id={id} country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
+			<MobileSlideShow id={id} country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
 			<Container style={{marginTop: '30px'}}>
 				<Row>
 					<Col xs={12} md={2}>
 						<Card style={{marginTop: '80px'}} className="d-none d-lg-block ">
-							<MainDesktop />
+							<MainDesktop id={id} />
 						</Card>
 					</Col>
 					<Col xs={12} md={7}>
 						
 						<div className="d-lg-none d-sm-block d-md-block">
-							<MobileCategory {...props} />
+							<MobileCategory id={id} {...props} />
 						</div>
 						<div className="mt-5 mt-md-0">
 							<Row>
@@ -67,7 +77,7 @@ export default function LandingPageItem(props) {
 									<h4 style={{fontSize: '20px'}} className="mb-5 ml-2 d-block d-sm-none">Trending Ads</h4>
 								</Col>
 							</Row>
-							<PremiunAds {...props} country={country} user={user}/>
+							<PremiunAds id={id} {...props} country={country} user={user}/>
 						</div>
 
 					</Col>
@@ -75,7 +85,7 @@ export default function LandingPageItem(props) {
 
 						<div style={{marginTop: '70px'}} className="d-none d-lg-block ">
 							<div className="p-2">
-								<AdSlide />
+								<AdSlide id={id} />
 							</div>
 						</div>
 							

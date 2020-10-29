@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import SnackBar from "../SnackBar/SnackBar";
 import Preloader from "./Preloader";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 
 export default function ProfileForm(props) {
   const [loading, setLoading] = useState(false);
@@ -74,27 +74,25 @@ export default function ProfileForm(props) {
     'Update'
 	])
 
-	const translate = new Translate({key: id})
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
 
-	const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
-
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
-
-    useEffect(() => {
-      getLanguage()
-    }, [])
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, props.language])
 
   useEffect(() => {
     setUpdateData({
@@ -145,7 +143,7 @@ export default function ProfileForm(props) {
             type: "",
             message: "",
           });
-        }, 2800);
+        }, 3800);
         setUpdateData({
           first_name: "",
           last_name: "",

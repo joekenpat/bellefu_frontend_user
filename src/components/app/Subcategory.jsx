@@ -7,11 +7,15 @@ import { useState } from 'react';
 import Preloader from '../user/Preloader';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import SubcategoryItem from './SubcategoriesItem';
+import Cookie from 'js-cookie'
 
 const Subcategory = (props) => {
     const [subcategories, setSubcategories] = useState([])
     const [loading, setLoading] = useState(true)
+    const [id, setId] = useState('')
+    const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+
 
     const loadSubCategory = () => {
 		Axios
@@ -23,14 +27,22 @@ const Subcategory = (props) => {
 			})
 			.then((res) => {
                 setLoading(false)
-				setSubcategories(res.data.subcategories.data);
+				setSubcategories(res.data.subcategories);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
     };
+
+    const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
     
     useEffect(() => {
+        load()
         loadSubCategory()
     }, [])
     return (
@@ -44,14 +56,7 @@ const Subcategory = (props) => {
 
                 <div style={{marginTop: '75px'}}>
                     {subcategories.map((data, index) => (
-                        <div style={{borderBottom: '1px solid #bab8b8'}} className="py-2" key={index}>
-                            <Link to={`/product_list?subcategory=${data.slug}&category=${props.match.params.category_id}&country=${props.userCountry.country_slug}`}>
-                                <div className="pl-4">
-                                    <div style={{fontWeight: 'bold', color: 'black'}}>{data.name}</div>
-                                    <div className="mt-1" style={{color: 'gray', fontSize: '12px'}}>{data.products_count} ads</div>
-                                </div>
-                            </Link>
-                        </div>
+                        <SubcategoryItem id={id} {...props} language={language} data={data} key={data.slug}/>
                     ))}
                 </div>
                 )

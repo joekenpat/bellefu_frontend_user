@@ -5,8 +5,11 @@ import { Card } from "react-bootstrap";
 import { signup } from "../../redux/actions/userActon";
 import Preloader from "./Preloader";
 import { useEffect } from 'react';
+import SuccessModal from "./LoginSuccessModal";
+import Axios from "axios";
+import SnackBar from "../SnackBar/SnackBar";
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 
  function RegisterationFrom(props) {
 	const [formData, setFormData] = useState({
@@ -18,10 +21,20 @@ const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 		email: "",
 		password: ""
 	});
+	const [id, setId] = useState('')
 
 	const dispatch = useDispatch();
 	const userSignup = useSelector((state) => state.userSignup);
 	const { loading, user, error } = userSignup;
+	const [show, setShow] = useState(false);
+	const [isVerified, setIsVerified] = useState(false)
+	const [snack, setsnack] = useState({
+		view: false,
+		type: "",
+		message: "",
+	  });
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
 	const [text, setText] = useState([
 		"Let's create your account",
@@ -37,7 +50,11 @@ const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 		'Male',
 		'Female',
 		'Register',
-		'do not add country code'
+		'do not add country code',
+		'Welcome',
+		"we're pleased to have you here.",
+		'Verify Phone Number',
+		'Continue Browsing'
 	])
 	const [originalText, setOriginalText] = useState([
 		"Let's create your account",
@@ -53,35 +70,77 @@ const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 		'Male',
 		'Female',
 		'Register',
-		'do not add country code'
+		'do not add country code',
+		'Welcome',
+		"we're pleased to have you here.",
+		'Verify Phone Number',
+		'Continue Browsing'
 	])
 
-	const translate = new Translate({key: id})
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
 
-	const getLanguage = () => {
-        if(props.language === 'en'){
-            setText(originalText)
-        } else {
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		if(props.language === 'en' || id.length < 2){
+			setText(originalText)
+		} else {
 
-            translate.translate(text, props.language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
-    
-    useEffect(() => {
-        getLanguage()
-    }, [])
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [id, props.language])
+
+	useEffect(() => {
+		load()
+	}, [])
+	
+	let url1 = 'https://dev.bellefu.com/api/user/profile/details';
+
 
 	useEffect(() => {
 		if (user) {
-			
-			props.history.push('/login')
+			setsnack({
+				view: true,
+				type: "success",
+				message: "Registration Successful",
+			  });
+	  
+			  setTimeout(() => {
+				setsnack({
+				  view: false,
+				  type: "",
+				  message: "",
+				});
+			  }, 3000);
+			Axios.get(url1, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				}
+			}).then((res) => {
+				if(res.data.user.phone_verification !== null){
+					setIsVerified(true)
+				} 
+				handleShow()
+				
+			}).catch(() => {
+				window.location.push('/')
+			})
 		}
 		return () => {};
 	}, [user]);
@@ -113,7 +172,9 @@ const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 				<Preloader />
 			</div>
 			)}
-			
+			{snack.view && <SnackBar type={snack.type}>{snack.message}</SnackBar>}
+
+			{show && <SuccessModal welcome={text[14]} welcome2={text[15]} verify={text[16]} browse={text[17]} name={formData.first_name} isVerified={isVerified} handleShow={handleShow} show={show} handleClose={handleClose} />}
 			<Card className="border-0">
 				<Card.Body>
 				<h4 className="text-center">

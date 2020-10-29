@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import Select from "react-select";
 import Cookie from 'js-cookie';
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 
 
 
@@ -30,28 +30,31 @@ const MobileInput = (props) => {
 		"Farmer's Club"
 	])
 
-	const translate = new Translate({key: id})
 	const options = [];
 
 	const handleChange = (option) => {
 		setCategory(option)
 	}
 
-	const getLanguage = () => {
-        if(language === 'en'){
-            setText(originalText)
-        } else {
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(language === 'en'){
+			setText(originalText)
+		} else {
 
-            translate.translate(text, language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
+			translate.translate(text, language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, language])
 
 
 
@@ -77,7 +80,6 @@ const MobileInput = (props) => {
 	};
 
 	useEffect(() => {
-		getLanguage()
 		loadCategory()
 	}, [])
 

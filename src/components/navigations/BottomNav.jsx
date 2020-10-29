@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Navbar, Image} from "react-bootstrap";
 import { AiOutlineHome,AiOutlineUser } from "react-icons/ai";
 import { MdFavoriteBorder } from "react-icons/md"
@@ -7,14 +7,38 @@ import { Link } from "react-router-dom";
 import {useSelector} from 'react-redux';
 import Axios from "axios";
 import { useState } from "react";
+import Cookie from 'js-cookie'
+import { useEffect } from "react";
+const {Translate} = require('@google-cloud/translate').v2;
 
 
 
 export default function BottomNav() {
+	const [id, setId] = useState('')
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	const [text, setText] = useState([
+		'Home',
+		'Favourite',
+		'Message',
+		'Account'
+	])
+	const [originalText, setOriginalText] = useState([
+		'Home',
+		'Favourite',
+		'Message',
+		'Account'
+	])
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
 	const [userData, setUserData] = useState({})
 	let url = 'https://dev.bellefu.com/api/user/profile/details';
+
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
 
 	useEffect(() => {
 		Axios.get(url, {
@@ -26,7 +50,28 @@ export default function BottomNav() {
 		}).then((res) => {
 			setUserData(res.data.user)
 		})
+		load()
 	}, [])
+
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		if(language === 'en' || id.length < 2){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [id, language])
 
 	return (
 		<div className="d-sm-none  ">
@@ -34,7 +79,7 @@ export default function BottomNav() {
 				<Navbar.Brand className="text-center mr-auto  ml-auto">
 				<Link to="/" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 					<AiOutlineHome style={styles.icon} />
-					<p style={styles.text_icon}>Home</p>
+					<p style={styles.text_icon}>{text[0]}</p>
 					</Link>
 				</Navbar.Brand>
 				
@@ -49,7 +94,7 @@ export default function BottomNav() {
 				<Navbar.Brand className="text-center mr-auto  ml-auto">
 				<Link to="/favourite_ad" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 					<MdFavoriteBorder style={styles.icon} />
-					<p style={styles.text_icon}>Favourite</p>
+					<p style={styles.text_icon}>{text[1]}</p>
 					</Link>
 				</Navbar.Brand>
 
@@ -60,7 +105,7 @@ export default function BottomNav() {
 				</Navbar.Brand>
 
 				<Navbar.Brand className="text-center mr-auto  ml-auto">
-				<Link to="/messages" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+				<a href="/messenger" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 					<div>
 						<FiMail style={styles.icon} />
 						{userData.has_unread_message && (
@@ -70,10 +115,10 @@ export default function BottomNav() {
 					</div>
 
 					<p style={styles.text_icon}>
-						<span>Message</span>
+						<span>{text[2]}</span>
 						
 					</p>
-				</Link>
+				</a>
 				</Navbar.Brand>
 
 				<Navbar.Brand href="#home">
@@ -86,7 +131,7 @@ export default function BottomNav() {
 				<Navbar.Brand className="text-center mr-auto  ml-auto">
 				<Link to="/user_dashboard" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 					<AiOutlineUser style={styles.icon} />
-					<p style={styles.text_icon}>Account</p>
+					<p style={styles.text_icon}>{text[3]}</p>
 					</Link>
 				</Navbar.Brand>
 

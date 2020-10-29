@@ -5,7 +5,7 @@ import MainDesktopItem from "./MainDesktopItem";
 
 //==========THIS COMPONENT ONLY SHOWS ON DESKTP VIEW =========//
 //==========THIS COMPONENT IS ALL SO MAKING USE OF UIKIT FOR DROP DOWN RIGHT CENTER, WICH I ADDED THROUGH CDN =======//
-export default function MainDesktop() {
+export default function MainDesktop(props) {
 	// ==============CATEGORY LIST STATE =========
 
 	const [categoryData, setCategoryData] = useState([]);
@@ -48,7 +48,7 @@ export default function MainDesktop() {
 			) : (
 				<div>
 					{categoryData && categoryData.map((data) => (
-						<MainDesktopItem language={language} data={data} />
+						<MainDesktopItem id={props.id} language={language} data={data} />
 			))}
 				</div>
 			)

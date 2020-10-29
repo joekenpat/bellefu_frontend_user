@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Accordion, Card } from "react-bootstrap";
 import Cookie from 'js-cookie'
+import Axios from "axios";
 
 const {Translate} = require('@google-cloud/translate').v2;
-const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 export default function Footer() {
+	const [id, setId] = useState('')
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 	const translate = new Translate({key: id})
     const [text, setText] = useState([
@@ -48,27 +49,36 @@ export default function Footer() {
 		'Bellefu Agro consult. All rights reserved.'
 	])
 	
-	const getLanguage = () => {
-        if(language === 'en'){
-            setText(originalText)
-        } else {
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
 
-            translate.translate(text, language)
-            .then((res) => {
-               
-                    setText(res[0])
-                
-            }).catch((e) => {
-                setText(originalText)
-            })
-        }
-    }
-    
-    useEffect(() => {
-        getLanguage()
-    }, [])
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		if(language === 'en' || id.length < 2){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [id, language])
  
-
+	useEffect(() => {
+		load()
+	}, [])
 
 	return (
 		<div>
@@ -89,7 +99,7 @@ export default function Footer() {
 									<ul>
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
-													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
+													<Accordion.Toggle style={{backgroundColor: '#191a19', color: 'white', border: 'none'}} eventKey="0">
 													{text[0]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
@@ -114,7 +124,7 @@ export default function Footer() {
 										</li>
 										<li className="d-block d-lg-none mt-2" style={styles.list}>
 											<Accordion>
-													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
+													<Accordion.Toggle style={{backgroundColor: '#191a19', color: 'white', border: 'none'}} eventKey="0">
 													{text[2]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
@@ -158,7 +168,7 @@ export default function Footer() {
 										</li>
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
-													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
+													<Accordion.Toggle style={{backgroundColor: '#191a19', color: 'white', border: 'none'}} eventKey="0">
 														{text[5]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
@@ -213,7 +223,7 @@ export default function Footer() {
 										</li>
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
-													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
+													<Accordion.Toggle style={{backgroundColor: '#191a19', color: 'white', border: 'none'}} eventKey="0">
 													{text[10]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
