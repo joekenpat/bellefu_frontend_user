@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, Image, Col, Row } from "react-bootstrap";
 import avater_placeholder from "../images/avater_placeholder.jpg";
 import Preloader from "./Preloader";
@@ -9,8 +9,11 @@ import { IoMdTime } from "react-icons/io";
 import { useSelector } from "react-redux";
 import Axios from "axios";
 import Ripple from "../Loading/Ripple";
+import { useEffect } from 'react';
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
-export default function DashboradInfo() {
+export default function DashboradInfo(props) {
   const [loading, setLoading] = useState(true);
   const userSignin = useSelector((state) => state.userSignin);
   const { user } = userSignin;
@@ -37,7 +40,42 @@ export default function DashboradInfo() {
     },
   });
 
+  const [text, setText] = useState([
+		"My Ads",
+		"Favourite",
+		'Pending Ads',
+		'Expired Ads',
+		'Hidden Ads',
+	])
+	const [originalText, setOriginalText] = useState([
+		"My Ads",
+		"Favourite",
+		'Pending Ads',
+		'Expired Ads',
+		'Hidden Ads',
+	])
+
+	const translate = new Translate({key: id})
+
+	const getLanguage = () => {
+        if(props.language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, props.language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+              console.log(e)
+                setText(originalText)
+            })
+        }
+    }
+
   useEffect(() => {
+    getLanguage()
 	fetchDashboard()
   }, []);
 
@@ -160,35 +198,35 @@ export default function DashboradInfo() {
               <p style={styles.data}>{dashboardData.products.load ? <Ripple size="sm" /> : dashboardData.products.data}</p>
               <span>
                 <AiOutlineGift style={styles.icon} className="mr-2" />
-                <label style={styles.text}> My Ads</label>
+                <label style={styles.text}>{text[0]}</label>
               </span>
             </Col>
             <Col xs={6} sm={6} md={6} lg={2} xl={2}>
               <p style={styles.data}>{dashboardData.favourites.load ? <Ripple size="sm" /> : dashboardData.favourites.data} </p>
               <span>
                 <AiOutlineHeart style={styles.icon} className="mr-2" />
-                <label style={styles.text}>Favourite</label>
+                <label style={styles.text}>{text[1]}</label>
               </span>
             </Col>
             <Col xs={6} sm={6} md={6} lg={2} xl={2}>
               <p style={styles.data}>{dashboardData.pending.load ? <Ripple size="sm" /> : dashboardData.pending.data}</p>
               <span>
                 <IoMdTime style={styles.icon} className="mr-2" />
-                <label style={styles.text}>Pending Ads</label>
+                <label style={styles.text}>{text[2]}</label>
               </span>
             </Col>
             <Col xs={6} sm={6} md={6} lg={2} xl={2}>
               <p style={styles.data}>{dashboardData.expired.load ? <Ripple size="sm" /> : dashboardData.expired.data}</p>
               <span>
                 <MdDateRange style={styles.icon} className="mr-2" />
-                <label style={styles.text}>Expired Ads</label>
+                <label style={styles.text}>{text[3]}</label>
               </span>
             </Col>
             <Col xs={6} sm={6} md={6} lg={2} xl={2}>
               <p style={styles.data}>{dashboardData.hidden.load ? <Ripple size="sm" /> : dashboardData.hidden.data}</p>
               <span>
                 <AiOutlineEyeInvisible style={styles.icon} className="mr-2" />
-                <label style={styles.text}>Hiden Ads</label>
+                <label style={styles.text}>{text[4]}</label>
               </span>
             </Col>
           </Row>

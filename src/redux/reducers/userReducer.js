@@ -8,7 +8,8 @@ import {
 	USER_UPDATE_FAIL,
 	USER_UPDATE_SUCCESS,
 	USER_UPDATE_REQUEST,
-	SEARCH_FILTER
+	SEARCH_FILTER,
+	USER_LOGOUT
 } from "../types";
 
 
@@ -30,6 +31,10 @@ export const userSigninReducer = (state = {}, action) => {
 			return {
 				loading: false,
 				error: action.payload
+			};
+		case USER_LOGOUT:
+			return {
+				user: {}
 			};
 		default:
 			return state;

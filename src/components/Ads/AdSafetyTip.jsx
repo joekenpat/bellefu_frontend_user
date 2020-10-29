@@ -32,7 +32,7 @@ export default function AdSafetyTip(props) {
 		Axios
 			.post(`https://dev.bellefu.com/api/user/product/report/${props.data.slug}`, reportBody, {
 				headers: {
-					Authorization: user.token ? `Bearer ${user.token}` : 'hfh',
+					Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}

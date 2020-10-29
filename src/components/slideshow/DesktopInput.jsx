@@ -1,21 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form, Col, Button } from "react-bootstrap";
 import Select from "react-select";
 import {FaMapMarkerAlt} from 'react-icons/fa'
 import {IconContext} from 'react-icons'
 import { Link } from "react-router-dom";
 import Axios from "axios";
-
+import Cookie from 'js-cookie'
+import { useEffect } from "react";
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 
 export default function DesktopInput(props) {
 	const [categoryData, setCategoryData] = useState([]);
 	const [category, setCategory] = useState({})
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	const [text, setText] = useState([
+		'What are you looking for?',
+		'Where?',
+		'Search',
+	])
+	const [originalText, setOriginalText] = useState([
+		'What are you looking for?',
+		'Where?',
+		'Search'
+	])
+	const translate = new Translate({key: id})
 	const options = [];
 
 	const handleChange = (option) => {
 		setCategory(option)
 	}
+
+	const getLanguage = () => {
+        if(language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+                setText(originalText)
+            })
+        }
+    }
 
 
 	const loadCategory = () => {
@@ -40,6 +71,7 @@ export default function DesktopInput(props) {
 	};
 
 	useEffect(() => {
+		getLanguage()
 		loadCategory()
 	}, [])
 
@@ -58,7 +90,7 @@ export default function DesktopInput(props) {
 							onChange={handleChange}
 							options={categoryData}
 							components={{ DropdownIndicator: () => null }}
-							placeholder={"What are you looking for?"}
+							placeholder={text[0]}
 							styles={selectStyles}
 						/>
 					</Col>
@@ -71,7 +103,7 @@ export default function DesktopInput(props) {
 								</IconContext.Provider>
 							</span>
 							{Object.keys(props.state).length === 0 ? (
-								<span style={{fontSize: '16px'}} className="ml-2">Where?  {props.country.country_name}</span>
+								<span style={{fontSize: '16px'}} className="ml-2">{text[1]}  {props.country.country_name}</span>
 							) : (
 
 								<span style={{fontSize: '16px'}} className="ml-2">{Object.keys(props.lga).length > 0 ? `${props.lga.name}, ${props.state.name}, ${props.country.country_name}` : `${props.state.name}, ${props.country.country_name}`}</span>
@@ -86,7 +118,7 @@ export default function DesktopInput(props) {
 										textDecoration: "inherit"
 									}} to={`/product_list?state=${props.state.slug}&lga=${props.lga.slug}&country=${props.country.country_slug}&category=${category.value}`}>
 							<Button onClick={handleClick} style={styles.btn} variant="warning">
-								Search
+								{text[2]}
 							</Button>
 						</Link>
 					</Col>

@@ -8,12 +8,15 @@ import BottomNav from "../navigations/BottomNav";
 import AdSafetyTip from "../Ads/AdSafetyTip"
 import Preloader from "../user/Preloader";
 import axios from "axios";
-import { useLocation, withRouter } from "react-router-dom";
+import Cookie from 'js-cookie'
+
 
 export default function AdViewPage(props) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [productsDataDetail, setproductsDataDetail] = useState({});
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+
 	let url = "https://dev.bellefu.com/api/product/show";
 
 	useEffect(() => {
@@ -49,28 +52,28 @@ export default function AdViewPage(props) {
 			<Row>
 				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }} className="d-none d-lg-block  d-md-none">
-						<AdviewSlide {...productsDataDetail}/>
+						<AdviewSlide productsDataDetail={productsDataDetail} language={language} {...productsDataDetail}/>
 					</div>
 					{/* ===FOR MOBILE VIEW=== */}
 					<div style={{ marginTop: "30%" }} className=" d-lg-none  d-xs-block d-sm-block d-md-block ">
-						<AdviewSlide {...productsDataDetail}/>
+						<AdviewSlide productsDataDetail={productsDataDetail} language={language} {...productsDataDetail}/>
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={8} xl={8}>
 					<div style={{ marginTop: "5%" }}>
-					<AdDetails {...productsDataDetail}/>	
+					<AdDetails productsDataDetail={productsDataDetail} language={language} {...productsDataDetail}/>	
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={4} xl={4}>
 					<Row>
 				   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
-						<UserAdInfo  {...productsDataDetail}/>
+						<UserAdInfo productsDataDetail={productsDataDetail} language={language}  {...productsDataDetail}/>
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
-						<AdSafetyTip data={productsDataDetail}/>
+						<AdSafetyTip productsDataDetail={productsDataDetail} language={language} data={productsDataDetail}/>
 					</div>
 				</Col>
 					</Row>

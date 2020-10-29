@@ -1,22 +1,85 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Card } from "react-bootstrap";
+import Cookie from 'js-cookie'
+
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 export default function Footer() {
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	const translate = new Translate({key: id})
+    const [text, setText] = useState([
+		'About Us',
+		'Bellefu.com is a dynamic online marketplace dedicated to agriculture-related activities ensuring farmers, buyers, and sellers of agricultural products have direct contact with other agro-allied providers and manufacturing industries around the world. Bellefu is designed to make searching for agro products available at your fingertips.',
+		'My Account',
+		'Login',
+		'Register',
+		'Help & Support',
+		'Feedback',
+		'Contact',
+		'Submit CV',
+		'Documentary',
+		'Information',
+		'About Us',
+		'Countries',
+		'Site Map',
+		'Legal',
+		'Privacy Policy',
+		'Bellefu Agro consult. All rights reserved.'
+	])
+	
+	const [originalText, setOriginalText] = useState([
+		'About Us',
+		'Bellefu.com is a dynamic online marketplace dedicated to agriculture-related activities ensuring farmers, buyers, and sellers of agricultural products have direct contact with other agro-allied providers and manufacturing industries around the world. Bellefu is designed to make searching for agro products available at your fingertips.',
+		'My Account',
+		'Login',
+		'Register',
+		'Help & Support',
+		'Feedback',
+		'Contact',
+		'Submit CV',
+		'Documentary',
+		'Information',
+		'About Us',
+		'Countries',
+		'Site Map',
+		'Legal',
+		'Privacy Policy',
+		'Bellefu Agro consult. All rights reserved.'
+	])
+	
+	const getLanguage = () => {
+        if(language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+                setText(originalText)
+            })
+        }
+    }
+    
+    useEffect(() => {
+        getLanguage()
+    }, [])
+ 
+
+
 	return (
 		<div>
 			<section className="footer" style={styles.footer}>
 				<div className="container" style={{ paddingTop: "50px" }}>
 					<div className="row footer-content" style={styles.footer_content}>
 						<div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-none d-lg-block">
-							<h3 style={styles.footerAbout}>ABOUT US</h3>
+							<h3 style={styles.footerAbout}>{text[0]}</h3>
 
 							<p style={{ opacity: "0.7" }}>
-								Bellefu.com is a dynamic online marketplace dedicated to
-								agriculture-related activities ensuring farmers, buyers, and
-								sellers of agricultural products have direct contact with other
-								agro-allied providers and manufacturing industries around the
-								world. Bellefu is designed to make searching for agro products
-								available at your fingertips.
+							{text[1]}
 							</p>
 						</div>
 
@@ -27,45 +90,40 @@ export default function Footer() {
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
 													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
-														About
+													{text[0]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 													<p className="pt-2" style={{ opacity: "0.7", color: '#c0c0c0' }}>
-														Bellefu.com is a dynamic online marketplace dedicated to
-														agriculture-related activities ensuring farmers, buyers, and
-														sellers of agricultural products have direct contact with other
-														agro-allied providers and manufacturing industries around the
-														world. Bellefu is designed to make searching for agro products
-														available at your fingertips.
+													{text[1]}
 													</p>
 													</Accordion.Collapse>
 											</Accordion>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<p>My Account</p>
+											<p>{text[2]}</p>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="/signin">
-												Login
+											{text[3]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="/signup">
-												Register
+											{text[4]}
 											</a>
 										</li>
 										<li className="d-block d-lg-none mt-2" style={styles.list}>
 											<Accordion>
 													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
-														My Account
+													{text[2]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<div className="pt-2">
 															<a style={styles.link} href="/signin">
-																Login
+															{text[3]}
 															</a>
 															<a style={styles.link} href="/signup">
-																Signup
+															{text[4]}
 															</a>
 														</div>
 													</Accordion.Collapse>
@@ -76,46 +134,46 @@ export default function Footer() {
 								<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<ul>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<p>Help & Support</p>
+											<p>{text[5]}</p>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#about">
-												Feed Back
+											{text[6]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#about">
-												Contact
+											{text[7]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#about">
-												Submit CV
+											{text[8]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#about">
-												Documentary
+											{text[9]}
 											</a>
 										</li>
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
 													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
-														Help & Support
+														{text[5]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<div className="pt-2">
 															<a style={styles.link} href="#">
-																Feedback
+															{text[6]}
 															</a>
 															<a style={styles.link} href="#">
-																Contact
+															{text[7]}
 															</a>
 															<a style={styles.link} href="#">
-																Submit CV
+															{text[8]}
 															</a>
 															<a style={styles.link} href="#">
-																Documentary
+															{text[9]}
 															</a>
 														</div>
 													</Accordion.Collapse>
@@ -126,54 +184,54 @@ export default function Footer() {
 								<div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 									<ul>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<p>Information</p>
+											<p>{text[10]}</p>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#about">
-												About Us
+											{text[11]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#">
-												Countries
+											{text[12]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#">
-												Site Maps
+											{text[13]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#">
-												Legal
+											{text[14]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#policy">
-												Privacy Policy
+											{text[15]}
 											</a>
 										</li>
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
 													<Accordion.Toggle style={{backgroundColor: 'black', color: 'white', border: 'none'}} eventKey="0">
-														Information
+													{text[10]}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<div className="pt-2">
 															<a style={styles.link} href="#">
-																About Us
+															{text[11]}
 															</a>
 															<a style={styles.link} href="#">
-																Countries
+															{text[12]}
 															</a>
 															<a style={styles.link} href="#">
-																Site Map
+															{text[13]}
 															</a>
 															<a style={styles.link} href="#">
-																Legal
+															{text[14]}
 															</a>
 															<a style={styles.link} href="#">
-																Privacy Policy
+															{text[15]}
 															</a>
 														</div>
 													</Accordion.Collapse>
@@ -189,8 +247,8 @@ export default function Footer() {
                     <hr class="uk-divider-icon"style={{opacity: "0.4"}} />
 
 					<div className="footer-bottom">
-						<h5 className="d-none d-lg-block" style={{color: "white" , opacity: "0.4"}}>&copy; 2020 Bellefu Agro consult. All rights reserved.</h5>
-						<h5 className="d-block d-lg-none" style={{color: "white" , opacity: "0.4", fontSize: '15px'}}>&copy; 2020 Bellefu Agro consult. All rights reserved.</h5>
+						<h5 className="d-none d-lg-block" style={{color: "white" , opacity: "0.4"}}>&copy; 2020 {text[16]}</h5>
+						<h5 className="d-block d-lg-none" style={{color: "white" , opacity: "0.4", fontSize: '15px'}}>&copy; 2020 {text[16]}</h5>
 					</div>
 				</div>
 			</section>

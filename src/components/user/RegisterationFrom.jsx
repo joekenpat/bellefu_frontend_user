@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { withRouter,Link } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { signup } from "../../redux/actions/userActon";
 import Preloader from "./Preloader";
-
+import { useEffect } from 'react';
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
  function RegisterationFrom(props) {
 	const [formData, setFormData] = useState({
@@ -20,6 +22,61 @@ import Preloader from "./Preloader";
 	const dispatch = useDispatch();
 	const userSignup = useSelector((state) => state.userSignup);
 	const { loading, user, error } = userSignup;
+
+	const [text, setText] = useState([
+		"Let's create your account",
+		"Already have an account?",
+		'Login Now',
+		'First Name',
+		'Last Name',
+		'Username',
+		'Email',
+		'Phone',
+		'Password',
+		'Gender',
+		'Male',
+		'Female',
+		'Register',
+		'do not add country code'
+	])
+	const [originalText, setOriginalText] = useState([
+		"Let's create your account",
+		"Already have an account?",
+		'Login Now',
+		'First Name',
+		'Last Name',
+		'Username',
+		'Email',
+		'Phone',
+		'Password',
+		'Gender',
+		'Male',
+		'Female',
+		'Register',
+		'do not add country code'
+	])
+
+	const translate = new Translate({key: id})
+
+	const getLanguage = () => {
+        if(props.language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, props.language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+                setText(originalText)
+            })
+        }
+    }
+    
+    useEffect(() => {
+        getLanguage()
+    }, [])
 
 	useEffect(() => {
 		if (user) {
@@ -47,19 +104,6 @@ import Preloader from "./Preloader";
 		dispatch(
 			signup(first_name, last_name, username, gender, phone, email, password)
 		);
-		// if (
-		// 	formData.first_name.length >= 3 &&
-		// 	formData.last_name.length >= 3 &&
-		// 	formData.username.length >= 3 &&
-		// 	formData.gender.length !== '' &&
-		// 	formData.phone.length >= 3 &&
-		// 	formData.email.length >= 3 &&
-		// 	formData.password.length >= 3
-		// ) {
-			
-		// } else {
-		// 	alert("form can't be empty");
-		// }
 	};
 
 	return (
@@ -73,10 +117,10 @@ import Preloader from "./Preloader";
 			<Card className="border-0">
 				<Card.Body>
 				<h4 className="text-center">
-						<strong>Let's create your account!</strong>
+						<strong>{text[0]}!</strong>
 					</h4>
 					<p className="text-center">
-					Already have an account? <span><Link to="/login" style={{color: "#ffa500"}}>Login Now!</Link></span>
+					{text[1]} <span><Link to="/login" style={{color: "#ffa500"}}>{text[2]}!</Link></span>
 					</p>
 					<form onSubmit={onSubmitHandle} className="uk-grid-small" uk-grid>
 						<div class="uk-margin-top">
@@ -88,7 +132,7 @@ import Preloader from "./Preloader";
 								<input
 									required
 									className="uk-input  uk-form-width-large"
-									placeholder="Frist Name"
+									placeholder={text[3]}
 									type="text"
 									name="first_name"
 									value={first_name}
@@ -106,7 +150,7 @@ import Preloader from "./Preloader";
 								<input
 									required
 									className="uk-input  uk-form-width-large"
-									placeholder="Last Name"
+									placeholder={text[4]}
 									type="text"
 									name="last_name"
 									value={last_name}
@@ -124,7 +168,7 @@ import Preloader from "./Preloader";
 								<input
 									required
 									className="uk-input  uk-form-width-large"
-									placeholder="Username"
+									placeholder={text[5]}
 									type="text"
 									name="username"
 									value={username}
@@ -142,7 +186,7 @@ import Preloader from "./Preloader";
 								<input
 									required
 									className="uk-input  uk-form-width-large"
-									placeholder="Email"
+									placeholder={text[6]}
 									type="email"
 									name="email"
 									value={email}
@@ -160,7 +204,7 @@ import Preloader from "./Preloader";
 								<input
 									required
 									className="uk-input  uk-form-width-large "
-									placeholder="phone"
+									placeholder={`${text[7]} (${text[13]})`}
 									type="text"
 									name="phone"
 									value={phone}
@@ -178,7 +222,7 @@ import Preloader from "./Preloader";
 								<input
 									required
 									className="uk-input  uk-form-width-large"
-									placeholder="password"
+									placeholder={text[8]}
 									type="password"
 									name="password"
 									value={password}
@@ -194,12 +238,12 @@ import Preloader from "./Preloader";
 								name="gender"
 								value={gender}
 								onChange={(e) => onChangeHandelr(e)}>
-								<option>Gender</option>
+								<option>{text[9]}</option>
 								<option value="M" selected={gender === "M" ? true : false}>
-									Male
+								{text[10]}
 								</option>
 								<option value="F" selected={gender === "F" ? true : false}>
-									Female
+								{text[11]}
 								</option>
 							</select>
 							{error && <p style={styles.formError}>{error.errors.gender}</p>}
@@ -208,7 +252,7 @@ import Preloader from "./Preloader";
 							<button type="submit" onClick={onSubmitHandle}
 								class="uk-button uk-button-default uk-width-1-1
 								uk-margin-small-bottom" style={styles.btnRegister}>
-								<b>Register</b>
+								<b>{text[12]}</b>
 							</button>
 						</div>
 					</form>

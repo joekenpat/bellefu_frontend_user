@@ -12,18 +12,24 @@ import {
 } from './reducers/userReducer';
 
 import {
-    userCountry
+    userCountry,
 } from './reducers/userCountry'
+
+import {
+    languagee,
+} from './reducers/language'
 
 
 const user = Cookie.getJSON("user") || null
 const country = Cookie.getJSON('country') || {}
+const userLanguage = Cookie.getJSON('language') || 'en'
 
 // const user = signin
 
 export const initialState = {
     userSignin: { user},
-    userCountry: country
+    userCountry: country,
+    language: userLanguage
 }
 
 const  reducers = combineReducers({
@@ -32,7 +38,8 @@ const  reducers = combineReducers({
      userSignup: userSignupReducer,
      userUpdate: userUpdateReducer,
      porductSearchFilter:searchFilterRuducer,
-     userCountry: userCountry
+     userCountry: userCountry,
+     language: languagee
  
 })
 

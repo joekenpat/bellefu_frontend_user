@@ -11,7 +11,7 @@ export default function AdSlide() {
 				
 				<img
 					className="d-block w-100"
-					src="https://dev.bellefu.com/images/misc/bellefu1.jpeg"
+					src="https://dev.bellefu.com/images/misc/bellefu-external-ad-1.jpeg"
 					alt="First slide"
 					style={{ height: "200px" }}
 				/>
@@ -24,7 +24,7 @@ export default function AdSlide() {
             
 				<img
 					className="d-block w-100"
-					src="https://dev.bellefu.com/images/misc/bellefu2.jpeg"
+					src="https://dev.bellefu.com/images/misc/bellefu-external-ad-2.jpeg"
 					alt="First slide"
 					style={{ height: "200px" }}
 				/>
@@ -37,7 +37,7 @@ export default function AdSlide() {
             
 			<img
 				className="d-block w-100"
-				src="https://dev.bellefu.com/images/misc/bellefu3.jpeg"
+				src="https://dev.bellefu.com/images/misc/bellefu-external-ad-3.jpeg"
 				alt="First slide"
 				style={{ height: "200px" }}
 			/>
@@ -50,7 +50,7 @@ export default function AdSlide() {
             
 			<img
 				className="d-block w-100"
-				src="https://dev.bellefu.com/images/misc/bellefu4.jpeg"
+				src="https://dev.bellefu.com/images/misc/bellefu-external-ad-4.jpeg"
 				alt="First slide"
 				style={{ height: "200px" }}
 			/>

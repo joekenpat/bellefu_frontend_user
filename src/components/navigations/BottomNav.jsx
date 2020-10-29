@@ -19,7 +19,7 @@ export default function BottomNav() {
 	useEffect(() => {
 		Axios.get(url, {
 			headers: {
-				Authorization: `Bearer ${user.token ? user.token : 'fjjhj'}`,
+				Authorization: `Bearer ${user !== null ? user.token : 'fjjhj'}`,
 				'Content-Type': 'application/json',
 				Accept: 'application/json'
 			}

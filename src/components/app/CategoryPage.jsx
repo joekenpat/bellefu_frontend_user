@@ -35,6 +35,11 @@ import DesktopInput from "../slideshow/DesktopInput";
 import MyVerticallyCenteredModal from "../Ads/StateModal";
 import MobileInput from "../slideshow/MobileInput";
 import MobileAds from "../Ads/MobileAds";
+import Cookie from 'js-cookie'
+import CategoryPageItem from "./CategoryPageItem";
+import CategorySubcategoryItem from "./CategorySubcategoryItem";
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 const queryString = require("query-string");
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -45,6 +50,7 @@ const convertTooltip = (props) => (
 );
 
 export default function CategoryPage(props) {
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 	// ========FOR FITER FROM STATE AND FUNCTION START HERE ==================================//
 	const [filterData, setFilterData] = useState({
 		min_price: "",
@@ -242,7 +248,63 @@ const loadSubCategory = () => {
 		loadCategory();
 	}, [productsData.length], [categoryData], [subcategoryData]);
 
+	// translate
+	const [text, setText] = useState([
+		'category',
+		'subcategory',
+		'plan',
+		'price',
+		'select category',
+		'select subcategory',
+		'select plan',
+		'Free',
+		'Urgent',
+		'Featured',
+		'Highlighted',
+		'Price',
+		'Min Price',
+		'Max Price',
+		'Apply Filter'
+    ])
+    const [originalText, setOriginalText] = useState([
+		'category',
+		'subcategory',
+		'plan',
+		'price',
+		'select category',
+		'select subcategory',
+		'select plan',
+		'Free',
+		'Urgent',
+		'Featured',
+		'Highlighted',
+		'Price',
+		'Min Price',
+		'Max Price',
+		'Apply Filter'
+    ])
+
+    const translate = new Translate({key: id})
+
+    const getLanguage = () => {
+        if(language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+                setText(originalText)
+            })
+        }
+    }
+
+
 	useEffect(() => {
+		getLanguage()
 		loadData(1);
 		loadStates()
 	}, [])
@@ -276,7 +338,7 @@ const loadSubCategory = () => {
 												<Form.Label
 													className="mt-3"
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>Category</b>
+													<b>{text[0]}</b>
 												</Form.Label>
 												<div>
 													
@@ -289,16 +351,10 @@ const loadSubCategory = () => {
 														onClick={(e) => onChangeHandler(e)}
 														>
 
-														<option>select category</option>
+														<option>{text[4]}</option>
 														{ 
 														categoryData.map((data) => (
-														<option key={data.slug}
-															value={data.slug}
-															selected={
-																category === data.slug ? true : false
-															}>
-															{data.name}
-														</option>
+															<CategorySubcategoryItem language={language} key={data.slug} category={category} data={data} />
 														))}
 													</select>
 													
@@ -308,7 +364,7 @@ const loadSubCategory = () => {
 												<Form.Label
 													className="mt-3"
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>Subcategory</b>
+													<b>{text[1]}</b>
 												</Form.Label>
 												<div >
 													<select
@@ -318,16 +374,10 @@ const loadSubCategory = () => {
 														value={subcategory}
 														onChange={(e) => onChangeHandler(e)}
 														disabled={notShow}>
-														<option>select subcategory</option>
+														<option>{text[0]}</option>
 														{ 
 														subcategoryData.map((data) => (
-														<option key={data.slug}
-															value={data.slug}
-															selected={
-																subcategory === data.slug ? true : false
-															}>
-															{data.name}
-														</option>
+															<CategorySubcategoryItem language={language} key={data.slug} subcategory={subcategory} data={data} />
 														))}
 														
 													</select>
@@ -337,7 +387,7 @@ const loadSubCategory = () => {
 												<Form.Label
 													className="mt-3"
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>Plan</b>
+													<b>{text[2]}</b>
 												</Form.Label>
 												<div>
 													<select
@@ -345,32 +395,32 @@ const loadSubCategory = () => {
 														name="plan"
 														value={plan}
 														onChange={(e) => onChangeHandler(e)}>
-														<option>select plan</option>
+														<option>{text[6]}</option>
 														<option
 															value="free"
 															selected={subcategory === "free" ? true : false}>
-															Free
+															{text[7]}
 														</option>
 														<option
 															value="urgent"
 															selected={
 																subcategory === "urgent" ? true : false
 															}>
-															Urgent
+															{text[8]}
 														</option>
 														<option
 															value="featured"
 															selected={
 																subcategory === "featured" ? true : false
 															}>
-															Featured
+															{text[9]}
 														</option>
 														<option
 															value="higlighted"
 															selected={
 																subcategory === "higlighted" ? true : false
 															}>
-															Higlighted
+															{text[10]}
 														</option>
 													</select>
 												</div>
@@ -378,7 +428,7 @@ const loadSubCategory = () => {
 											<Form.Group>
 												<Form.Label
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>Price</b>
+													<b>{text[11]}</b>
 												</Form.Label>
 												<Row>
 													<Col xs={6} sm={6}>
@@ -386,7 +436,7 @@ const loadSubCategory = () => {
 															onFocus={inputFocus}
 															type="number"
 															min="0"
-															placeholder="Min Price"
+															placeholder={text[12]}
 															name="min_price"
 															value={min_price}
 															onChange={(e) => onChangeHandler(e)}
@@ -395,7 +445,7 @@ const loadSubCategory = () => {
 													<Col xs={6} sm={6} md={6} lg={6} xl={6}>
 														<Form.Control
 															onFocus={inputFocus}
-															placeholder="Price max"
+															placeholder={text[13]}
 															type="number"
 															min="0"
 															name="max_price"
@@ -413,7 +463,7 @@ const loadSubCategory = () => {
 													block
 													type="button"
 													onClick={onSubmitHandle}>
-												<b>Appy Filter</b>	
+												<b>{text[14]}</b>	
 												</Button>
 											</Form.Group>
 										</Container>
@@ -628,96 +678,7 @@ const loadSubCategory = () => {
 									  
 									<Row>
 									{productsData.map((data) => (
-										<Col
-											key={data.slug}
-											xs={6}
-											sm={6}
-											md={3}
-											lg={3}
-											xl={3}
-											className=" my-1 px-1">
-											<Card className="border-0 rounded-lg pc-card-shadow">
-												<Card.Img
-													style={styles.image}
-													variant="top"
-													src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
-												/>
-
-												<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-													<Row>
-														<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-															<Badge
-																variant="danger"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "featured"
-																		? "d-none"
-																		: "d-block" || data.plan === "higlighted"
-																		? "d-none"
-																		: "d-block" || data.plan === "Ugent"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																Ugent
-															</Badge>
-															<Badge
-																variant="warning"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "ugent"
-																		? "d-none"
-																		: "d-block" || data.plan === "higlighted"
-																		? "d-none"
-																		: "d-block" || data.plan === "Featured"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																}`}> Featured
-															</Badge>
-															<Badge
-																variant="success"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "ugent"
-																		? "d-none"
-																		: "d-block" || data.plan === "featured"
-																		? "d-none"
-																		: "d-block" || data.plan === "Higlighted"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																Higlighted
-															</Badge>
-														</Col>
-														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-															<Fav {...props} user={user} data={data} />
-														</Col>
-													</Row>
-												</Card.ImgOverlay>
-
-												<Card.Body style={styles.titleBody}>
-													<Link
-														to={{
-															pathname: `/product_detail/${data.slug}`,
-															state: data.slug
-														}}
-														style={{
-															color: "inherit",
-															textDecoration: "inherit"
-														}}>
-														<p style={styles.title}>{data.title}</p>
-													</Link>
-
-													
-												</Card.Body>
-											</Card>
-											<div style={{backgroundColor: 'white', paddingBottom: '10px'}}>
-												<Price styles={styles} data={data} convertTooltip={convertTooltip} />
-											</div>
-										</Col>
+										<CategoryPageItem language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
 									))}
 								  	</Row>
 									  <InfiniteScroll
@@ -758,7 +719,7 @@ const loadSubCategory = () => {
 											xl={3}
 											className=" my-1 px-1">
 											
-											<MobileAds {...props} data={data} convertTooltip={convertTooltip} />
+											<MobileAds language={language} {...props} data={data} convertTooltip={convertTooltip} />
 										</Col>
 									))
 								)}

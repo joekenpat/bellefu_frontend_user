@@ -6,11 +6,10 @@ import Cookie from "js-cookie";
 import axios from 'axios';
 import Flag from 'react-world-flags';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateUserCountry} from '../../redux/actions/userCountry'
+import {updateUserCountry, languagee} from '../../redux/actions/userCountry'
 import { IconContext } from "react-icons/lib";
 import { FaUsers } from "react-icons/fa";
-import Axios from "axios";
-// const translate = require('translate-google');
+const {Translate} = require('@google-cloud/translate').v2;
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (CHANGE CONTRY)
@@ -20,43 +19,85 @@ const renderTooltip = (props) => (
 	</Tooltip>
 );
 
+const languages = [
+	{name: 'english', code: 'en'},
+	{name: 'french', code: 'fr'},
+	{name: 'german', code: 'de'},
+	{name: 'spanish', code: 'es'},
+	{name: 'arabic', code: 'ar'},
+	{name: 'chinese', code: 'zh-CN'},
+	{name: 'afrikaans', code: 'af'},
+	{name: 'bosnian', code: 'bs'},
+	{name: 'croatian', code: 'hr'},
+	{name: 'czech', code: 'cs'},
+	{name: 'danish', code: 'da'},
+	{name: 'dutch', code: 'nl'},
+	{name: 'estonian', code: 'et'},
+	{name: 'italiano', code: 'it'},
+	
+]
+
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 //THIS IS A HEADER COMPOENT
 export default function HeaderNav(props) {
 	const dispatch = useDispatch();
 	const [loadingCountry, setLoadingCountry] = useState(false)
 	const country = useSelector((state) => state.userCountry);
+	const userLanguage = useSelector((state) => state.language);
+
 
 	const [show, setShow] = useState(false)
 	const [countries, setCountries] = useState([])
-	const [languageCodes, setLanguageCodes] = useState([])
-	const [language, setLanguage] = useState(Cookie.get("language") !== 'undefined' ? Cookie.get("language") : "en")
-	const [text, setText] = useState('Post Free Ad')
+	const [language, setLanguage] = useState(Cookie.get('language') || 'en')
+	const [number, setNumber] = useState(0)
+	const [text, setText] = useState([
+		'Post Free Ad',
+		'Register',
+		'login',
+		'Blog',
+		"Farmer's Club",
+		'country',
+		'Dashboard',
+		'Logout',
+		'Select Your Country'
+	])
+	const [originalText, setOriginalText] = useState([
+		'Post Free Ad',
+		'Register',
+		'login',
+		'Blog',
+		"Farmer's Club",
+		'country',
+		'Dashboard',
+		'Logout',
+		'Select Your Country'
+	])
+
+	const translate = new Translate({key: id})
   
 
-	const translate = async (lang) => {
+	const translatee = (lang) => {
 		setLanguage(lang)
+		setNumber(1)
 	}
-
-	useEffect(() => {
-		Axios.get('https://translation.googleapis.com/language/translate/v2/languages')
-		.then((res) => {
-			console.log(res)
-			// setLanguageCodes(languageCodes); 
-		}).catch((e) => 
-		console.log('error from country: ',e))
-	}, [])
 	  
-	// useEffect(() => {
-	// 	googleTranslate.translate(text, language, function(err, translation) {
-	// 		if(language === 'en'){
-	// 			setText('Post Free Ad')
-	// 		} else {
-
-	// 			setText(translation.translatedText)
-	// 		}
-	// 		Cookie.set('language', language, { expires: 1 })
-	// 	});
-	// }, [language])
+	useEffect(() => {
+		translate.translate(text, language)
+		.then((res) => {
+			
+				setText(res[0])
+				Cookie.set('language', language)
+				if(number > 0){
+					window.location.reload()
+				}
+			
+		}).catch(() => {
+			setText(originalText)
+			setLanguage('en')
+			Cookie.set('language', language)
+		})
+	}, [language])
 
 	const onShow = () => {
 		setTimeout(() => {
@@ -105,7 +146,7 @@ export default function HeaderNav(props) {
 						delay={{ show: 250, hide: 400 }}
 						overlay={renderTooltip}>
 						<Button onClick={onShow} variant="outline-warning" style={styles.contrey_btn}>
-							<Flag style={{width: '12px', height: '12px'}} code={country.country_iso2} />{'  '}country
+							<Flag style={{width: '12px', height: '12px'}} code={country.country_iso2} />{'  '}{text[5]}
 						</Button>
 						
 					</OverlayTrigger>
@@ -123,14 +164,14 @@ export default function HeaderNav(props) {
 							<IconContext.Provider value={{ color: "white", size: '20px', style: {paddingBottom: '5px'}}}>
 								<FaUsers className="cursor" />
 							</IconContext.Provider>
-					{' '}Farmer's Club
+					{' '}{text[4]}
 					</a>
 					<a
 						target="_blank"
 						href="https://blog.bellefu.com"
 						className="d-none d-lg-block farmers-club"
 						style={{color: 'white', paddingBottom: '12px'}}>
-						Blog
+						{text[3]}
 					</a>
 					<Nav.Link
 						as={Link}
@@ -141,7 +182,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-none  d-md-none"
 						}`}
 						style={styles.auth}>
-						Dashboard
+					{text[6]}
 					</Nav.Link>
 					<Nav.Link
 						as={Link}
@@ -153,7 +194,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-none  d-md-none"
 						}`}
 						style={styles.auth}>
-						LogOut
+						{text[7]}
 					</Nav.Link>
 
 					<Nav.Link
@@ -165,7 +206,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-block  d-md-none"
 						}`}
 						style={styles.auth}>
-						Login
+						{text[2]}
 					</Nav.Link>
 					<Nav.Link
 						as={Link}
@@ -176,7 +217,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-block  d-md-none"
 						}`}
 						style={styles.auth}>
-						Register
+						{text[1]}
 					</Nav.Link>
 					<Navbar.Brand styles={styles.language}>
 						<Dropdown>
@@ -185,8 +226,8 @@ export default function HeaderNav(props) {
 							</Dropdown.Toggle>
 
 							<Dropdown.Menu style={{height: '280px', overflowY: 'scroll'}}>
-								{languageCodes.length > 1 && languageCodes.map((code) => (
-								<Dropdown.Item style={{fontSize: '12px'}} onClick={() => translate(code.language)} key={code.language}>{code.name}</Dropdown.Item>
+								{languages.length > 1 && languages.map((code) => (
+								<Dropdown.Item style={{fontSize: '12px'}} onClick={() => translatee(code.code)} key={code.code}>{code.name}</Dropdown.Item>
 
 								))}
 
@@ -197,7 +238,7 @@ export default function HeaderNav(props) {
 					<Navbar.Brand className="d-none d-lg-block  d-md-none">
 						<Link to="/post_ad">
 						<Button variant="warning" style={styles.post_free_add_btn}>
-							{text}
+							{text[0]}
 						</Button>
 						</Link>
 					</Navbar.Brand>
@@ -210,7 +251,7 @@ export default function HeaderNav(props) {
 			<Modal size="lg" show={show} onHide={() => setShow(false)} aria-labelledby="select-country-modal" centered>
 				<Modal.Header closeButton>
 					<Modal.Title className="text" id="select-country-modal">
-						<Container>Select Your Country</Container>
+						<Container>{text[8]}</Container>
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>

@@ -18,9 +18,44 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
 
 
 const MobileAds = (props) => {
+    const [text, setText] = useState([
+		props.data.title,
+        props.data.plan
+    ])
+    const [originalText, setOriginalText] = useState([
+		props.data.title,
+        props.data.plan
+    ])
+
+    const translate = new Translate({key: id})
+
+    const getLanguage = () => {
+        if(props.language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, props.language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+                setText(originalText)
+            })
+        }
+    }
+    
+    useEffect(() => {
+        if(!props.text) {
+
+            getLanguage()
+        }
+    }, [])
 return (
     <Container>
     <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column card-shadow">
@@ -49,7 +84,7 @@ return (
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-                        <div className="" style={{fontWeight: '500', lineHeight: '1', fontSize: '13px'}}>{props.data.title.substring(0, 48)}</div>
+                        <div className="" style={{fontWeight: '500', lineHeight: '1', fontSize: '13px'}}>{props.text ? props.text[0].substring(0, 48) : text[0].substring(0, 48)}</div>
                         <div className="pt-1">
                             <IconContext.Provider value={{ color: "gray", size: '10px'}}>
                                 <FaMapMarkerAlt className="cursor" />
@@ -73,51 +108,16 @@ return (
                     color: "inherit",
                     textDecoration: "inherit"
                 }}>
-                    <Badge
-                                variant="danger"
-                                className={`${
-                                    props.data.plan === "free"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "featured"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "higlighted"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "urgent"
-                                        ? "d-block"
-                                        : "d-none"
-                                }`}>
-                                Urgent
-                            </Badge>
-                            <Badge
-                                variant="warning"
-                                className={`${
-                                    props.data.plan === "free"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "urgent"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "higlighted"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "Featured"
-                                        ? "d-block"
-                                        : "d-none"
-                                }`}>
-                                Featured
-                            </Badge>
-                            <Badge
-                                variant="success"
-                                className={`${
-                                    props.data.plan === "free"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "urgent"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "featured"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "Higlighted"
-                                        ? "d-block"
-                                        : "d-none"
-                                }`}>
-                                Higlighted
-                            </Badge>
+                   <Badge
+                        variant={props.data.plan === 'urgent' ? 'danger' : props.data.plan === 'highlighted' ? 'success' : 'warning'}
+                        className={`${
+                            props.data.plan === "free"
+                                ? "d-none"
+                                : "d-block"
+                        }`}>
+                        {props.text ? props.text[1] : text[1]}
+                    </Badge>
+                           
                     </Link>
                     </div>
                 </div>

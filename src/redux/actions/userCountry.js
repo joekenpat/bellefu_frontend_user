@@ -1,4 +1,4 @@
-import {LOAD_USER_COUNTRY, UPDATE_USER_COUNTRY} from '../types';
+import {LOAD_USER_COUNTRY, UPDATE_USER_COUNTRY, LANGUAGE} from '../types';
 import Cookie from 'js-cookie';
 import axios from "axios";
 
@@ -10,6 +10,11 @@ export const loadCountry = (country) => ({
 export const updateCountry = (country) => ({
     type: UPDATE_USER_COUNTRY,
     country
+})
+
+export const setLanguage = (language) => ({
+    type: LANGUAGE,
+    language
 })
 
 export const fetchCountry = () => {
@@ -31,4 +36,9 @@ export const updateUserCountry = (data) => (dispatch) => {
     dispatch(updateCountry(data))
     Cookie.remove('country')
     Cookie.set('country', JSON.stringify(data))
+}
+
+export const languagee = (lang) => (dispatch) => {
+    dispatch(setLanguage(lang))
+    Cookie.set('language', lang, { expires: 1 })
 }

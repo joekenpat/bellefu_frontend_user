@@ -18,6 +18,8 @@ export const UPDATE_USER_COUNTRY = "UPDATE_USER_COUNTRY";
 
 export const SEARCH_FILTER = "SEARCH_FILTER";
 
+export const LANGUAGE = "LANGUAGE";
+
 export const USER_LOGOUT =  "USER_LOGOUT"
 
 

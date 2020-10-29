@@ -1,15 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { withRouter, Link, Redirect } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { signin } from "../../redux/actions/userActon";
 import Preloader from "./Preloader";
 
+import { useEffect } from 'react';
+const {Translate} = require('@google-cloud/translate').v2;
+const id = 'AIzaSyAsMSfONcZLI-R5-fOMC79U94YBShHEoxo'
+
 function LogInForm(props) {
 	const [formData, setFormData] = useState({
 		identifier: "",
 		password: ""
 	});
+	
+	const [text, setText] = useState([
+		'Welcome Back',
+		"Don't have an account?",
+		'Sign Up Now',
+		'Email or Phone',
+		'Password',
+		'Login'
+	])
+	const [originalText, setOriginalText] = useState([
+		'Welcome Back',
+		"Don't have an account?",
+		'Sign Up Now',
+		'Email or Phone',
+		'Password',
+		'Login'
+	])
+
+	const translate = new Translate({key: id})
+
+	const getLanguage = () => {
+        if(props.language === 'en'){
+            setText(originalText)
+        } else {
+
+            translate.translate(text, props.language)
+            .then((res) => {
+               
+                    setText(res[0])
+                
+            }).catch((e) => {
+                setText(originalText)
+            })
+        }
+    }
+    
+    useEffect(() => {
+        getLanguage()
+    }, [])
 
 	const dispatch = useDispatch();
 
@@ -47,10 +90,10 @@ function LogInForm(props) {
 			<Card className="border-0">
 				<Card.Body>
 					<h4 className="text-center">
-						<strong>Welcome Back</strong>
+						<strong>{text[0]}</strong>
 					</h4>
 					<p className="text-center">
-						Don't have an account? <span ><Link to="/register" style={{color: "#ffa500"}}>Sign Up Now!</Link></span>
+					{text[1]} <span ><Link to="/register" style={{color: "#ffa500"}}>{text[2]}!</Link></span>
 					</p>
 
 					<form onSubmit={onSubmitHandle} className="uk-grid-small" uk-grid>
@@ -63,7 +106,7 @@ function LogInForm(props) {
 								<input
 									required
 									className="uk-input  uk-form-width-large"
-									placeholder="Email or Phone"
+									placeholder={text[3]}
 									type="text"
 									value={identifier}
 									name="identifier"
@@ -86,7 +129,7 @@ function LogInForm(props) {
 								<input
 									required
 									className="uk-input  uk-form-width-large "
-									placeholder="password"
+									placeholder={text[4]}
 									type="password"
 									value={password}
 									name="password"
@@ -102,7 +145,7 @@ function LogInForm(props) {
 								style={styles.btnRegister}
 								type="submit"
 								onClick={onSubmitHandle}>
-								<b>Login</b>
+								<b>{text[5]}</b>
 							</button>
 						</div>
 					</form>
