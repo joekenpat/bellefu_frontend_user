@@ -23,7 +23,9 @@ export default function ProfileInfo() {
 			<Card className="border-0">
 				<Card.Body>
 					{loading ? (
+						<div style={{height: '100vh', width: '100%'}}>
 						<Preloader />
+					</div>
 					) : (
 						<Row>
 							<Col

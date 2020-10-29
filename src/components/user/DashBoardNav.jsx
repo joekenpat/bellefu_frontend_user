@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import Cookie from 'js-cookie';
 import Preloader from './Preloader';
 
+import { useEffect } from 'react';
 import {
     AiOutlineUser,
     AiOutlineGift,
@@ -17,84 +18,140 @@ import {IoMdTime, IoIosLogIn} from 'react-icons/io';
 import {GoVerified} from 'react-icons/go';
 import {MdDateRange} from 'react-icons/md';
 
-export default function DashBoardNav() {
+const {Translate} = require('@google-cloud/translate').v2;
+
+
+export default function DashBoardNav(props) {
+    const [text, setText] = useState([
+        "Links",
+        'Classified',
+		"Dashboard",
+        'Profile Public View',
+        'Ads',
+		'My Ads',
+		'Favourite Ads',
+		'Pending Ads',
+		'Expired Ads',
+		'Account',
+		'Message',
+		'Verification',
+		'Settings',
+		'Logout',
+	])
+	const [originalText, setOriginalText] = useState([
+		"Links",
+        'Classified',
+		"Dashboard",
+        'Profile Public View',
+        'Ads',
+		'My Ads',
+		'Favourite Ads',
+		'Pending Ads',
+		'Expired Ads',
+		'Account',
+		'Message',
+		'Verification',
+		'Settings',
+		'Logout',
+	])
+
+
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, props.language])
     return (
         <div>
             <Card className="border-0">
                 <Card.Header className="border-0" style={{backgroundColor: '#76ba1b'}}>
-                    <b style={{color: 'white'}}>Links</b>
+                    <b style={{color: 'white'}}>{text[0]}</b>
                 </Card.Header>
                 <div className="p-3">
                     <h6 className="p-3" style={styles.head}>
-                        Classified
+                    {text[1]}
                     </h6>
                     <ul style={styles.list}>
                         <Link to="/user_dashboard" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3 linking" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <GoDashboard className="mr-3" style={styles.icon} />
-                                Dasboard
+                                {text[2]}
                             </li>
                         </Link>
                         <Link to="/profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <AiOutlineUser className="mr-3" style={styles.icon} />
-                                Profile public view
+                                {text[3]}
                             </li>
                         </Link>
                     </ul>
                     <h6 className="p-3" style={styles.head}>
-                        Ads
+                    {text[4]}
                     </h6>
                     <ul style={styles.list}>
                         <Link to="/user_ad" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <AiOutlineGift className="mr-3" style={styles.icon} />
-                                My Ads
+                                {text[5]}
                             </li>
                         </Link>
                         <Link to="/favourite_ad" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <AiOutlineHeart className="mr-3" style={styles.icon} />
-                                Favourite Ads
+                                {text[6]}
                             </li>
                         </Link>
                         <Link to="/pending_ad" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <IoMdTime className="mr-3" style={styles.icon} />
-                                Pending Ads
+                                {text[7]}
                             </li>
                         </Link>
 
                         <Link to="/expried_ad" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <MdDateRange className="mr-3" style={styles.icon} />
-                                Expired Ads
+                                {text[8]}
                             </li>
                         </Link>
                     </ul>
                     <h6 className="p-3" style={styles.head}>
-                        Account
+                    {text[9]}
                     </h6>
                     <ul style={styles.list}>
                         <Link to="/messages" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <AiOutlineMessage className="mr-3" style={styles.icon} />
-                                Message
+                                {text[10]}
                             </li>
                         </Link>
                         <Link to="/verification" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <GoVerified className="mr-3" style={styles.icon} />
-                                Verification
+                                {text[11]}
                             </li>
                         </Link>
                         <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                             <AiOutlineSetting className="mr-3" style={styles.icon} />
-                            Settings
+                            {text[12]}
                         </li>
                         <li onClick={logout} className="pb-0" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                             <IoIosLogIn className="mr-3" style={styles.icon} />
-                            Logout
+                            {text[13]}
                         </li>
                     </ul>
                 </div>

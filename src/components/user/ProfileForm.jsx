@@ -12,9 +12,10 @@ import Axios from "axios";
 import { useEffect } from "react";
 import SnackBar from "../SnackBar/SnackBar";
 import Preloader from "./Preloader";
+const {Translate} = require('@google-cloud/translate').v2;
 
-export default function ProfileForm() {
-  const dispatch = useDispatch();
+
+export default function ProfileForm(props) {
   const [loading, setLoading] = useState(false);
   const [snack, setsnack] = useState({
     view: false,
@@ -35,6 +36,63 @@ export default function ProfileForm() {
     country_code: "",
     address: "",
   });
+
+  const [text, setText] = useState([
+		"My Details",
+		'First Name',
+		'Last Name',
+    'Phone Number',
+    'do not add country code',
+		'State',
+		'Local Government',
+		'City',
+		'Country',
+		'Address',
+		'About Me',
+    'Upload Profile Photo',
+    'Select An Image',
+    'Notify me by e-mail when a ad gets posted that is relevant to my choice',
+    'Subscribe Now',
+    'Update'
+	])
+	const [originalText, setOriginalText] = useState([
+		"My Details",
+		'First Name',
+		'Last Name',
+    'Phone Number',
+    'do not add country code',
+		'State',
+		'Local Government',
+		'City',
+		'Country',
+		'Address',
+		'About Me',
+    'Upload Profile Photo',
+    'Select An Image',
+    'Notify me by e-mail when a ad gets posted that is relevant to my choice',
+    'Subscribe Now',
+    'Update'
+	])
+
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, props.language])
 
   useEffect(() => {
     setUpdateData({
@@ -85,7 +143,7 @@ export default function ProfileForm() {
             type: "",
             message: "",
           });
-        }, 2800);
+        }, 3800);
         setUpdateData({
           first_name: "",
           last_name: "",
@@ -120,18 +178,22 @@ export default function ProfileForm() {
 
   return (
     <div>
-      {loading && <Preloader />}
+      {loading && (
+        <div style={{height: '100vh', width: '100%'}}>
+        <Preloader />
+      </div>
+      )}
       {snack.view && <SnackBar type={snack.type}>{snack.message}</SnackBar>}
       <Form onSubmit={handleSubmmit}>
         <Card className="border-0">
           <Card.Header className="bg-white ">
             <AiOutlineUser className="mr-3" style={styles.icon} />
-            <b style={{ opacity: "0.7" }}>My Details</b>
+            <b style={{ opacity: "0.7" }}>{text[0]}</b>
           </Card.Header>
           <Card.Body>
             <Row>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>First Name</Form.Label>
+                <Form.Label style={styles.label}>{text[1]}</Form.Label>
                 <div
                   class="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -142,7 +204,7 @@ export default function ProfileForm() {
                     </span>
                   </div>
                   <Form.Control
-                    placeholder="First Name"
+                    placeholder={text[1]}
                     value={updateData.first_name}
                     name="first_name"
                     onChange={handleOnChange}
@@ -151,7 +213,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Last Name</Form.Label>
+                <Form.Label style={styles.label}>{text[2]}</Form.Label>
                 <div
                   class="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -163,7 +225,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="Last Name"
+                    placeholder={text[2]}
                     value={updateData.last_name}
                     name="last_name"
                     onChange={handleOnChange}
@@ -172,7 +234,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Phone Number</Form.Label>
+                <Form.Label style={styles.label}>{text[3]} ({text[4]})</Form.Label>
                 <div
                   className="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -184,7 +246,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="Phone Number"
+                    placeholder={text[3]}
                     value={updateData.phone}
                     name="phone"
                     onChange={handleOnChange}
@@ -193,7 +255,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>State</Form.Label>
+                <Form.Label style={styles.label}>{text[5]}</Form.Label>
                 <div
                   className="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -203,7 +265,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="Admin Code 1"
+                    placeholder={text[5]}
                     value={updateData.admin1_code}
                     name="admin1_code"
                     onChange={handleOnChange}
@@ -212,7 +274,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Local Government</Form.Label>
+                <Form.Label style={styles.label}>{text[6]}</Form.Label>
                 <div
                   className="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -222,7 +284,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="Admin Code 2"
+                    placeholder={text[6]}
                     value={updateData.admin2_code}
                     name="admin2_code"
                     onChange={handleOnChange}
@@ -232,7 +294,7 @@ export default function ProfileForm() {
               </Col>
 
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>City Code</Form.Label>
+                <Form.Label style={styles.label}>{text[7]}</Form.Label>
                 <div
                   className="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -244,7 +306,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="City Code"
+                    placeholder={text[7]}
                     value={updateData.city_code}
                     name="city_code"
                     onChange={handleOnChange}
@@ -253,7 +315,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Country Code</Form.Label>
+                <Form.Label style={styles.label}>{text[8]}</Form.Label>
                 <div
                   className="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -265,7 +327,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="Country Code"
+                    placeholder={text[8]}
                     value={updateData.country_code}
                     name="country_code"
                     onChange={handleOnChange}
@@ -274,7 +336,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>Address</Form.Label>
+                <Form.Label style={styles.label}>{text[9]}</Form.Label>
                 <div
                   className="input-group mb-3 shadow-none"
                   style={{ height: "50px" }}
@@ -286,7 +348,7 @@ export default function ProfileForm() {
                   </div>
 
                   <Form.Control
-                    placeholder="Address"
+                    placeholder={text[9]}
                     value={updateData.address}
                     name="address"
                     onChange={handleOnChange}
@@ -295,7 +357,7 @@ export default function ProfileForm() {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Form.Label style={styles.label}>About Me</Form.Label>
+                <Form.Label style={styles.label}>{text[10]}</Form.Label>
                 <ReactQuill
                   value={bio}
                   onChange={setBio}
@@ -306,7 +368,7 @@ export default function ProfileForm() {
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Form.Label style={styles.label} className="mr-3">
-                  Upload Image
+                {text[11]}
                 </Form.Label>
                 <div uk-form-custom="target: true">
                   <label
@@ -332,7 +394,7 @@ export default function ProfileForm() {
                     />
                     {avatar === "" || avatar === null ? (
                       <>
-                        Select an image{" "}
+                        {text[12]}{" "}
                         <AiOutlineUpload
                           style={{ fontSize: 24, marginLeft: 10 }}
                         />
@@ -355,8 +417,7 @@ export default function ProfileForm() {
                     <Row>
                       <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                         <p style={{ opacity: "0.7" }}>
-                          Notify me by e-mail when a ad gets posted that is
-                          relevant to my choice
+                        {text[13]}
                         </p>
                       </Col>
                       <Col xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -366,7 +427,7 @@ export default function ProfileForm() {
                           variant="outline-warning"
                           eventKey="0"
                         >
-                          Subscribe Now
+                          {text[14]}
                         </Accordion.Toggle>
                       </Col>
                     </Row>
@@ -389,7 +450,7 @@ export default function ProfileForm() {
                 variant="warning"
                 size="sm"
               >
-                Update
+                {text[15]}
               </Button>
             </Card.Body>
           </Card>

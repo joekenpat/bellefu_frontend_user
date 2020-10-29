@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Image, Col, Container } from "react-bootstrap";
-import agro_tools from "../images/agro_tools.png";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import Cookie from 'js-cookie'
 
-export default function MobileCategory() {
+import MobileCategoryItem from "./MobileCategoryItem";
+
+export default function MobileCategory(props) {
 	const [categoryData, setCategoryData] = useState([]);
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 
 	const loadCategory = () => {
 		axios
@@ -31,23 +33,7 @@ export default function MobileCategory() {
 		<Container>
 			<Row>
 				{categoryData && categoryData.map((data) => (
-					<Col key={data.slug} xs={4} sm={4} md={4} className=" my-1 px-1">
-						<Card style={{ height: "100%" }} className="border-0 category-shadow">
-							<Link
-								to={`/subcategory/${data.slug}`}
-								style={{ color: "inherit", textDecoration: "inherit" }}>
-								<Card.Body className="text-center">
-									<Image
-										src={`https://dev.bellefu.com/images/categories/${data.slug}/${data.image}`}
-										style={{ height: "40px" }}
-									/>
-									<Card.Text style={{ fontSize: "0.6em" }} className="mt-2">
-										{data.name}
-									</Card.Text>
-								</Card.Body>
-							</Link>
-						</Card>
-					</Col>
+					<MobileCategoryItem id={props.id} language={language} data={data} key={data.slug} />
 				))}
 			</Row>
 		</Container>

@@ -11,20 +11,59 @@ import {
 	Button,
     Container
 } from "react-bootstrap";
-import pic from "../images/pic.jpg";
-import { FaCommentDots, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import { FaCommentDots, FaMapMarkerAlt, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { BsArrowLeftRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
+import Axios from "axios";
+const {Translate} = require('@google-cloud/translate').v2;
 
 
 const MobileAds = (props) => {
+    const [id, setId] = useState('')
+    const [text, setText] = useState([
+		props.data.title,
+        props.data.plan,
+        'Chat',
+        'Whatsapp',
+        'Call'
+    ])
+    const [originalText, setOriginalText] = useState([
+		props.data.title,
+        props.data.plan,
+        'Chat',
+        'Whatsapp',
+        'Call'
+    ])
+
+
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, props.language])
+    
+    
 return (
     <Container>
-    <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column card-shadow ">
+    <div style={{backgroundColor: 'white'}} className="d-flex d-md-none flex-column card-shadow">
         <div style={{borderBottom: '1px solid gray'}}>
             
         <Row>
@@ -37,7 +76,7 @@ return (
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-                    <img width="100%" className="image" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
+                    <img width="100%" height="100%" className="image-height" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
                 </Link>
             </Col>
             <Col xs={7}>
@@ -50,11 +89,18 @@ return (
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-                        <div style={{fontWeight: 'bold'}}>{props.data.title.substring(0, 20)}</div>
+                        <div className="" style={{fontWeight: '500', lineHeight: '1', fontSize: '13px'}}>{props.text ? props.text[0].substring(0, 48) : text[0].substring(0, 48)}</div>
+                        <div className="pt-1">
+                            <IconContext.Provider value={{ color: "gray", size: '10px'}}>
+                                <FaMapMarkerAlt className="cursor" />
+                            </IconContext.Provider>
+                             <span style={{color: 'gray', fontSize: '12px'}} className="ml-1">{props.data.address}</span>
+                        </div>
                     </Link>
                         <div className="mt-1">
-                        <Price styles={styles} data={props.data} {...props} convertTooltip={props.convertTooltip}/>
+                            <Price styles={styles} data={props.data} {...props} convertTooltip={props.convertTooltip}/>
                         </div>
+                    
                     <div className="mt-1">
                         <Fav {...props} user={props.user} data={props.data} />
                     </div>
@@ -67,51 +113,16 @@ return (
                     color: "inherit",
                     textDecoration: "inherit"
                 }}>
-                    <Badge
-                                variant="danger"
-                                className={`${
-                                    props.data.plan === "free"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "featured"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "higlighted"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "urgent"
-                                        ? "d-block"
-                                        : "d-none"
-                                }`}>
-                                Urgent
-                            </Badge>
-                            <Badge
-                                variant="warning"
-                                className={`${
-                                    props.data.plan === "free"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "urgent"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "higlighted"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "Featured"
-                                        ? "d-block"
-                                        : "d-none"
-                                }`}>
-                                Featured
-                            </Badge>
-                            <Badge
-                                variant="success"
-                                className={`${
-                                    props.data.plan === "free"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "urgent"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "featured"
-                                        ? "d-none"
-                                        : "d-block" || props.data.plan === "Higlighted"
-                                        ? "d-block"
-                                        : "d-none"
-                                }`}>
-                                Higlighted
-                            </Badge>
+                   <Badge
+                        variant={props.data.plan === 'urgent' ? 'danger' : props.data.plan === 'highlighted' ? 'success' : 'warning'}
+                        className={`${
+                            props.data.plan === "free"
+                                ? "d-none"
+                                : "d-block"
+                        }`}>
+                        {props.text ? props.text[1] : text[1]}
+                    </Badge>
+                           
                     </Link>
                     </div>
                 </div>
@@ -120,49 +131,37 @@ return (
         </div>
         <div>
         <Row>
-            <Col className="py-1" xs={6} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
-                <div>
-                    <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {paddingBottom: '5px'}}}>
-                        <FaCommentDots className="cursor" />
-                    </IconContext.Provider>
-                    <span className="ml-1">Chat</span>
+            <Col xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
+                <div className="py-1">
+                    <a href={`/messenger?recipient=${props.data.user.username}`}>
+                        <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
+                            <FaCommentDots className="cursor" />
+                        </IconContext.Provider>
+                        <span className="ml-1" style={{color: 'black', textDecoration: 'none', fontSize: '12px'}}>{text[2]}</span>
+                    </a>
                 </div>
             </Col>
-            <Col className="py-1" xs={6} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Accordion>
-                    <div>
-                        <Accordion.Toggle style={{color: 'black'}} className="accordion-click" as={Button} variant="link" eventKey="0">
-                            <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {paddingBottom: '5px'}}}>
-                                <FaPhone className="cursor"/>
-                            </IconContext.Provider>
-                            <span className="ml-1">Contact</span>
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                        <Card.Body>
-                            <div >
-                                <div>
-                                    <a href={`https://wa.me/${props.data.user.phone}`}>
-                                        <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
-                                            <FaWhatsapp className="cursor"/>
-                                        </IconContext.Provider>
-                                        <span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Whatsapp</span>
-                                    </a>
-                                </div>
-                                <div className="mt-1">
-                                <a href={`tel:${props.data.user.phone}`}>
-                                    <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
-                                        <FaMobileAlt className="cursor"/>
-                                    </IconContext.Provider>
-                                    <span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Call</span>
-                                </a>
-                                </div>
-                            </div>
-                        </Card.Body>
-                        </Accordion.Collapse>
-                    </div>
-            </Accordion>
-                
+            <Col xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
+                <div className="py-1">
+                     <a href={`https://wa.me/${props.data.user.phone}`}>
+                        <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
+                            <FaWhatsapp className="cursor"/>
+                        </IconContext.Provider>
+                        <span style={{color: 'black', textDecoration: 'none', fontSize: '12px'}} className="ml-1">{text[3]}</span>
+                    </a>
+                </div>
             </Col>
+            <Col xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
+                <div className="py-1">
+                    <a href={`tel:${props.data.user.phone}`}>
+                        <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
+                            <FaMobileAlt className="cursor"/>
+                        </IconContext.Provider>
+                        <span style={{color: 'black', textDecoration: 'none', fontSize: '12px'}} className="ml-1">{text[4]}</span>
+                    </a>
+                </div>
+            </Col>
+            
         </Row>
     </div>
 </div>

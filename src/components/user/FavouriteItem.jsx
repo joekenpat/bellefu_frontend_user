@@ -3,7 +3,6 @@ import { AiOutlineTag, AiOutlineEye } from "react-icons/ai";
 import { GiHeartMinus } from "react-icons/gi";
 import { GoLocation } from "react-icons/go";
 import { IoMdTime } from "react-icons/io";
-import pic from "../images/pic.jpg";
 import {
 	Card,
 	Badge,

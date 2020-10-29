@@ -17,7 +17,7 @@ const Fav = (props) => {
 		axios
 			.get(`https://dev.bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
 				headers: {
-					Authorization: user.token ? `Bearer ${user.token}` : 'hfh',
+					Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}

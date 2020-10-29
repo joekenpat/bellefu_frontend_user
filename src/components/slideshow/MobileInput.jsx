@@ -1,10 +1,14 @@
 import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { useEffect } from "react";
+import { Button, Card, Form, Nav } from 'react-bootstrap';
+import { FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
+import Cookie from 'js-cookie';
+const {Translate} = require('@google-cloud/translate').v2;
+
 
 
 
@@ -12,11 +16,46 @@ import Select from "react-select";
 const MobileInput = (props) => {
 	const [categoryData, setCategoryData] = useState([]);
 	const [category, setCategory] = useState({})
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	const [text, setText] = useState([
+		'What are you looking for?',
+		'Where?',
+		'Search',
+		"Farmer's Club"
+	])
+	const [originalText, setOriginalText] = useState([
+		'What are you looking for?',
+		'Where?',
+		'Search',
+		"Farmer's Club"
+	])
+
 	const options = [];
 
 	const handleChange = (option) => {
 		setCategory(option)
 	}
+
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+	}, [props.id, language])
+
 
 
 	const loadCategory = () => {
@@ -59,7 +98,7 @@ const MobileInput = (props) => {
 						onChange={handleChange}
                         options={categoryData}
                         components={{ DropdownIndicator: () => null, IndicatorSeparator:() => null }}
-                        placeholder={"What are you looking for?"}
+                        placeholder={text[0]}
                         styles={selectStyles}
                     />
                 </Card>
@@ -72,7 +111,7 @@ const MobileInput = (props) => {
                         </IconContext.Provider>
                     </span>
                     {Object.keys(props.state).length === 0 ? (
-                        <span style={{fontSize: '12.5px', color: '#808080'}} className="ml-2">Where?  {props.country.country_name}</span>
+                        <span style={{fontSize: '12.5px', color: '#808080'}} className="ml-2">{text[1]}  {props.country.country_name}</span>
                     ) : (
 
                         <span style={{fontSize: '12.5px', color: '#808080'}} className="ml-2">{Object.keys(props.lga).length > 0 ? `${props.lga.name}, ${props.state.name}, ${props.country.country_name}` : `${props.state.name}, ${props.country.country_name}`}</span>
@@ -86,10 +125,24 @@ const MobileInput = (props) => {
 					textDecoration: "inherit"
 				}} to={`/product_list?state=${props.state.slug}&lga=${props.lga.slug}&country=${props.country.country_slug}&category=${category.value}`}>
                 <Button onClick={handleClick} style={styles.btn} variant="warning" size="lg" block>
-                    Search
+                    {text[2]}
                 </Button>
 			</Link>
             </Form.Group>
+			{props.landingpage && (
+				<Form.Group style={{paddingTop: '10px'}}>
+				<a  target="_blank" style={{
+						color: "inherit",
+						textDecoration: "inherit"
+					}} href="https://www.facebook.com/groups/bellefu">
+					<IconContext.Provider value={{ color: "white", size: '20px', style: {paddingBottom: '5px'}}}>
+						<FaUsers className="cursor" />
+					</IconContext.Provider>
+					{' '}{text[3]}
+				</a>
+				</Form.Group>
+			)}
+			
         </Form>
     )
 }
@@ -135,6 +188,9 @@ const selectStyles = {
 const styles = {
 	from_card: {
 		height: "50px",	
+	},
+	auth: {
+		color: "white"
 	},
 	input: {
 		border: "none",

@@ -8,7 +8,6 @@ import {
 	Badge,
 	Tooltip
 } from "react-bootstrap";
-import pic from "../images/pic.jpg";
 import { Link } from "react-router-dom";
 
 import Price from "./Price";

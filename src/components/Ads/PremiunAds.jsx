@@ -10,16 +10,10 @@ import {
 	Accordion,
 	Button
 } from "react-bootstrap";
-import pic from "../images/pic.jpg";
-import { FaCommentDots, FaMobileAlt, FaPhone, FaWhatsapp } from 'react-icons/fa';
-import { IconContext } from 'react-icons/lib';
-import { BsArrowLeftRight } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import Price from "./Price";
-import Fav from "./Fav";
-import MobileAds from "./MobileAds";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import PremiumAdsItem from "./PremiumAdsItem";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {useSelector} from 'react-redux';
+import Cookie from 'js-cookie'
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -32,11 +26,16 @@ const convertTooltip = (props) => (
 
 
 export default function PremiunAds(props) {
+	const [id, setId] = useState('')
+
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
 	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${props.country.country_slug}`;
 
+	
+	
 	const loadData = () => {
 		axios
 			.get(apiUrl, {
@@ -82,117 +81,7 @@ useEffect(() => {
 		<div>
 			<Row>
 			{ productsData.map((data) => (
-										<Col
-											key={data.slug}
-											xs={12}
-											sm={12}
-											md={6}
-											lg={4}
-											xl={4}
-											className="my-2 px-1">
-											<Card className="d-none cursor d-md-block border-0 pc-card-shadow">
-												<Link to={{
-													pathname: `/product_detail/${data.slug}`,
-													state: data.slug
-													}}
-													style={{
-														color: "inherit",
-														textDecoration: "inherit"
-													}}>
-
-												<Card.Img
-													style={styles.image}
-													variant="top"
-													src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
-												/>
-												</Link>
-												<Card.ImgOverlay style={{ marginTop: "-15px" }}>
-													<Row>
-														<Link to={{
-																pathname: `/product_detail/${data.slug}`,
-																state: data.slug
-															}}
-															style={{
-																color: "inherit",
-																textDecoration: "inherit"
-															}}>
-
-														<Col xs={8} sm={8} md={8} lg={8} xl={8}>
-															<Badge
-																variant="danger"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "featured"
-																		? "d-none"
-																		: "d-block" || data.plan === "higlighted"
-																		? "d-none"
-																		: "d-block" || data.plan === "urgent"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																Urgent
-															</Badge>
-															<Badge
-																variant="warning"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "urgent"
-																		? "d-none"
-																		: "d-block" || data.plan === "higlighted"
-																		? "d-none"
-																		: "d-block" || data.plan === "Featured"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																 Featured
-															</Badge>
-															<Badge
-																variant="success"
-																className={`${
-																	data.plan === "free"
-																		? "d-none"
-																		: "d-block" || data.plan === "urgent"
-																		? "d-none"
-																		: "d-block" || data.plan === "featured"
-																		? "d-none"
-																		: "d-block" || data.plan === "Higlighted"
-																		? "d-block"
-																		: "d-none"
-																}`}>
-																Higlighted
-															</Badge>
-														</Col>
-														</Link>
-														<Col xs={4} sm={4} md={4} lg={4} xl={4}>
-															<Fav {...props} user={props.user} data={data} />
-														</Col>
-													</Row>
-												</Card.ImgOverlay>
-
-												<Card.Body style={styles.titleBody}>
-													<Link
-														to={{
-															pathname: `/product_detail/${data.slug}`,
-															state: data.slug
-														}}
-														style={{
-															color: "inherit",
-															textDecoration: "inherit"
-														}}>
-														<p className="product-title">{data.title}</p>
-													</Link>
-
-													
-												</Card.Body>
-											</Card>
-											
-											<div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
-												<Price styles={styles} data={data} {...props} convertTooltip={convertTooltip} />
-											</div>
-											<MobileAds  {...props} data={data} convertTooltip={convertTooltip} />
-										</Col>
+				<PremiumAdsItem id={props.id} language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
 									))
 							}
 			</Row>

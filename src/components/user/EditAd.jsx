@@ -251,7 +251,11 @@ function EditAd(props) {
 						success.is_upgradable}/${location.pathname}`}
 				/>
 			) : null}
-			{loading ? <Preloader /> : null}
+			{loading && (
+				<div style={{height: '100vh', width: '100%'}}>
+				<Preloader />
+			</div>
+			)}
 			<Form>
 				<Card className="border-0">
 					<Card.Header

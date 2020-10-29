@@ -80,7 +80,9 @@ const  loadData = (page=1) => {
 		
 			<Row>
 				{loading ? (
+					<div style={{height: '100vh', width: '100%'}}>
 					<Preloader />
+				</div>
 				) : (
 					productsData.map((data) => (
 						<Col

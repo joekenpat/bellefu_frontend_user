@@ -8,13 +8,85 @@ import { FaSlackHash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import Moment from "react-moment";
 import renderHTML from "react-render-html"
+const {Translate} = require('@google-cloud/translate').v2;
+
 
 function AdDetails(props) {
 	const [productsDataDetail, setProductsDataDetail] = useState(props);
+	const [text, setText] = useState([
+        'Ad Details',
+		'Location',
+		props.address,
+		'Price',
+		'Posted',
+		'Ad Views',
+		'Ad',
+		props.slug,
+		'Ad Description',
+		
+		
+    ])
+    const [originalText, setOriginalText] = useState([
+        'Ad Details',
+		'Location',
+		props.address,
+		'Price',
+		'Posted',
+		'Ad Views',
+		'Ad',
+		props.slug,
+		'Ad Description',
+		
+    ])
+
 
 	useEffect(() => {
 		setProductsDataDetail(props);
-	}, [props]);
+		setText([
+            'Ad Details',
+			'Location',
+			props.address,
+			'Price',
+			'Posted',
+			'Ad Views',
+			'Ad',
+			props.slug,
+		'Ad Description',
+		
+        ])
+        setOriginalText([
+            'Ad Details',
+			'Location',
+			props.address,
+			'Price',
+			'Posted',
+			'Ad Views',
+			'Ad',
+			props.slug,
+		'Ad Description',
+		
+        ])
+	}, []);
+
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+    }, [props.id])
 
 	return (
 		<div>
@@ -24,7 +96,7 @@ function AdDetails(props) {
 						<Card.Header
 							className="border-0"
 							style={{ backgroundColor: "#76ba1b" }}>
-							<b style={{ color: "white" }}>AdDetails</b>
+							<b style={{ color: "white" }}>{text[0]}</b>
 						</Card.Header>
 						<Card.Body>
 							<Row>
@@ -32,16 +104,16 @@ function AdDetails(props) {
 									<div className="mt-3">
 										<MdLocationOn style={styles.icon} className="mr-3" />{" "}
 										<span style={styles.text}>
-											<b>Location</b>
+											<b>{text[1]}</b>
 										</span>
 									</div>
-									<p className="ml-5">{productsDataDetail.address}</p>
+									<p className="ml-5">{text[2]}</p>
 								</Col>
 								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
 									<div className="mt-3">
 										<GiReceiveMoney style={styles.icon} className="mr-3" />{" "}
 										<span style={styles.text}>
-											<b>Price</b>
+											<b>{text[3]}</b>
 										</span>
 									</div>
 									<p className="ml-5 ">
@@ -53,7 +125,7 @@ function AdDetails(props) {
 									<div className="mt-3">
 										<IoIosTime style={styles.icon} className="mr-3" />{" "}
 										<span style={styles.text}>
-											<b>Posted</b>
+											<b>{text[4]}</b>
 										</span>
 									</div>
 									<p className="ml-5">
@@ -62,20 +134,12 @@ function AdDetails(props) {
 										</Moment>
 									</p>
 								</Col>
-								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
-									<div className="mt-3">
-										<AiFillPhone style={styles.icon} className="mr-3" />{" "}
-										<span style={styles.text}>
-											<b>Phone Number</b>
-										</span>
-									</div>
-									<p className="ml-5 ">{productsDataDetail.phone}</p>
-								</Col>
+								
 								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
 									<div className="mt-3">
 										<AiFillEye style={styles.icon} className="mr-3" />{" "}
 										<span style={styles.text}>
-											<b>Ad Views</b>
+											<b>{text[5]}</b>
 										</span>
 									</div>
 									<p className="ml-5">{productsDataDetail.inorganic_views}</p>
@@ -84,10 +148,10 @@ function AdDetails(props) {
 									<div className="mt-3">
 										<FaSlackHash style={styles.icon} className="mr-3" />{" "}
 										<span style={styles.text}>
-											<b>Ad </b>
+											<b>{text[6]}</b>
 										</span>
 									</div>
-									<p className="ml-5 ">{productsDataDetail.slug}</p>
+									<p className="ml-5 ">{text[7]}</p>
 								</Col>
 							</Row>
 						</Card.Body>
@@ -97,13 +161,13 @@ function AdDetails(props) {
 						<Card.Header
 							className="border-0"
 							style={{ backgroundColor: "#76ba1b" }}>
-							<b style={{ color: "white" }}>Ad Discription</b>
+							<b style={{ color: "white" }}>{text[8]}</b>
 						</Card.Header>
 						<Card.Body>
 							<Row>
 								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
 									<span style={styles.text}>	
-									{	renderHTML(`${productsDataDetail.description}`)}
+									`{renderHTML(`${props.description}`)}`
 									</span>
 								</Col>
 							</Row>

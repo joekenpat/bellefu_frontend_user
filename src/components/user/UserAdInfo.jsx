@@ -1,23 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Image, Col } from "react-bootstrap";
+import { Card, Row, Image, Col, Accordion, Button } from "react-bootstrap";
 import avater_placeholder from "../images/avater_placeholder.jpg";
 import { IoIosTime, IoMdMailOpen, IoIosChatbubbles } from "react-icons/io";
 import { AiFillPhone } from "react-icons/ai";
 import Moment from "react-moment";
+import { FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
+import { IconContext } from "react-icons/lib";
+const {Translate} = require('@google-cloud/translate').v2;
+
 
 export default function UserAdInfo(props) {
 	const [userprofile, setProfileState] = useState(props);
 	const [reveal, setReveal] = useState(false)
+	const [text, setText] = useState([
+        'Advertiser Info',
+		'Reveal Phone Number',
+		'Reply By Mail',
+		'Message Seller',
+    ])
+    const [originalText, setOriginalText] = useState([
+        'Advertiser Info',
+		'Reveal Phone Number',
+		'Reply By Mail',
+		'Message Seller',
+    ])
 	useEffect(() => {
 		setProfileState(props);
 	}, [props]);
+
+	const trans = async() => {
+		const translate = await new Translate({key: props.id})
+		if(props.language === 'en'){
+			setText(originalText)
+		} else {
+
+			translate.translate(text, props.language)
+				.then((res) => {
+					setText(res[0])
+				
+			}).catch(() => {
+				setText(originalText)
+				})
+		}
+	}
+	  
+	useEffect( () => {
+		trans()
+    }, [props.id])
 	return (
 		<div>
 			<Card className="border-0 ">
 				<Card.Header
 					className="border-0"
 					style={{ backgroundColor: "#76ba1b" }}>
-					<b style={{ color: "white" }}>Advertiser Info</b>
+					<b style={{ color: "white" }}>{text[0]}</b>
 				</Card.Header>
 				<Card.Body>
 					<Row>
@@ -68,11 +104,13 @@ export default function UserAdInfo(props) {
 								<div style={{paddingLeft: '80px'}} className="mt-2">
 									<AiFillPhone style={styles.icon} className="mr-3" />{" "}
 									{!reveal && (
-										<span className="cursor" onClick={() => setReveal(true)} style={styles.text}>Reveal Phone Number</span>
+										<span className="cursor" onClick={() => setReveal(true)} style={styles.text}>{text[1]}</span>
 									)}
 									{reveal && (
 										<span style={styles.text}>
-										<b>{userprofile.user && userprofile.user.phone}</b>
+										<a href={`tel:${userprofile.user.phone}`}>
+											<b>{userprofile.user && userprofile.user.phone}</b>
+										</a>
 									</span>
 									)}
 								</div>
@@ -83,19 +121,53 @@ export default function UserAdInfo(props) {
 										href={`mailto:${userprofile.user &&
 											userprofile.user.email}?subject=subject text`}>
 										<span style={styles.text}>
-											<span>Reply By Mail</span>
+											<span>{text[2]}</span>
 										</span>
 									</a>
 								</div>
-								<div style={{paddingLeft: '80px'}} className="mt-2">
-									<IoIosChatbubbles style={styles.icon} className="mr-3" />{" "}
-									<a
-										style={{color: 'black'}}
-										href="#">
-										<span style={styles.text}>
-											<span>Message Seller</span>
-										</span>
-									</a>
+								<div style={{paddingLeft: '70px'}} className="mt-2">
+								<Accordion>
+									
+										<Accordion.Toggle as={Button} variant="link" style={{color: 'black', border: 'none', backgroundColor: 'transparent'}}  eventKey="0">
+											<IoIosChatbubbles style={styles.icon} className="mr-3" />{" "}
+										
+											<span style={styles.text}>
+												<a href="/messenger">
+												<span style={{color: 'black', }}>{text[3]}</span>
+												</a>
+											</span>
+										
+										</Accordion.Toggle>
+										<Accordion.Collapse eventKey="0">
+										<div className="pl-3">
+											<div className="mt-2">
+												<a href={`https://wa.me/${userprofile.user && userprofile.user.phone}`}>
+													<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
+														<FaWhatsapp className="cursor"/>
+													</IconContext.Provider>
+													<span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Whatsapp</span>
+												</a>
+											</div>
+											<div className="mt-1 d-block d-lg-none">
+											<a href={`tel:${userprofile.user && userprofile.user.phone}`}>
+												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
+													<FaMobileAlt className="cursor"/>
+												</IconContext.Provider>
+												<span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Call</span>
+											</a>
+											</div>
+											<div className="mt-1">
+											<a href="#">
+												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
+													<FaRegCommentDots className="cursor"/>
+												</IconContext.Provider>
+												<span style={{color: 'black', textDecoration: 'none'}} className="ml-1">Chat</span>
+											</a>
+											</div>
+										</div>
+										</Accordion.Collapse>
+								</Accordion>
+									
 								</div>
 							</div>
 						</Col>

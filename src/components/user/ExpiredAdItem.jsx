@@ -12,7 +12,6 @@ import { AiOutlineTag } from "react-icons/ai";
 import { GoLocation, GoPencil } from "react-icons/go";
 import { MdDateRange } from "react-icons/md";
 import { IoMdTrash } from "react-icons/io";
-import pic from "../images/pic.jpg";
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 

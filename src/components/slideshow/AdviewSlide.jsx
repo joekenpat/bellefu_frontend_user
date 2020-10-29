@@ -1,145 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Badge, Card } from "react-bootstrap";
-import pic from "../images/pic.jpg";
 
 import {
 	IoIosArrowDropleftCircle,
 	IoIosArrowDroprightCircle
 } from "react-icons/io";
+import ProductTitle from "./ProductTitle";
 
 // ====PRODUCT TITLE & TAGS====
-function ProductTitle(props) {
-	const [productTitel, setProductTitel] = useState(props);
-	useEffect(() => {
-		setProductTitel(props);
-	}, [props]);
-	return (
-		<div>
-			{/* ===FOR DESKTOP VIEW=== */}
-			<div
-				className="d-none d-lg-block  d-md-none"
-				style={{ marginBottom: "15px" }}>
-				<span
-					className="mb-5"
-					style={{
-						fontSize: "15px"
-					}}>
-					<b>{productTitel.title}</b>
-				</span>
-				<Badge
-					variant="danger"
-					className={`${
-						productTitel.plan === "free"
-							? "d-none"
-							: "d-block" || productTitel.plan === "featured"
-							? "d-none"
-							: "d-block" || productTitel.plan === "higlighted"
-							? "d-none"
-							: "d-block" || productTitel.plan === "Ugent"
-							? "d-block"
-							: "d-none"
-					}`}>
-					Urgent
-				</Badge>
-				<Badge
-					variant="warning"
-					className={`${
-						productTitel.plan === "free"
-							? "d-none"
-							: "d-block" || productTitel.plan === "urgent"
-							? "d-none"
-							: "d-block" || productTitel.plan === "higlighted"
-							? "d-none"
-							: "d-block" || productTitel.plan === "Featured"
-							? "d-block"
-							: "d-none"
-					}`}>
-					}`}> Featured
-				</Badge>
-				<Badge
-					variant="success"
-					className={`${
-						productTitel.plan === "free"
-							? "d-none"
-							: "d-block" || productTitel.plan === "urgent"
-							? "d-none"
-							: "d-block" || productTitel.plan === "featured"
-							? "d-none"
-							: "d-block" || productTitel.plan === "Higlighted"
-							? "d-block"
-							: "d-none"
-					}`}>
-					Higlighted
-				</Badge>
-			</div>
 
-			{/* ===FOR MOBILE VIEW=== */}
-			<div
-				className=" d-lg-none  d-xs-block d-sm-block d-md-block "
-				style={{ marginBottom: "15px" }}>
-				<span
-					className="mb-5"
-					style={{
-						fontSize: "15px"
-					}}>
-					<b>{productTitel.title}</b>
-				</span>
-				<Badge
-					variant="danger"
-					className={`${
-						productTitel.plan === "free"
-							? "d-none"
-							: "d-block" || productTitel.plan === "featured"
-							? "d-none"
-							: "d-block" || productTitel.plan === "higlighted"
-							? "d-none"
-							: "d-block" || productTitel.plan === "Urgent"
-							? "d-block"
-							: "d-none"
-					}`}>
-					Ugent
-				</Badge>
-				<Badge
-					variant="warning"
-					className={`${
-						productTitel.plan === "free"
-							? "d-none"
-							: "d-block" || productTitel.plan === "urgent"
-							? "d-none"
-							: "d-block" || productTitel.plan === "higlighted"
-							? "d-none"
-							: "d-block" || productTitel.plan === "Featured"
-							? "d-block"
-							: "d-none"
-					}`}>
-					}`}> Featured
-				</Badge>
-				<Badge
-					variant="success"
-					className={`${
-						productTitel.plan === "free"
-							? "d-none"
-							: "d-block" || productTitel.plan === "uyarn start gent"
-							? "d-none"
-							: "d-block" || productTitel.plan === "featured"
-							? "d-none"
-							: "d-block" || productTitel.plan === "Higlighted"
-							? "d-block"
-							: "d-none"
-					}`}>
-					Higlighted
-				</Badge>
-			</div>
-		</div>
-	);
-}
 
 export default function AdviewSlide(props) {
 	const [productImg, setProductImg] = useState(props);
+	const [product, setProduct] = useState({})
+	console.log(props.data)
 	useEffect(() => {
 		setProductImg(props);
-		console.log(props.images);
 	}, [props]);
+
+	useEffect(() => {
+		setProduct(props.data)
+		console.log(product)
+	}, [props.data])
 	return (
 		<div>
 			<Card className="border-0">
@@ -147,7 +29,7 @@ export default function AdviewSlide(props) {
 					<b style={{ color: "white" }}> Ad</b>
 				</Card.Header>
 				<Card.Body>
-					<ProductTitle {...productImg} />
+					<ProductTitle id={props.id} language={props.language} data={product} {...productImg} />
 
 					<div
 						class="uk-position-relative uk-visible-toggle uk-dark"

@@ -202,7 +202,9 @@ export default function Verification(props) {
 	return (
 		<div>
 			{loading && (
+				<div style={{height: '100vh', width: '100%'}}>
 				<Preloader />
+			</div>
 			)}
 			<Card className="border-0">
 				<Card.Header

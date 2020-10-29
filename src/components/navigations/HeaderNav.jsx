@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from "react";
-import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner } from "react-bootstrap";
+import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner, Dropdown } from "react-bootstrap";
 import SideNav from "./SideNav";
-import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import Cookie from "js-cookie";
 import axios from 'axios';
 import Flag from 'react-world-flags';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateUserCountry} from '../../redux/actions/userCountry'
+import {updateUserCountry, languagee} from '../../redux/actions/userCountry'
+import { IconContext } from "react-icons/lib";
+import { FaUsers } from "react-icons/fa";
+import Axios from "axios";
+const {Translate} = require('@google-cloud/translate').v2;
 
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (CHANGE CONTRY)
@@ -17,14 +20,99 @@ const renderTooltip = (props) => (
 	</Tooltip>
 );
 
+const languages = [
+	{name: 'english', code: 'en'},
+	{name: 'french', code: 'fr'},
+	{name: 'german', code: 'de'},
+	{name: 'spanish', code: 'es'},
+	{name: 'arabic', code: 'ar'},
+	{name: 'chinese', code: 'zh-CN'},
+	{name: 'afrikaans', code: 'af'},
+	{name: 'bosnian', code: 'bs'},
+	{name: 'croatian', code: 'hr'},
+	{name: 'czech', code: 'cs'},
+	{name: 'danish', code: 'da'},
+	{name: 'dutch', code: 'nl'},
+	{name: 'estonian', code: 'et'},
+	{name: 'italiano', code: 'it'},
+	
+]
+
+
 //THIS IS A HEADER COMPOENT
 export default function HeaderNav(props) {
 	const dispatch = useDispatch();
 	const [loadingCountry, setLoadingCountry] = useState(false)
 	const country = useSelector((state) => state.userCountry);
+	
 
 	const [show, setShow] = useState(false)
 	const [countries, setCountries] = useState([])
+	const [language, setLanguage] = useState(Cookie.get('language') || 'en')
+	const [number, setNumber] = useState(0)
+	const [text, setText] = useState([
+		'Post Free Ad',
+		'Register',
+		'login',
+		'Blog',
+		"Farmer's Club",
+		'country',
+		'Dashboard',
+		'Logout',
+		'Select Your Country'
+	])
+	const [originalText, setOriginalText] = useState([
+		'Post Free Ad',
+		'Register',
+		'login',
+		'Blog',
+		"Farmer's Club",
+		'country',
+		'Dashboard',
+		'Logout',
+		'Select Your Country'
+	])
+
+	
+  
+
+	const translatee = (lang) => {
+		setLanguage(lang)
+		setNumber(1)
+	}
+
+	const [id, setId] = useState('')
+
+	const load = async () => {
+		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
+
+	const trans = async() => {
+		const translate = await new Translate({key: id})
+		translate.translate(text, language)
+			.then((res) => {
+				
+					setText(res[0])
+					Cookie.set('language', language)
+					if(number > 0){
+						window.location.reload()
+					}
+			
+		}).catch(() => {
+			setText(originalText)
+			})
+	}
+
+	useEffect(() => {
+		load()
+	}, [])
+	  
+	useEffect( () => {
+		trans()
+	}, [id, language])
 
 	const onShow = () => {
 		setTimeout(() => {
@@ -65,7 +153,7 @@ export default function HeaderNav(props) {
 		<div>
 			<Navbar style={styles.head} className=" shadow-sm fixed-top">
 				<Navbar.Brand as={Link} to="/">
-					<img src={logo} style={styles.logo} />
+					<img src="https://dev.bellefu.com/images/misc/logo.png" style={styles.logo} />
 				</Navbar.Brand>
 				<Navbar.Brand>
 					<OverlayTrigger
@@ -73,7 +161,7 @@ export default function HeaderNav(props) {
 						delay={{ show: 250, hide: 400 }}
 						overlay={renderTooltip}>
 						<Button onClick={onShow} variant="outline-warning" style={styles.contrey_btn}>
-							<Flag style={{width: '12px', height: '12px'}} code={country.country_iso2} />{'  '}country
+							<Flag style={{width: '12px', height: '12px'}} code={country.country_iso2} />{'  '}{text[5]}
 						</Button>
 						
 					</OverlayTrigger>
@@ -83,6 +171,23 @@ export default function HeaderNav(props) {
 				</Navbar.Brand>
 
 				<Navbar.Collapse className="justify-content-end">
+					<a
+						
+						href="https://www.facebook.com/groups/bellefu"
+						className="d-none d-lg-block farmers-club pt-4 pr-3"
+						style={{color: 'white', paddingBottom: '10px'}}>
+							<IconContext.Provider value={{ color: "white", size: '20px', style: {paddingBottom: '5px'}}}>
+								<FaUsers className="cursor" />
+							</IconContext.Provider>
+					{' '}{text[4]}
+					</a>
+					<a
+						target="_blank"
+						href="https://blog.bellefu.com"
+						className="d-none d-lg-block farmers-club"
+						style={{color: 'white', paddingBottom: '12px'}}>
+						{text[3]}
+					</a>
 					<Nav.Link
 						as={Link}
 						to="/user_dashboard"
@@ -92,7 +197,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-none  d-md-none"
 						}`}
 						style={styles.auth}>
-						Dashboard
+					{text[6]}
 					</Nav.Link>
 					<Nav.Link
 						as={Link}
@@ -104,7 +209,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-none  d-md-none"
 						}`}
 						style={styles.auth}>
-						LogOut
+						{text[7]}
 					</Nav.Link>
 
 					<Nav.Link
@@ -116,7 +221,7 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-block  d-md-none"
 						}`}
 						style={styles.auth}>
-						Login
+						{text[2]}
 					</Nav.Link>
 					<Nav.Link
 						as={Link}
@@ -127,20 +232,32 @@ export default function HeaderNav(props) {
 								: "d-none d-lg-block  d-md-none"
 						}`}
 						style={styles.auth}>
-						Register
+						{text[1]}
 					</Nav.Link>
+					<Navbar.Brand styles={styles.language}>
+						<Dropdown>
+							<Dropdown.Toggle variant="warning" style={styles.post_free_add_btn} id="dropdown-basic">
+								{language}
+							</Dropdown.Toggle>
+
+							<Dropdown.Menu style={{height: '280px', overflowY: 'scroll'}}>
+								{languages.length > 1 && languages.map((code) => (
+								<Dropdown.Item style={{fontSize: '12px'}} onClick={() => translatee(code.code)} key={code.code}>{code.name}</Dropdown.Item>
+
+								))}
+
+							</Dropdown.Menu>
+						</Dropdown>
+						
+					</Navbar.Brand>
 					<Navbar.Brand className="d-none d-lg-block  d-md-none">
 						<Link to="/post_ad">
 						<Button variant="warning" style={styles.post_free_add_btn}>
-							Post Free Ad
+							{text[0]}
 						</Button>
 						</Link>
 					</Navbar.Brand>
-					<Navbar.Brand styles={styles.language}>
-						<Button variant="warning" style={styles.post_free_add_btn}>
-							EN
-						</Button>
-					</Navbar.Brand>
+					
 					<Navbar.Brand className="d-lg-none d-xs-block  d-sm-block d-md-block">
 						<SideNav />
 					</Navbar.Brand>
@@ -149,7 +266,7 @@ export default function HeaderNav(props) {
 			<Modal size="lg" show={show} onHide={() => setShow(false)} aria-labelledby="select-country-modal" centered>
 				<Modal.Header closeButton>
 					<Modal.Title className="text" id="select-country-modal">
-						<Container>Select Your Country</Container>
+						<Container>{text[8]}</Container>
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>

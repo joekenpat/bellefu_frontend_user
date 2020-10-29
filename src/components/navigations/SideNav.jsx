@@ -57,6 +57,15 @@ export default function SideNav() {
 						</a>
 						</div>
 						<div className="mb-3">
+						<a href="https://blog.bellefu.com"
+							target="_blank"
+							style={{ color: "inherit", textDecoration: "inherit" }}>
+							<Button  className="rounded-0" variant="dark" size="sm" block>
+								Blog
+							</Button>
+						</a>
+						</div>
+						<div className="mb-3">
 						<a href="/login"
 						className={`${
 							Cookie.get("user")

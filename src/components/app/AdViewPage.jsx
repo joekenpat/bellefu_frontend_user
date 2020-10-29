@@ -8,13 +8,29 @@ import BottomNav from "../navigations/BottomNav";
 import AdSafetyTip from "../Ads/AdSafetyTip"
 import Preloader from "../user/Preloader";
 import axios from "axios";
-import { useLocation, withRouter } from "react-router-dom";
+import Cookie from 'js-cookie'
+
 
 export default function AdViewPage(props) {
 	const [loading, setLoading] = useState(true);
+	const [id, setId] = useState('')
+
 	const [error, setError] = useState("");
 	const [productsDataDetail, setproductsDataDetail] = useState({});
+	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+
 	let url = "https://dev.bellefu.com/api/product/show";
+
+	const load = async () => {
+		await axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		.then((res) => {
+			setId(res.data.key)
+		})
+	}
+
+	useEffect(() => {
+		load()
+	}, [])
 
 	useEffect(() => {
 		axios
@@ -42,33 +58,35 @@ export default function AdViewPage(props) {
 			<HeaderNav />
 			<Container>
 			{loading ? (
-					<Preloader />
+					<div style={{height: '100vh', width: '100%'}}>
+						<Preloader />
+					</div>
 				) : (
 			<Row>
 				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }} className="d-none d-lg-block  d-md-none">
-						<AdviewSlide {...productsDataDetail}/>
+						<AdviewSlide id={id} language={language} data={productsDataDetail} language={language} {...productsDataDetail}/>
 					</div>
 					{/* ===FOR MOBILE VIEW=== */}
 					<div style={{ marginTop: "30%" }} className=" d-lg-none  d-xs-block d-sm-block d-md-block ">
-						<AdviewSlide {...productsDataDetail}/>
+						<AdviewSlide id={id} language={language} data={productsDataDetail} language={language} {...productsDataDetail}/>
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={8} xl={8}>
 					<div style={{ marginTop: "5%" }}>
-					<AdDetails {...productsDataDetail}/>	
+					<AdDetails id={id} language={language} data={productsDataDetail} language={language} {...productsDataDetail}/>	
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={4} xl={4}>
 					<Row>
 				   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
-						<UserAdInfo  {...productsDataDetail}/>
+						<UserAdInfo id={id} language={language} data={productsDataDetail} language={language}  {...productsDataDetail}/>
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
-						<AdSafetyTip/>
+						<AdSafetyTip id={id} language={language} language={language} data={productsDataDetail}/>
 					</div>
 				</Col>
 					</Row>
