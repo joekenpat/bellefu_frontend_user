@@ -108,7 +108,7 @@ export default function BottomNav() {
 				<a href="/messenger" style={{ color: 'inherit', textDecoration: 'inherit'}}>
 					<div>
 						<FiMail style={styles.icon} />
-						{userData.has_unread_message && (
+						{userData.has_unread_message && userData.has_unread_message && (
 						<span style={{width: '9px', height: '9px', borderRadius: '10px', backgroundColor: '#ffa500', position: 'absolute'}} />
 
 						)}

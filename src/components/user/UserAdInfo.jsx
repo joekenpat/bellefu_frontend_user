@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Image, Col, Accordion, Button } from "react-bootstrap";
+import { Card, Row, Image, Col, Accordion, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import avater_placeholder from "../images/avater_placeholder.jpg";
 import { IoIosTime, IoMdMailOpen, IoIosChatbubbles } from "react-icons/io";
 import { AiFillPhone } from "react-icons/ai";
 import Moment from "react-moment";
-import { FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
+import { FaCheckCircle, FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 const {Translate} = require('@google-cloud/translate').v2;
 
@@ -46,7 +46,23 @@ export default function UserAdInfo(props) {
 	  
 	useEffect( () => {
 		trans()
-    }, [props.id])
+	}, [props.id])
+	
+	const renderTooltip = (props) => (
+		<Tooltip id="button-tooltip" {...props}>
+		  Phone Verified
+		</Tooltip>
+	  );
+	  const renderTooltip1 = (props) => (
+		<Tooltip id="button-tooltip" {...props}>
+		  ID Verified
+		</Tooltip>
+	  );
+	  const renderTooltip2 = (props) => (
+		<Tooltip id="button-tooltip" {...props}>
+		  KYC Verified
+		</Tooltip>
+	  );
 	return (
 		<div>
 			<Card className="border-0 ">
@@ -82,6 +98,16 @@ export default function UserAdInfo(props) {
 								<b className="ml-1">
 									{userprofile.user && userprofile.user.profile.last_name}
 								</b>
+								<OverlayTrigger
+									placement="right"
+									delay={{ show: 250, hide: 400 }}
+									overlay={userprofile.user ? userprofile.user.verification_level === 'phone' ? renderTooltip : userprofile.user.verification_level === 'id' ? renderTooltip1 : userprofile.user.verification_level === 'kyc' ? renderTooltip2 : null : null}
+								>
+
+									<IconContext.Provider value={{ color: userprofile.user ? userprofile.user.verification_level === 'phone' ? 'ash' : userprofile.user.verification_level === 'id' ? 'orange' : '#76BA1B' : 'blue', size: '20px', style: {textDecoration: 'none', marginLeft: '5px', display: userprofile.user ? userprofile.user.verification_level === 'none' ? 'none' : 'inline' : 'inline'}}}>
+										<FaCheckCircle className="cursor" />
+									</IconContext.Provider>
+								</OverlayTrigger>
 							</p>
 						</Col>
 						<Col
