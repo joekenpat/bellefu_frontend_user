@@ -74,7 +74,7 @@ export default function AdViewPage(props) {
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={8} xl={8}>
 					<div style={{ marginTop: "5%" }}>
-					<AdDetails id={id} language={language} data={productsDataDetail} language={language} {...productsDataDetail}/>	
+					<AdDetails id={id} language={language} data={productsDataDetail} language={language}/>	
 					</div>
 				</Col>
 				<Col xs={12} sm={12} md={12} lg={4} xl={4}>

@@ -13,14 +13,12 @@ import ProductTitle from "./ProductTitle";
 export default function AdviewSlide(props) {
 	const [productImg, setProductImg] = useState(props);
 	const [product, setProduct] = useState({})
-	console.log(props.data)
 	useEffect(() => {
 		setProductImg(props);
 	}, [props]);
 
 	useEffect(() => {
 		setProduct(props.data)
-		console.log(product)
 	}, [props.data])
 	return (
 		<div>
