@@ -42,7 +42,7 @@ const ExpiredAdItem = (props) => {
     return (
         <tr>
             <td className="uk-text-center">
-                <Image src={props.data.images[0]} style={props.styles.image} />
+                <Image src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} style={props.styles.image} />
             </td>
             <td>
                 <p style={props.styles.titel}>

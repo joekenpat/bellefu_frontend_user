@@ -59,6 +59,7 @@ export default function PremiunAds(props) {
 		axios
 			.get(nextPageUrl, {
 				headers: {
+					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}

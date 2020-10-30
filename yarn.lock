@@ -13548,6 +13548,11 @@ react-overlays@^4.1.0:
     uncontrollable "^7.0.0"
     warning "^4.0.3"
 
+react-paystack@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-paystack/-/react-paystack-3.0.2.tgz#da2237e750fd818e3496b12ed8131dc79f16962f"
+  integrity sha512-bSiyb0a+DpBhTeyh0jZ0XERuwmZ1Q7Ryje9OLRvpCjkt8c9jW/VP+MhPo0pC4laA7ejS3fxdAqmx6CY84Fx/tw==
+
 react-pdf@^4.1.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-pdf/-/react-pdf-4.2.0.tgz#b83a01eb070912522075b7a51aee7d63b2c912ed"

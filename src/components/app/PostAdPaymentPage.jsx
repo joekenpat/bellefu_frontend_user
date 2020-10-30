@@ -8,7 +8,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdArrowDropdown } from "react-icons/io";
 
 
-export default function PostAdPaymentPage() {
+export default function PostAdPaymentPage(props) {
     return (
         <div>
         <HeaderNav />
@@ -71,7 +71,7 @@ export default function PostAdPaymentPage() {
 
                 <Col xs={12} sm={12} md={12} lg={9} xl={9} style={{ marginTop: "10.7%" }}>	
                     <div className="mt-3">
-                    <PostAdPayment/>
+                    <PostAdPayment {...props}/>
                     </div>
                 </Col>
             </Row>

@@ -9,6 +9,22 @@ import { IconContext } from "react-icons/lib";
 const {Translate} = require('@google-cloud/translate').v2;
 
 
+const renderTooltip = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+	  Phone Verified
+	</Tooltip>
+  );
+  const renderTooltip1 = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+	  ID Verified
+	</Tooltip>
+  );
+  const renderTooltip2 = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+	  KYC Verified
+	</Tooltip>
+  );
+
 export default function UserAdInfo(props) {
 	const [userprofile, setProfileState] = useState(props);
 	const [reveal, setReveal] = useState(false)
@@ -48,21 +64,7 @@ export default function UserAdInfo(props) {
 		trans()
 	}, [props.id])
 	
-	const renderTooltip = (props) => (
-		<Tooltip id="button-tooltip" {...props}>
-		  Phone Verified
-		</Tooltip>
-	  );
-	  const renderTooltip1 = (props) => (
-		<Tooltip id="button-tooltip" {...props}>
-		  ID Verified
-		</Tooltip>
-	  );
-	  const renderTooltip2 = (props) => (
-		<Tooltip id="button-tooltip" {...props}>
-		  KYC Verified
-		</Tooltip>
-	  );
+	
 	return (
 		<div>
 			<Card className="border-0 ">
@@ -98,16 +100,19 @@ export default function UserAdInfo(props) {
 								<b className="ml-1">
 									{userprofile.user && userprofile.user.profile.last_name}
 								</b>
-								<OverlayTrigger
+								{userprofile.user && (
+									<OverlayTrigger
 									placement="right"
+									
 									delay={{ show: 250, hide: 400 }}
-									overlay={userprofile.user ? userprofile.user.verification_level === 'phone' ? renderTooltip : userprofile.user.verification_level === 'id' ? renderTooltip1 : userprofile.user.verification_level === 'kyc' ? renderTooltip2 : null : null}
+									overlay={userprofile.user && userprofile.user.verification_level === 'phone' ? renderTooltip : userprofile.user.verification_level === 'id' ? renderTooltip1 : renderTooltip2}
 								>
 
-									<IconContext.Provider value={{ color: userprofile.user ? userprofile.user.verification_level === 'phone' ? 'ash' : userprofile.user.verification_level === 'id' ? 'orange' : '#76BA1B' : 'blue', size: '20px', style: {textDecoration: 'none', marginLeft: '5px', display: userprofile.user ? userprofile.user.verification_level === 'none' ? 'none' : 'inline' : 'inline'}}}>
+									<IconContext.Provider value={{ color: userprofile.user && userprofile.user.verification_level === 'phone' ? 'ash' : userprofile.user.verification_level === 'id' ? 'orange' : '#76BA1B', size: '20px', style: {textDecoration: 'none', marginLeft: '5px', display: userprofile.user && userprofile.user.verification_level === 'none' ? 'none' : 'inline'}}}>
 										<FaCheckCircle className="cursor" />
 									</IconContext.Provider>
 								</OverlayTrigger>
+								)}
 							</p>
 						</Col>
 						<Col
@@ -130,7 +135,7 @@ export default function UserAdInfo(props) {
 								<div style={{paddingLeft: '80px'}} className="mt-2">
 									<AiFillPhone style={styles.icon} className="mr-3" />{" "}
 									{!reveal && (
-										<span className="cursor" onClick={() => setReveal(true)} style={styles.text}>{text[1]}</span>
+										<span className="cursor" onClick={() => setReveal(true)} style={{padding: '5px', border: '1px solid #ffa500', fontWeight: '550'}}>{text[1]}</span>
 									)}
 									{reveal && (
 										<span style={styles.text}>

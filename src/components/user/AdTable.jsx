@@ -34,12 +34,19 @@ const editTooltip = (props) => (
 	</Tooltip>
 );
 
+const upgradeTooltip = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+		Upgrade Ad
+	</Tooltip>
+);
+
 export default function AdTable(props) {
 	const [loading, setLoading] = useState(true);
 	const [loadingg, setLoadingg] = useState(false);
 	const [ad, setAd] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
+	const [fee, setFee] = useState({})
 	const [status, setStatus] = useState('loading')
 
 	const onAdDelete = (slug) => {
@@ -97,6 +104,22 @@ export default function AdTable(props) {
 				setLoading(false);
 				setAd([]);
 			});
+
+			axios
+			.get("https://dev.bellefu.com/api/user/product/upgrade/fee", {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setFee(res.data)
+				console.log(res)
+			})
+			.catch((error) => {
+				
+			});
 	}, []);
 
 	return (
@@ -136,7 +159,7 @@ export default function AdTable(props) {
 							) : (
 								
 								ad.map((data) => (
-									<AdTableItem setLoadingg={setLoadingg} key={data.id} onAdDelete={onAdDelete} styles={styles} data={data} viewTooltip={viewTooltip} editTooltip={editTooltip} deleteTooltip={deleteTooltip} {...props} user={user} />
+									<AdTableItem fee={fee} upgradeTooltip={upgradeTooltip} setLoadingg={setLoadingg} key={data.id} onAdDelete={onAdDelete} styles={styles} data={data} viewTooltip={viewTooltip} editTooltip={editTooltip} deleteTooltip={deleteTooltip} {...props} user={user} />
 								))
 								
 							)}

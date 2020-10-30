@@ -135,6 +135,7 @@ export default function CategoryPage(props) {
 		axios
 			.get(`${apiUrl}&page=${page}`, {
 				headers: {
+					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
@@ -158,6 +159,7 @@ export default function CategoryPage(props) {
 		axios
 			.get(nextPageUrl, {
 				headers: {
+					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
