@@ -40,7 +40,7 @@ export default function PremiunAds(props) {
 		axios
 			.get(apiUrl, {
 				headers: {
-					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
+					Authorization: props.user !== null ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
@@ -59,7 +59,7 @@ export default function PremiunAds(props) {
 		axios
 			.get(nextPageUrl, {
 				headers: {
-					Authorization: props.user ? `Bearer ${props.user.token}` : 'hfh',
+					Authorization: props.user !== null ? `Bearer ${props.user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}

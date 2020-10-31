@@ -163,16 +163,15 @@ export default function UserAdInfo(props) {
 											<IoIosChatbubbles style={styles.icon} className="mr-3" />{" "}
 										
 											<span style={styles.text}>
-												<a href="/messenger">
 												<span style={{color: 'black', }}>{text[3]}</span>
-												</a>
+												
 											</span>
 										
 										</Accordion.Toggle>
 										<Accordion.Collapse eventKey="0">
 										<div className="pl-3">
 											<div className="mt-2">
-												<a href={`https://wa.me/${userprofile.user && userprofile.user.phone}`}>
+												<a href={`https://wa.me/${userprofile.phone && userprofile.phone}?text=Hi%2C+I+got+your+contact+from+bellefu`}>
 													<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
 														<FaWhatsapp className="cursor"/>
 													</IconContext.Provider>
@@ -180,7 +179,7 @@ export default function UserAdInfo(props) {
 												</a>
 											</div>
 											<div className="mt-1 d-block d-lg-none">
-											<a href={`tel:${userprofile.user && userprofile.user.phone}`}>
+											<a href={`tel:${userprofile.phone && userprofile.phone}`}>
 												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
 													<FaMobileAlt className="cursor"/>
 												</IconContext.Provider>

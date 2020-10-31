@@ -10,30 +10,12 @@ import MobileInput from "./MobileInput";
 
 export default function MobileSlideShow(props) {
 	return (
-		<div>
-			<Carousel
-				indicators={false}
-				prevIcon={
-					<span aria-hidden="true" className="carousel-contrl-prev-icon " />
-				}
-				nextIcon={
-					<span aria-hidden="true" className="carousel-contrl-next-icon " />
-				}
-				className="d-lg-none d-sm-block d-md-block">
-				<Carousel.Item interval={1000} style={{ height: "400px" }}>
-					<img
-						className="d-block w-100"
-						src="https://dev.bellefu.com/images/misc/Bellefu_home_banner_1.png"
-						alt="First slide"
-						style={{ height: "400px", objectFit: 'cover' }}
-					/>
-					<Carousel.Caption  style={{ left: "10px", right: "10px" }} >
-						<h3 style={{ color: "white", fontSize: '20px', paddingBottom: '10px' }}>Bellefu - digital agro connect...</h3>
+		<div style={{backgroundColor: '#76BA1B', height: '55vh', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
+			<h3 style={{ textAlign: 'center', paddingTop: '5px', color: "white", fontSize: '20px', paddingBottom: '10px' }}>Bellefu - digital agro connect...</h3>
 
-						<MobileInput id={props.id} landingpage={true} country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow}/>
-					</Carousel.Caption>
-				</Carousel.Item>
-			</Carousel>
+			<div className="px-2">
+			<MobileInput id={props.id} landingpage={true} country={props.country} lga={props.lga} state={props.state} setModalShow={props.setModalShow}/>
+			</div>
 		</div>
 	);
 }

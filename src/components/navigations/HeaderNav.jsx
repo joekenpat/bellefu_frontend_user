@@ -77,7 +77,7 @@ export default function HeaderNav(props) {
 
 	let miniSearch = new MiniSearch({
         fields: ['name'],
-        storeFields: ['name', 'id', 'slug', 'code'],
+        storeFields: ['name', 'iso2', 'slug', 'code'],
         searchOptions: {
             boost: { name: 2 },
             fuzzy: 0.2,
