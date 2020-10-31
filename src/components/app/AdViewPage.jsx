@@ -63,7 +63,7 @@ export default function AdViewPage(props) {
 					</div>
 				) : (
 			<Row>
-				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
+				<Col xs={{ order: 1 }} lg={{ order: 1 }} xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }} className="d-none d-lg-block  d-md-none">
 						<AdviewSlide id={id} language={language} data={productsDataDetail} language={language} {...productsDataDetail}/>
 					</div>
@@ -72,19 +72,19 @@ export default function AdViewPage(props) {
 						<AdviewSlide id={id} language={language} data={productsDataDetail} language={language} {...productsDataDetail}/>
 					</div>
 				</Col>
-				<Col xs={12} sm={12} md={12} lg={8} xl={8}>
+				<Col xs={{ order: 3 }} lg={{ order: 2 }} xs={12} sm={12} md={12} lg={8} xl={8}>
 					<div style={{ marginTop: "5%" }}>
 					<AdDetails id={id} language={language} data={productsDataDetail} language={language}/>	
 					</div>
 				</Col>
-				<Col xs={12} sm={12} md={12} lg={4} xl={4}>
+				<Col xs={{ order: 2 }} lg={{ order: 3 }} xs={12} sm={12} md={12} lg={4} xl={4}>
 					<Row>
 				   <Col xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
 						<UserAdInfo id={id} language={language} data={productsDataDetail} language={language}  {...productsDataDetail}/>
 					</div>
 				</Col>
-				<Col xs={12} sm={12} md={12} lg={12} xl={12}>
+				<Col xs={{ order: 4 }} lg={{ order: 4 }} xs={12} sm={12} md={12} lg={12} xl={12}>
 					<div style={{ marginTop: "10%" }}>
 						<AdSafetyTip id={id} language={language} language={language} data={productsDataDetail}/>
 					</div>

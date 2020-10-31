@@ -4,16 +4,54 @@ import { Redirect, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Preloader from "./Preloader";
+import { PaystackButton } from "react-paystack";
 
-export default function PostAdPayment() {
+function makeid(length) {
+	var result           = '';
+	var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var charactersLength = characters.length;
+	for ( var i = 0; i < length; i++ ) {
+	   result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+ }
+
+export default function PostAdPayment(props) {
 	let location = useLocation();
 	const [success, setSuccess] = useState()
 	const [loading, setLoading] = useState();
+	const [fee, setFee] = useState({})
 	const [paymentData, setPaymentData] = useState({
 		payment_channel: "",
 		voucher_code: "",
 		gateway_provider: ""
 	});
+	const [reference, setReference] = useState(
+		`bellefu-${makeid(11)}`
+	  );
+	  const userSignin = useSelector((state) => state.userSignin);
+	const { user } = userSignin;
+	const [userData, setUserData] = useState({})
+	const [profile, setProfile] = useState({})
+	let url = 'https://dev.bellefu.com/api/user/profile/details';
+
+	  const metadata = {
+		name: `${userData.firstName} ${userData.lastName}`,
+		phone: userData.phone,
+	  };
+	
+	  const componentProps = {
+		email: userData.email,
+		amount: props.match.params.product_plan === 'urgent' ? fee.urgent_upgrade_fee * 100 : props.match.params.product_plan === 'highlighted' ? fee.highlighted.upgrade_fee * 100: fee.featured_upgrade_fee * 100 ,
+		name: `${profile.first_name} ${profile.last_name}`,
+		phone: userData.phone,
+		reference,
+		metadata,
+		publicKey: "pk_test_18f280bc5226dd715ba9a6997c73d56ec10d18ef",
+		text: "Proceed",
+		onSuccess: () => onSubmitHandle(),
+		onClose: () => setReference(`bellefu-${makeid(11)}`),
+	  };
 	// const [voucherShow, setVoucherShow] = useState(true);
 	// const [cardShow, setCardShow] = useState(true);
 
@@ -29,9 +67,6 @@ export default function PostAdPayment() {
 		setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
 	};
 
-	//GLOBAL STATE FROM REDUX
-	const userSignin = useSelector((state) => state.userSignin);
-	const { user } = userSignin;
 
 	//SUBMIT FUNCTION
 	const onSubmitHandle = (e) => {
@@ -39,19 +74,19 @@ export default function PostAdPayment() {
 		setLoading(true);
 		let mainData = {};
 		let walletPayment = {
-			product_slug: `${location.state.product_slug}`,
-			upgrade_plan: `${location.state.product_plan}`,
+			product_slug: `${props.match.params.slug}`,
+			upgrade_plan: `${props.match.params.plan}`,
 			payment_channel: paymentData.payment_channel
 		};
 		let voucherPayment = {
-			product_slug: `${location.state.product_slug}`,
-			upgrade_plan: `${location.state.product_plan}`,
+			product_slug: `${props.match.params.slug}`,
+			upgrade_plan: `${props.match.params.plan}`,
 			payment_channel: paymentData.payment_channel,
 			voucher_code: paymentData.voucher_code
 		};
 		let cardPayment = {
-			product_slug: `${location.state.product_slug}`,
-			upgrade_plan: `${location.state.product_plan}`,
+			product_slug: `${props.match.params.slug}`,
+			upgrade_plan: `${props.match.params.plan}`,
 			payment_channel: paymentData.payment_channel,
 			gateway_provider: paymentData.gateway_provider
 		};
@@ -85,8 +120,33 @@ export default function PostAdPayment() {
 	};
 
 	useEffect(() => {
-		console.log({work: success});
-	});
+		axios.get(url, {
+			headers: {
+				Authorization: `Bearer ${user !== null ? user.token : 'fjjhj'}`,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		}).then((res) => {
+			setUserData(res.data.user)
+			setProfile(res.data.user.profile)
+		})
+
+		axios
+			.get("https://dev.bellefu.com/api/user/product/upgrade/fee", {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})
+			.then((res) => {
+				setFee(res.data)
+				console.log(res)
+			})
+			.catch((error) => {
+				
+			});
+	}, []);
 	
 	return (
 		<div>
@@ -180,6 +240,20 @@ export default function PostAdPayment() {
 									</select>
 								</Col>
 							</Row>
+							{paymentData.payment_channel === 'card' && paymentData.gateway_provider === 'paystack' ? (
+								<PaystackButton
+								style={{
+									marginTop: "30px",
+									backgroundColor: "#ffa500",
+									border: "none",
+									color: "white",
+									fontSize: "17px",
+									width: "100px",
+									height: "40px"
+								}}
+								{...componentProps}
+							  />
+							) : (
 
 							<Button
 								style={styles.btnSubmit}
@@ -188,6 +262,7 @@ export default function PostAdPayment() {
 								onClick={onSubmitHandle}>
 								Proceed
 							</Button>
+							)}
 						</Card.Body>
 					</Card>
 				</Form>

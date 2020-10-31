@@ -292,6 +292,9 @@ function AdDetails(props) {
 							</Row>
 						</Card.Body>
 					</Card>
+					{data.length > 0 && (
+
+					
 					<Card className="border-0 mt-4" style={{position: 'relative', height: `${data.length * 150}px`}}>
 						<Card.Header
 							className="border-0"
@@ -385,7 +388,7 @@ function AdDetails(props) {
 							</Row>
 						</Card.Body>
 					</Card>
-				
+				)}
 		</div>
 	);
 }

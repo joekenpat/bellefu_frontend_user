@@ -58,7 +58,7 @@ export default function CategoryPage(props) {
 		max_price: "",
 		subcategory: "",
 		category: "",
-		plan: "",
+		stateee: "",
 		sort: ""
 	});
 	const {
@@ -67,20 +67,13 @@ export default function CategoryPage(props) {
 		max_price,
 		subcategory,
 		category,
-		plan,
+		stateee,
 		sort
 	} = filterData;
 	const onChangeHandler = (e) => {
 		setFilterData({ ...filterData, [e.target.name]: e.target.value });
-		loadSubCategory()
-		
 	};
 	
-	const onSubmitHandle = (e) => {
-		loadFilterData();
-		e.preventDefault();
-		console.log(filterData.category)
-	};
 	// ========FOR FITER FROM  STATE AND FUNCTION END HERE ==================================//
 
 	const [loading, setLoading] = useState(true);
@@ -105,22 +98,18 @@ export default function CategoryPage(props) {
 	
 	let countryy = params.country ? `country=${params.country}` : ''
 	let lgaa = params.lga ? `&lga=${params.lga}` : ''
-	let statee = params.state ? `&state=${params.state}` : ''
-	let subcategoryy = params.subcategory ? `&subcategory=${params.subcategory}` : ''
-	let categoryy = params.category ? `&category=${params.category}` : ''
+	let statee = stateee.length > 0 ? `&state=${stateee}` : params.state ? `&state=${params.state}` : ''
+	let subcategoryy = subcategory.length > 0 ? `&subcategory=${subcategory}` : params.subcategory ? `&subcategory=${params.subcategory}` : ''
+	let categoryy = category.length > 0 ? `&category=${category}` : params.category ? `&category=${params.category}` : ''
+	let maxPrice = max_price.length > 0 ? `&max_price=${max_price}` : '';
+	let minPrice = min_price.length > 0 ? `&min_price=${min_price}` : '';
+	
 
 	let dataUrl = "";
-	let apiUrl = `https://dev.bellefu.com/api/product/list?${countryy}${lgaa}${statee}${subcategoryy}${categoryy}`;
+	let apiUrl = `https://dev.bellefu.com/api/product/list?${countryy}${lgaa}${statee}${subcategoryy}${categoryy}${maxPrice}${minPrice}`;
 
 	let location = useLocation();
 	const parsed = queryString.parse(location.search);
-
-	let filterString = "";
-
-	const loadFilterData = () => {
-		filterString = new URLSearchParams(filterData).toString();
-		dataUrl = apiUrl + "?" + filterString;
-	};
 
 	const loadStates = () => {
 		axios.get(`https://dev.bellefu.com/api/${props.userCountry.country_iso2}/state/list`)
@@ -135,6 +124,7 @@ export default function CategoryPage(props) {
 		axios
 			.get(`${apiUrl}&page=${page}`, {
 				headers: {
+					Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
@@ -158,6 +148,7 @@ export default function CategoryPage(props) {
 		axios
 			.get(nextPageUrl, {
 				headers: {
+					Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				}
@@ -184,6 +175,7 @@ const [categoryData, setCategoryData] = useState([])
 	})
 	.then((res) => {
 		setCategoryData(res.data.categories)
+		setFilterData({...filterData, subcategory: ''})
 		setError("");
 	})
 	.catch((error) => {
@@ -215,52 +207,16 @@ const loadSubCategory = () => {
 	   console.log(error);
    });
 }
- 
-
-
-	useEffect(() => {
-	
-		if (parsed.plan) {
-			setFilterData(parsed);
-		}
-
-		if (parsed.country) {
-			setFilterData(parsed);
-		}
-		if (parsed.subcategory) {
-			setFilterData(parsed);
-		}
-		if (parsed.category) {
-			setFilterData(parsed);
-		}
-		if (parsed.sort) {
-			setFilterData(parsed);
-		}
-		if (parsed.min_price) {
-			setFilterData(parsed);
-		}
-		if (parsed.max_price) {
-			setFilterData(parsed);
-		}
-	
-		
-		loadFilterData();
-		loadCategory();
-	}, [productsData.length], [categoryData], [subcategoryData]);
 
 	// translate
 	const [text, setText] = useState([
 		'category',
 		'subcategory',
-		'plan',
+		'state',
 		'price',
 		'select category',
 		'select subcategory',
-		'select plan',
-		'Free',
-		'Urgent',
-		'Featured',
-		'Highlighted',
+		'select state',
 		'Price',
 		'Min Price',
 		'Max Price',
@@ -269,15 +225,11 @@ const loadSubCategory = () => {
     const [originalText, setOriginalText] = useState([
 		'category',
 		'subcategory',
-		'plan',
+		'state',
 		'price',
 		'select category',
 		'select subcategory',
-		'select plan',
-		'Free',
-		'Urgent',
-		'Featured',
-		'Highlighted',
+		'select state',
 		'Price',
 		'Min Price',
 		'Max Price',
@@ -312,6 +264,11 @@ const loadSubCategory = () => {
 	}, [id, language])
 
 	useEffect(() => {
+		loadSubCategory()
+	}, [filterData.category])
+
+	useEffect(() => {
+		loadCategory();
 		load()
 		loadData(1);
 		loadStates()
@@ -339,7 +296,7 @@ const loadSubCategory = () => {
 						<div>
 								{/* ======FOR DESKTOP FILLTER====== */}
 							<div style={{ marginTop: "80px" }} className="d-none d-lg-block  d-md-none">
-								<Form onSubmit={onSubmitHandle}>
+								<Form onSubmit={loadData}>
 									<Card className="border-0">
 										<Container>
 											<Form.Group>
@@ -356,7 +313,6 @@ const loadSubCategory = () => {
 														id="category"
 														value={category }
 														 onChange={(e) => onChangeHandler(e)}
-														onClick={(e) => onChangeHandler(e)}
 														>
 
 														<option>{text[4]}</option>
@@ -400,43 +356,27 @@ const loadSubCategory = () => {
 												<div>
 													<select
 														class="uk-select  "
-														name="plan"
-														value={plan}
+														name="stateee"
+														value={stateee}
 														onChange={(e) => onChangeHandler(e)}>
-														<option>{text[6]}</option>
+															<option hidden>{text[6]}</option>
+														{states.map((data, index) => (
 														<option
-															value="free"
-															selected={subcategory === "free" ? true : false}>
-															{text[7]}
+														key={index}
+															value={data.slug}
+															>
+															{data.name}
 														</option>
-														<option
-															value="urgent"
-															selected={
-																subcategory === "urgent" ? true : false
-															}>
-															{text[8]}
-														</option>
-														<option
-															value="featured"
-															selected={
-																subcategory === "featured" ? true : false
-															}>
-															{text[9]}
-														</option>
-														<option
-															value="higlighted"
-															selected={
-																subcategory === "higlighted" ? true : false
-															}>
-															{text[10]}
-														</option>
+
+														))}
+														
 													</select>
 												</div>
 											</Form.Group>
 											<Form.Group>
 												<Form.Label
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>{text[11]}</b>
+													<b>{text[7]}</b>
 												</Form.Label>
 												<Row>
 													<Col xs={6} sm={6}>
@@ -444,7 +384,7 @@ const loadSubCategory = () => {
 															onFocus={inputFocus}
 															type="number"
 															min="0"
-															placeholder={text[12]}
+															placeholder={text[8]}
 															name="min_price"
 															value={min_price}
 															onChange={(e) => onChangeHandler(e)}
@@ -453,7 +393,7 @@ const loadSubCategory = () => {
 													<Col xs={6} sm={6} md={6} lg={6} xl={6}>
 														<Form.Control
 															onFocus={inputFocus}
-															placeholder={text[13]}
+															placeholder={text[9]}
 															type="number"
 															min="0"
 															name="max_price"
@@ -470,8 +410,8 @@ const loadSubCategory = () => {
 													size="lg"
 													block
 													type="button"
-													onClick={onSubmitHandle}>
-												<b>{text[14]}</b>	
+													onClick={loadData}>
+												<b>{text[10]}</b>	
 												</Button>
 											</Form.Group>
 										</Container>
@@ -506,14 +446,14 @@ const loadSubCategory = () => {
 									</Accordion.Toggle>
 									<Accordion.Collapse eventKey="0">
 										<Card.Body>
-											<Form onSubmit={onSubmitHandle}>
+											<Form onSubmit={loadData}>
 												<Card className="border-0">
 													<Container>
 													<Form.Group>
 												<Form.Label
 													className="mt-3"
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>Category</b>
+													<b>{text[0]}</b>
 												</Form.Label>
 												<div>
 													
@@ -523,10 +463,9 @@ const loadSubCategory = () => {
 														id="category"
 														value={category }
 														 onChange={(e) => onChangeHandler(e)}
-														onClick={(e) => onChangeHandler(e)}
 														>
 
-														<option>---select category---</option>
+														<option hidden>---select category---</option>
 														{ 
 														categoryData.map((data) => (
 														<option key={data.slug}
@@ -545,7 +484,7 @@ const loadSubCategory = () => {
 												<Form.Label
 													className="mt-3"
 													style={{ opacity: "0.4", fontSize: "0.8em" }}>
-													<b>Subcategory</b>
+													<b>{text[1]}</b>
 												</Form.Label>
 												<div >
 													<select
@@ -555,7 +494,7 @@ const loadSubCategory = () => {
 														value={subcategory}
 														onChange={(e) => onChangeHandler(e)}
 														disabled={notShow}>
-														<option>---select subcategory---</option>
+														<option>{text[1]}</option>
 														{ 
 														subcategoryData.map((data) => (
 														<option key={data.slug}
@@ -574,52 +513,32 @@ const loadSubCategory = () => {
 															<Form.Label
 																className="mt-3"
 																style={{ opacity: "0.4", fontSize: "0.8em" }}>
-																<b>Plan</b>
+																<b>{text[6]}</b>
 															</Form.Label>
 															<div >
 																<select
 																	class="uk-select  "
-																	name="plan"
-																	value={plan}
+																	name="stateee"
+																	value={stateee}
 																	onChange={(e) => onChangeHandler(e)}>
-																	<option>select plan</option>
-																	<option
-																		value="free"
-																		selected={
-																			subcategory === "free" ? true : false
-																		}>
-																		Free
-																	</option>
-																	<option
-																		value="urgent"
-																		selected={
-																			subcategory === "urgent" ? true : false
-																		}>
-																		Urgent
-																	</option>
-																	<option
-																		value="featured"
-																		selected={
-																			subcategory === "featured" ? true : false
-																		}>
-																		Featured
-																	</option>
-																	<option
-																		value="higlighted"
-																		selected={
-																			subcategory === "higlighted"
-																				? true
-																				: false
-																		}>
-																		Higlighted
-																	</option>
+																	<option hidden>select state</option>
+																	<option hidden>{text[6]}</option>
+														{states.map((data, index) => (
+														<option
+														key={index}
+															value={data.slug}
+															>
+															{data.name}
+														</option>
+
+														))}
 																</select>
 															</div>
 														</Form.Group>
 														<Form.Group>
 															<Form.Label
 																style={{ opacity: "0.4", fontSize: "0.8em" }}>
-																<b>Price</b>
+																<b>{text[3]}</b>
 															</Form.Label>
 															<Row>
 																<Col xs={6} sm={6}>
@@ -653,8 +572,8 @@ const loadSubCategory = () => {
 																size="lg"
 																block
 																type="button"
-																onClick={onSubmitHandle}>
-															<b>Appy Filter</b>	
+																onClick={loadData}>
+															<b>{text[10]}</b>	
 															</Button>
 														</Form.Group>
 													</Container>

@@ -15,6 +15,7 @@ export default function DesktopInput(props) {
 	const [categoryData, setCategoryData] = useState([]);
 	const [category, setCategory] = useState({})
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
+	
 	const [text, setText] = useState([
 		'What are you looking for?',
 		'Where?',
@@ -30,6 +31,8 @@ export default function DesktopInput(props) {
 	const handleChange = (option) => {
 		setCategory(option)
 	}
+
+	
 
 	
 
@@ -128,7 +131,7 @@ export default function DesktopInput(props) {
 						<Link style={{
 										color: "inherit",
 										textDecoration: "inherit"
-									}} to={`/product_list?state=${props.state.slug}&lga=${props.lga.slug}&country=${props.country.country_slug}&category=${category.value}`}>
+									}} to={`/product_list?${props.state.slug ? `state=${props.state.slug}` : ''}${props.lga.slug ? `&lga=${props.lga.slug}` : ''}&country=${props.country.country_slug}${category.value ? `&category=${category.value}` : ''}`}>
 							<Button onClick={handleClick} style={styles.btn} variant="warning">
 								{text[2]}
 							</Button>

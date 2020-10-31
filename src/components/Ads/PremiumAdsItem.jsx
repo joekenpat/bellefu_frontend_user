@@ -95,13 +95,14 @@ const PremiumAdsItem = (props) => {
 
                         <Col xs={8} sm={8} md={8} lg={8} xl={8}>
                             <Badge
+                            style={{width: '100px'}}
                             pill
                                 variant={props.data.plan === 'urgent' ? 'danger' : props.data.plan === 'highlighted' ? 'success' : 'warning'}
                                 className={`${
                                     props.data.plan === "free"
                                         ? "d-none"
                                         : "d-block"
-                                }`}>
+                                } `}>
                                 {text[1]}
                             </Badge>
                             

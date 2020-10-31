@@ -123,16 +123,16 @@ const MobileInput = (props) => {
 			<Link style={{
 					color: "inherit",
 					textDecoration: "inherit"
-				}} to={`/product_list?state=${props.state.slug}&lga=${props.lga.slug}&country=${props.country.country_slug}&category=${category.value}`}>
+				}} to={`/product_list?${props.state.slug ? `state=${props.state.slug}` : ''}${props.lga.slug ? `&lga=${props.lga.slug}` : ''}&country=${props.country.country_slug}${category.value ? `&category=${category.value}` : ''}`}>
                 <Button onClick={handleClick} style={styles.btn} variant="warning" size="lg" block>
                     {text[2]}
                 </Button>
 			</Link>
             </Form.Group>
 			{props.landingpage && (
-				<Form.Group style={{paddingTop: '10px'}}>
+				<Form.Group style={{paddingTop: '10px', display: 'flex', justifyContent: 'center'}}>
 				<a  target="_blank" style={{
-						color: "inherit",
+						color: "white",
 						textDecoration: "inherit"
 					}} href="https://www.facebook.com/groups/bellefu">
 					<IconContext.Provider value={{ color: "white", size: '20px', style: {paddingBottom: '5px'}}}>

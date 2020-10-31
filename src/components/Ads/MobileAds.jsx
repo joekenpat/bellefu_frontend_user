@@ -143,7 +143,7 @@ return (
             </Col>
             <Col xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
                 <div className="py-1">
-                     <a href={`https://wa.me/${props.data.user.phone}`}>
+                     <a href={`https://wa.me/${props.data.phone}?text=Hi%2C+I+got+your+contact+from+bellefu`}>
                         <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                             <FaWhatsapp className="cursor"/>
                         </IconContext.Provider>
@@ -153,7 +153,7 @@ return (
             </Col>
             <Col xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', borderRight: '1px solid gray'}}>
                 <div className="py-1">
-                    <a href={`tel:${props.data.user.phone}`}>
+                    <a href={`tel:${props.data.phone}`}>
                         <IconContext.Provider value={{ color: "#76BA1B", size: '15px', style: {textDecoration: 'none'}}}>
                             <FaMobileAlt className="cursor"/>
                         </IconContext.Provider>

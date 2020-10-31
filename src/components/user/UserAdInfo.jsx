@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Image, Col, Accordion, Button } from "react-bootstrap";
+import { Card, Row, Image, Col, Accordion, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import avater_placeholder from "../images/avater_placeholder.jpg";
 import { IoIosTime, IoMdMailOpen, IoIosChatbubbles } from "react-icons/io";
 import { AiFillPhone } from "react-icons/ai";
 import Moment from "react-moment";
-import { FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
+import { FaCheckCircle, FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 const {Translate} = require('@google-cloud/translate').v2;
 
+
+const renderTooltip = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+	  Phone Verified
+	</Tooltip>
+  );
+  const renderTooltip1 = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+	  ID Verified
+	</Tooltip>
+  );
+  const renderTooltip2 = (props) => (
+	<Tooltip id="button-tooltip" {...props}>
+	  KYC Verified
+	</Tooltip>
+  );
 
 export default function UserAdInfo(props) {
 	const [userprofile, setProfileState] = useState(props);
@@ -46,7 +62,9 @@ export default function UserAdInfo(props) {
 	  
 	useEffect( () => {
 		trans()
-    }, [props.id])
+	}, [props.id])
+	
+	
 	return (
 		<div>
 			<Card className="border-0 ">
@@ -82,6 +100,19 @@ export default function UserAdInfo(props) {
 								<b className="ml-1">
 									{userprofile.user && userprofile.user.profile.last_name}
 								</b>
+								{userprofile.user && (
+									<OverlayTrigger
+									placement="right"
+									
+									delay={{ show: 250, hide: 400 }}
+									overlay={userprofile.user && userprofile.user.verification_level === 'phone' ? renderTooltip : userprofile.user.verification_level === 'id' ? renderTooltip1 : renderTooltip2}
+								>
+
+									<IconContext.Provider value={{ color: userprofile.user && userprofile.user.verification_level === 'phone' ? 'ash' : userprofile.user.verification_level === 'id' ? 'orange' : '#76BA1B', size: '20px', style: {textDecoration: 'none', marginLeft: '5px', display: userprofile.user && userprofile.user.verification_level === 'none' ? 'none' : 'inline'}}}>
+										<FaCheckCircle className="cursor" />
+									</IconContext.Provider>
+								</OverlayTrigger>
+								)}
 							</p>
 						</Col>
 						<Col
@@ -104,7 +135,7 @@ export default function UserAdInfo(props) {
 								<div style={{paddingLeft: '80px'}} className="mt-2">
 									<AiFillPhone style={styles.icon} className="mr-3" />{" "}
 									{!reveal && (
-										<span className="cursor" onClick={() => setReveal(true)} style={styles.text}>{text[1]}</span>
+										<span className="cursor" onClick={() => setReveal(true)} style={{padding: '5px', border: '1px solid #ffa500', fontWeight: '550'}}>{text[1]}</span>
 									)}
 									{reveal && (
 										<span style={styles.text}>
@@ -132,16 +163,15 @@ export default function UserAdInfo(props) {
 											<IoIosChatbubbles style={styles.icon} className="mr-3" />{" "}
 										
 											<span style={styles.text}>
-												<a href="/messenger">
 												<span style={{color: 'black', }}>{text[3]}</span>
-												</a>
+												
 											</span>
 										
 										</Accordion.Toggle>
 										<Accordion.Collapse eventKey="0">
 										<div className="pl-3">
 											<div className="mt-2">
-												<a href={`https://wa.me/${userprofile.user && userprofile.user.phone}`}>
+												<a href={`https://wa.me/${userprofile.phone && userprofile.phone}?text=Hi%2C+I+got+your+contact+from+bellefu`}>
 													<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
 														<FaWhatsapp className="cursor"/>
 													</IconContext.Provider>
@@ -149,7 +179,7 @@ export default function UserAdInfo(props) {
 												</a>
 											</div>
 											<div className="mt-1 d-block d-lg-none">
-											<a href={`tel:${userprofile.user && userprofile.user.phone}`}>
+											<a href={`tel:${userprofile.phone && userprofile.phone}`}>
 												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
 													<FaMobileAlt className="cursor"/>
 												</IconContext.Provider>

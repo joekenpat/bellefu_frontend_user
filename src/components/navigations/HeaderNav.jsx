@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner, Dropdown } from "react-bootstrap";
+import { Navbar, Nav, Button, Tooltip, OverlayTrigger, Modal, Row, Col, Container, Spinner, Dropdown, InputGroup, FormControl } from "react-bootstrap";
 import SideNav from "./SideNav";
 import { Link } from "react-router-dom";
 import Cookie from "js-cookie";
@@ -10,6 +10,7 @@ import {updateUserCountry, languagee} from '../../redux/actions/userCountry'
 import { IconContext } from "react-icons/lib";
 import { FaUsers } from "react-icons/fa";
 import Axios from "axios";
+import MiniSearch from 'minisearch'
 const {Translate} = require('@google-cloud/translate').v2;
 
 
@@ -44,7 +45,8 @@ export default function HeaderNav(props) {
 	const dispatch = useDispatch();
 	const [loadingCountry, setLoadingCountry] = useState(false)
 	const country = useSelector((state) => state.userCountry);
-	
+	const [altState, setAltState] = useState([])
+    const [searchedState, setSearchedState] = useState('')
 
 	const [show, setShow] = useState(false)
 	const [countries, setCountries] = useState([])
@@ -73,7 +75,17 @@ export default function HeaderNav(props) {
 		'Select Your Country'
 	])
 
-	
+	let miniSearch = new MiniSearch({
+        fields: ['name'],
+        storeFields: ['name', 'iso2', 'slug', 'code'],
+        searchOptions: {
+            boost: { name: 2 },
+            fuzzy: 0.2,
+            prefix: true
+          }
+	  })
+	  
+	  miniSearch.addAll(countries)
   
 
 	const translatee = (lang) => {
@@ -136,10 +148,26 @@ export default function HeaderNav(props) {
 		});
 	}
 
+	useEffect(() => {
+        if(searchedState.length === 0){
+            setAltState([])
+        } else {
+            
+        let results = miniSearch.search(searchedState)
+        setAltState(results)
+            
+        }
+	}, [searchedState])
+	
+	const onChange = (e) => {
+        setSearchedState(e.target.value)
+    }
+
 	const fetchCountries = () => {
 		fetch(url)
 		.then((res) => res.json())
 		.then((data) => {
+			
 			setCountries(data.countries)
 		}).catch((e) => console.log('this is error: ', e))
 	}
@@ -266,21 +294,43 @@ export default function HeaderNav(props) {
 			<Modal size="lg" show={show} onHide={() => setShow(false)} aria-labelledby="select-country-modal" centered>
 				<Modal.Header closeButton>
 					<Modal.Title className="text" id="select-country-modal">
-						<Container>{text[8]}</Container>
+						<Container>
+							<div className="mb-2">
+							{text[8]}
+								
+							</div>
+							<InputGroup>
+							<FormControl onChange={onChange} value={searchedState} name="searchedState" id="search-state" placeholder="search country" />
+						</InputGroup>
+						</Container>
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Container>
-						<Row  style={{height: '300px', overflowY: 'scroll'}}>
-							{countries.map((data, index) => (
-								<Col key={index} style={{marginTop: '10px'}} className="cursor country" sm={4}>
-									<div onClick={() => onFlagClick(data.iso2, data.name)}>
-										<Flag className="flag" code={data.iso2} /> {data.name}
-									</div>
-									
-								</Col>
-							))}
-						</Row>
+								{altState.length > 0 ? (
+									<Row style={{height: '300px', overflowY: 'scroll'}}>
+										{altState.map((data, index) => (
+											<Col key={index} style={{marginTop: '10px'}} className="cursor country" sm={4}>
+												<div onClick={() => onFlagClick(data.iso2, data.name)}>
+													<Flag className="flag" code={data.iso2} /> {data.name}
+												</div>
+												
+											</Col>
+					 					))}
+									</Row>
+								) : (
+									<Row style={{height: '300px', overflowY: 'scroll'}}>
+										{countries.map((data, index) => (
+											<Col key={index} style={{marginTop: '10px'}} className="cursor country" sm={4}>
+												<div onClick={() => onFlagClick(data.iso2, data.name)}>
+													<Flag className="flag" code={data.iso2} /> {data.name}
+												</div>
+												
+											</Col>
+					 					))}
+									</Row>
+								)
+							}
 					</Container>
 				</Modal.Body>
 			</Modal>

@@ -27,6 +27,7 @@ export default function Verification(props) {
 	const [requestLoading, setRequestLoading] = useState(false)
 	const [showCodeInput, setShowCodeInput] = useState(false)
 	const [pendingID, setPendingID] = useState(false)
+	const [pendingKYC, setPendingKYC] = useState(false)
 	
 	let url = 'https://dev.bellefu.com/api/user/profile/details';
 
@@ -160,7 +161,6 @@ export default function Verification(props) {
 			}
 		})
 		.then(res => {
-			console.log(res)
 			setLoading(false)
 			setPendingID(true)
 			setError('');
@@ -177,7 +177,7 @@ export default function Verification(props) {
 		let formData = new FormData()
 		formData.append('id_images', idImage)
 		Axios
-		.post('https://dev.bellefu.com/api/user/verification/request/id', formData, {
+		.get('https://dev.bellefu.com/api/user/verification/request/kyc', {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 				'Content-Type': 'application/json',
@@ -185,10 +185,10 @@ export default function Verification(props) {
 			}
 		})
 		.then(res => {
-			console.log(res)
 			setLoading(false)
 			setHeaderTitle('KYC Verification')
 			setComponentToShow('kyc')
+			setPendingKYC(true)
 			setError('');
 		})
 		.catch(error => {
@@ -283,9 +283,15 @@ export default function Verification(props) {
 					</div>
 					{/* for KYC verification */}
 					<div style={{alignSelf: 'center', display: componentToShow === 'kyc' && !pendingID ? 'block' : 'none'}} className="mt-3">
-						<Button onClick={onKycSubmit} className="callToAction" size="md">
-							Request KYC
-						</Button>
+						{pendingKYC ? (
+							<Alert variant='primary'>
+							Your KYC request has been received.
+						</Alert>
+						) : (
+							<Button onClick={onKycSubmit} className="callToAction" size="md">
+								Request KYC
+							</Button>
+						)}
 					</div>
 				</div>
                 </Card.Body>
