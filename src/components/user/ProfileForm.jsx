@@ -12,8 +12,7 @@ import Axios from "axios";
 import { useEffect } from "react";
 import SnackBar from "../SnackBar/SnackBar";
 import Preloader from "./Preloader";
-const {Translate} = require('@google-cloud/translate').v2;
-
+const { Translate } = require("@google-cloud/translate").v2;
 
 export default function ProfileForm(props) {
   const [loading, setLoading] = useState(false);
@@ -21,6 +20,11 @@ export default function ProfileForm(props) {
     view: false,
     type: "",
     message: "",
+  });
+  const [drop, setDrop] = useState({
+    country: [],
+    state: [],
+    city: [],
   });
   const userSignin = useSelector((state) => state.userSignin);
   const { user } = userSignin;
@@ -30,7 +34,6 @@ export default function ProfileForm(props) {
     first_name: "",
     last_name: "",
     phone: "",
-    city_code: "",
     admin1_code: "",
     admin2_code: "",
     country_code: "",
@@ -38,61 +41,61 @@ export default function ProfileForm(props) {
   });
 
   const [text, setText] = useState([
-		"My Details",
-		'First Name',
-		'Last Name',
-    'Phone Number',
-    'do not add country code',
-		'State',
-		'Local Government',
-		'City',
-		'Country',
-		'Address',
-		'About Me',
-    'Upload Profile Photo',
-    'Select An Image',
-    'Notify me by e-mail when a ad gets posted that is relevant to my choice',
-    'Subscribe Now',
-    'Update'
-	])
-	const [originalText, setOriginalText] = useState([
-		"My Details",
-		'First Name',
-		'Last Name',
-    'Phone Number',
-    'do not add country code',
-		'State',
-		'Local Government',
-		'City',
-		'Country',
-		'Address',
-		'About Me',
-    'Upload Profile Photo',
-    'Select An Image',
-    'Notify me by e-mail when a ad gets posted that is relevant to my choice',
-    'Subscribe Now',
-    'Update'
-	])
+    "My Details",
+    "First Name",
+    "Last Name",
+    "Phone Number",
+    "do not add country code",
+    "State",
+    "Local Government",
+    "City",
+    "Country",
+    "Address",
+    "About Me",
+    "Upload Profile Photo",
+    "Select An Image",
+    "Notify me by e-mail when a ad gets posted that is relevant to my choice",
+    "Subscribe Now",
+    "Update",
+  ]);
+  const [originalText, setOriginalText] = useState([
+    "My Details",
+    "First Name",
+    "Last Name",
+    "Phone Number",
+    "do not add country code",
+    "State",
+    "Local Government",
+    "City",
+    "Country",
+    "Address",
+    "About Me",
+    "Upload Profile Photo",
+    "Select An Image",
+    "Notify me by e-mail when a ad gets posted that is relevant to my choice",
+    "Subscribe Now",
+    "Update",
+  ]);
 
-	const trans = async() => {
-		const translate = await new Translate({key: props.id})
-		if(props.language === 'en'){
-			setText(originalText)
-		} else {
+  const trans = async () => {
+    const translate = await new Translate({ key: props.id });
+    if (props.language === "en") {
+      setText(originalText);
+    } else {
+      translate
+        .translate(text, props.language)
+        .then((res) => {
+          setText(res[0]);
+        })
+        .catch(() => {
+          setText(originalText);
+        });
+    }
+  };
 
-			translate.translate(text, props.language)
-				.then((res) => {
-					setText(res[0])
-				
-			}).catch(() => {
-				setText(originalText)
-				})
-		}
-	}
-	  
-	useEffect( () => {
-		trans()
-	}, [props.id, props.language])
+  useEffect(() => {
+    trans();
+  }, [props.id, props.language]);
 
   useEffect(() => {
     setUpdateData({
@@ -115,6 +118,34 @@ export default function ProfileForm(props) {
       [name]: value,
     }));
   };
+
+  //Country Effect
+  useEffect(() => {
+    const url = "https://dev.bellefu.com/api/country/list";
+    setUpdateData((prev) => ({ ...prev, admin2_code: "", admin1_code: "" }));
+
+    Axios.get(url).then((res) => {
+      setDrop((prev) => ({ ...prev, country: res.data.countries }));
+    });
+  }, []);
+  //State Effect
+  useEffect(() => {
+    const url = `https://dev.bellefu.com/api/${updateData.country_code}/state/list`;
+    setUpdateData((prev) => ({ ...prev, admin2_code: "" }));
+
+    Axios.get(url).then((res) => {
+      setDrop((prev) => ({ ...prev, state: res.data.states }));
+    });
+  }, [updateData.country_code]);
+  // City Effect
+  useEffect(() => {
+    const url = `https://dev.bellefu.com/api/${updateData.country_code}/${updateData.admin1_code}/lga/list`;
+
+    Axios.get(url).then((res) => {
+      setDrop((prev) => ({ ...prev, city: res.data.lgas }));
+    });
+  }, [updateData.admin1_code]);
+
   const handleSubmmit = (event) => {
     event.preventDefault();
     setLoading(true);
@@ -175,13 +206,12 @@ export default function ProfileForm(props) {
       });
   };
 
-
   return (
     <div>
       {loading && (
-        <div style={{height: '100vh', width: '100%'}}>
-        <Preloader />
-      </div>
+        <div style={{ height: "100vh", width: "100%" }}>
+          <Preloader />
+        </div>
       )}
       {snack.view && <SnackBar type={snack.type}>{snack.message}</SnackBar>}
       <Form onSubmit={handleSubmmit}>
@@ -194,10 +224,7 @@ export default function ProfileForm(props) {
             <Row>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>{text[1]}</Form.Label>
-                <div
-                  class="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
+                <div class="input-group mb-3 shadow-none" style={{ height: "50px" }}>
                   <div className="input-group-prepend">
                     <span class="input-group-text">
                       <AiOutlineUser />
@@ -214,10 +241,7 @@ export default function ProfileForm(props) {
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>{text[2]}</Form.Label>
-                <div
-                  class="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
+                <div class="input-group mb-3 shadow-none" style={{ height: "50px" }}>
                   <div className="input-group-prepend">
                     <span class="input-group-text">
                       <AiOutlineUser />
@@ -234,11 +258,10 @@ export default function ProfileForm(props) {
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>{text[3]} ({text[4]})</Form.Label>
-                <div
-                  className="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
+                <Form.Label style={styles.label}>
+                  {text[3]} ({text[4]})
+                </Form.Label>
+                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <AiOutlinePhone />
@@ -254,72 +277,10 @@ export default function ProfileForm(props) {
                   />
                 </div>
               </Col>
-              <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>{text[5]}</Form.Label>
-                <div
-                  className="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"></span>
-                  </div>
 
-                  <Form.Control
-                    placeholder={text[5]}
-                    value={updateData.admin1_code}
-                    name="admin1_code"
-                    onChange={handleOnChange}
-                    style={{ height: "50px", boxShadow: "none" }}
-                  />
-                </div>
-              </Col>
-              <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>{text[6]}</Form.Label>
-                <div
-                  className="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"></span>
-                  </div>
-
-                  <Form.Control
-                    placeholder={text[6]}
-                    value={updateData.admin2_code}
-                    name="admin2_code"
-                    onChange={handleOnChange}
-                    style={{ height: "50px", boxShadow: "none" }}
-                  />
-                </div>
-              </Col>
-
-              <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                <Form.Label style={styles.label}>{text[7]}</Form.Label>
-                <div
-                  className="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <GiWorld />
-                    </span>
-                  </div>
-
-                  <Form.Control
-                    placeholder={text[7]}
-                    value={updateData.city_code}
-                    name="city_code"
-                    onChange={handleOnChange}
-                    style={{ height: "50px", boxShadow: "none" }}
-                  />
-                </div>
-              </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                 <Form.Label style={styles.label}>{text[8]}</Form.Label>
-                <div
-                  className="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
+                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <GiWorld />
@@ -327,20 +288,83 @@ export default function ProfileForm(props) {
                   </div>
 
                   <Form.Control
+                    as="select"
                     placeholder={text[8]}
                     value={updateData.country_code}
                     name="country_code"
                     onChange={handleOnChange}
                     style={{ height: "50px", boxShadow: "none" }}
-                  />
+                  >
+                    <option selected disabled value={null}>
+                      Select Your Country
+                    </option>
+                    {drop.country.map((item, key) => (
+                      <option key={key} value={item.iso2}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </div>
+              </Col>
+
+              <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Form.Label style={styles.label}>{text[5]}</Form.Label>
+                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <GiWorld />
+                    </span>
+                  </div>
+
+                  <Form.Control
+                    as="select"
+                    placeholder={text[7]}
+                    value={updateData.admin1_code}
+                    name="admin1_code"
+                    onChange={handleOnChange}
+                    style={{ height: "50px", boxShadow: "none" }}
+                  >
+                    <option selected disabled value={null}>
+                      Select Your State
+                    </option>
+                    {drop.state.map((item, key) => (
+                      <option key={key} value={item.code}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Form.Control>
                 </div>
               </Col>
               <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Form.Label style={styles.label}>{text[7]}</Form.Label>
+                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <GiWorld />
+                    </span>
+                  </div>
+
+                  <Form.Control
+                    as="select"
+                    value={updateData.admin2_code}
+                    name="admin2_code"
+                    onChange={handleOnChange}
+                    style={{ height: "50px", boxShadow: "none" }}
+                  >
+                    <option selected disabled value={null}>
+                      Select Your City
+                    </option>
+                    {drop.city.map((item, key) => (
+                      <option key={key} value={item.code}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </div>
+              </Col>
+              <Col xs={12} sm={12}>
                 <Form.Label style={styles.label}>{text[9]}</Form.Label>
-                <div
-                  className="input-group mb-3 shadow-none"
-                  style={{ height: "50px" }}
-                >
+                <div className="input-group mb-3 shadow-none" style={{ height: "50px" }}>
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <FaRegAddressCard />
@@ -358,17 +382,11 @@ export default function ProfileForm(props) {
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Form.Label style={styles.label}>{text[10]}</Form.Label>
-                <ReactQuill
-                  value={bio}
-                  onChange={setBio}
-                  name="bio"
-                  row="3"
-                  style={{ height: "300px", marginBottom: "100px" }}
-                />
+                <ReactQuill value={bio} onChange={setBio} name="bio" row="3" style={{ height: "300px", marginBottom: "100px" }} />
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Form.Label style={styles.label} className="mr-3">
-                {text[11]}
+                  {text[11]}
                 </Form.Label>
                 <div uk-form-custom="target: true">
                   <label
@@ -394,10 +412,7 @@ export default function ProfileForm(props) {
                     />
                     {avatar === "" || avatar === null ? (
                       <>
-                        {text[12]}{" "}
-                        <AiOutlineUpload
-                          style={{ fontSize: 24, marginLeft: 10 }}
-                        />
+                        {text[12]} <AiOutlineUpload style={{ fontSize: 24, marginLeft: 10 }} />
                       </>
                     ) : (
                       avatar.name
@@ -416,17 +431,10 @@ export default function ProfileForm(props) {
                   <Card.Header style={{ backgroundColor: "white" }}>
                     <Row>
                       <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <p style={{ opacity: "0.7" }}>
-                        {text[13]}
-                        </p>
+                        <p style={{ opacity: "0.7" }}>{text[13]}</p>
                       </Col>
                       <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <Accordion.Toggle
-                          style={styles.btn}
-                          as={Button}
-                          variant="outline-warning"
-                          eventKey="0"
-                        >
+                        <Accordion.Toggle style={styles.btn} as={Button} variant="outline-warning" eventKey="0">
                           {text[14]}
                         </Accordion.Toggle>
                       </Col>
@@ -434,22 +442,12 @@ export default function ProfileForm(props) {
                   </Card.Header>
                   <Accordion.Collapse eventKey="0">
                     <Card.Body>
-                      <Form.Check
-                        type="checkbox"
-                        id="autoSizingCheck2"
-                        label="Agro tools"
-                        style={styles.check}
-                      />
+                      <Form.Check type="checkbox" id="autoSizingCheck2" label="Agro tools" style={styles.check} />
                     </Card.Body>
                   </Accordion.Collapse>
                 </Card>
               </Accordion>
-              <Button
-                type="submit"
-                style={styles.btnUpdate}
-                variant="warning"
-                size="sm"
-              >
+              <Button type="submit" style={styles.btnUpdate} variant="warning" size="sm">
                 {text[15]}
               </Button>
             </Card.Body>
