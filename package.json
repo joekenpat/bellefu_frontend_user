@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.3",
+    "emailjs-com": "^2.6.3",
     "js-cookie": "^2.2.1",
     "json-form-data": "^1.7.2",
     "minisearch": "^3.0.1",

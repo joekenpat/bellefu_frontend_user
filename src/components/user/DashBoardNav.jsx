@@ -133,12 +133,12 @@ export default function DashBoardNav(props) {
                     {text[9]}
                     </h6>
                     <ul style={styles.list}>
-                        <Link to="/messages" style={{color: 'inherit', textDecoration: 'inherit'}}>
+                        <a href="/messenger" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <AiOutlineMessage className="mr-3" style={styles.icon} />
                                 {text[10]}
                             </li>
-                        </Link>
+                        </a>
                         <Link to="/verification" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                                 <GoVerified className="mr-3" style={styles.icon} />

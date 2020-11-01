@@ -615,7 +615,6 @@ const loadSubCategory = () => {
 										loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
 										endMessage={
 										<p style={{ textAlign: 'center' }}>
-											<b>Yay! You have seen it all</b>
 										</p>
 										}
 										>
@@ -659,7 +658,6 @@ const loadSubCategory = () => {
 								loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
 								endMessage={
 								<p style={{ textAlign: 'center' }}>
-									<b>Yay! You have seen it all</b>
 								</p>
 								}
 								>

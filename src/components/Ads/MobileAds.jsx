@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
 import Axios from "axios";
+import Quotation from "../slideshow/Quotation";
 const {Translate} = require('@google-cloud/translate').v2;
 
 
@@ -165,6 +166,11 @@ return (
         </Row>
     </div>
 </div>
+        {props.index % 15 === 0 && (
+                <div className="mt-3 d-block d-lg-none">
+                    <Quotation />
+                </div>
+            )}
     </Container>
 )
 }

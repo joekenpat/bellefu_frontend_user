@@ -21,6 +21,7 @@ import MobileAds from "./MobileAds";
 
 import { useEffect } from 'react';
 import Axios from 'axios';
+import Quotation from '../slideshow/Quotation';
 const {Translate} = require('@google-cloud/translate').v2;
 
 const PremiumAdsItem = (props) => {
@@ -142,7 +143,8 @@ const PremiumAdsItem = (props) => {
             <div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
                 <Price styles={props.styles} data={props.data} {...props} convertTooltip={props.convertTooltip} />
             </div>
-            <MobileAds id={props.id} text={text}  {...props} data={props.data} convertTooltip={props.convertTooltip} />
+            <MobileAds index={props.index} id={props.id} text={text}  {...props} data={props.data} convertTooltip={props.convertTooltip} />
+            
         </Col>
     )
 }

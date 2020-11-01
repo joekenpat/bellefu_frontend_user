@@ -6,6 +6,7 @@ import { AiFillPhone } from "react-icons/ai";
 import Moment from "react-moment";
 import { FaCheckCircle, FaMobileAlt, FaRegCommentDots, FaWhatsapp } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
+import { GoVerified } from "react-icons/go";
 const {Translate} = require('@google-cloud/translate').v2;
 
 
@@ -30,13 +31,13 @@ export default function UserAdInfo(props) {
 	const [reveal, setReveal] = useState(false)
 	const [text, setText] = useState([
         'Advertiser Info',
-		'Reveal Phone Number',
+		'Reveal Contact',
 		'Reply By Mail',
 		'Message Seller',
     ])
     const [originalText, setOriginalText] = useState([
         'Advertiser Info',
-		'Reveal Phone Number',
+		'Reveal Contact',
 		'Reply By Mail',
 		'Message Seller',
     ])
@@ -107,10 +108,7 @@ export default function UserAdInfo(props) {
 									delay={{ show: 250, hide: 400 }}
 									overlay={userprofile.user && userprofile.user.verification_level === 'phone' ? renderTooltip : userprofile.user.verification_level === 'id' ? renderTooltip1 : renderTooltip2}
 								>
-
-									<IconContext.Provider value={{ color: userprofile.user && userprofile.user.verification_level === 'phone' ? 'ash' : userprofile.user.verification_level === 'id' ? 'orange' : '#76BA1B', size: '20px', style: {textDecoration: 'none', marginLeft: '5px', display: userprofile.user && userprofile.user.verification_level === 'none' ? 'none' : 'inline'}}}>
-										<FaCheckCircle className="cursor" />
-									</IconContext.Provider>
+									<GoVerified style={{marginLeft: '5px', fontSize: '20px', color: userprofile.user && userprofile.user.verification_level === 'phone' ? '#2a2b2b' : userprofile.user.verification_level === 'id' ? 'orange' : '#76BA1B', display: userprofile.user && userprofile.user.verification_level === 'none' ? 'none' : 'inline', }} className="mr-3 cursor" />
 								</OverlayTrigger>
 								)}
 							</p>
@@ -135,12 +133,12 @@ export default function UserAdInfo(props) {
 								<div style={{paddingLeft: '80px'}} className="mt-2">
 									<AiFillPhone style={styles.icon} className="mr-3" />{" "}
 									{!reveal && (
-										<span className="cursor" onClick={() => setReveal(true)} style={{padding: '5px', border: '1px solid #ffa500', fontWeight: '550'}}>{text[1]}</span>
+										<span className="cursor" onClick={() => setReveal(true)} style={{padding: '3px', border: '2px solid #76BA1B', color: '#76BA1B', fontSize: '13px'}}>{text[1]}</span>
 									)}
 									{reveal && (
 										<span style={styles.text}>
 										<a href={`tel:${userprofile.user.phone}`}>
-											<b>{userprofile.user && userprofile.user.phone}</b>
+											<span>{userprofile.user && userprofile.user.phone}</span>
 										</a>
 									</span>
 									)}

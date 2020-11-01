@@ -90,7 +90,7 @@ export default function Verification(props) {
 			setShowNumber(true)
 			setRequestLoading(false)
 			setShowCodeInput(true)
-			setSeconds(60)
+			setSeconds(80)
 		})
 		.catch(error => {
 			console.log('this is error: ',error)

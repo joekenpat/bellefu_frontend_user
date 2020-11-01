@@ -56,8 +56,12 @@ export default function LandingPageItem(props) {
 	return (
 		<div>
 			<HeaderNav />
+			<div className="d-none d-lg-block">
 			<DesktopSlideShow id={id} country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
+			</div>
+			<div className="d-block d-lg-none">
 			<MobileSlideShow id={id} country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
+			</div>
 			<Container style={{marginTop: '30px'}}>
 				<Row>
 					<Col xs={12} md={2}>
