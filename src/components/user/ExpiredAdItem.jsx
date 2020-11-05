@@ -23,7 +23,7 @@ const ExpiredAdItem = (props) => {
   
   const onDelete = (slug) => {
     props.setLoadingg(true)
-    Axios.get(`https://dev.bellefu.com/api/user/product/delete/${slug}`, {
+    Axios.get(`https://bellefu.com/api/user/product/delete/${slug}`, {
         headers: {
             Authorization: `Bearer ${props.user.token}`,
             "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const ExpiredAdItem = (props) => {
     return (
         <tr>
             <td className="uk-text-center">
-                <Image src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} style={props.styles.image} />
+                <Image src={`https://bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} style={props.styles.image} />
             </td>
             <td>
                 <p style={props.styles.titel}>

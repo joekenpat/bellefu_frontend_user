@@ -32,7 +32,7 @@ export default function MessageChat() {
                                     </p>
                                 </div>
                                 <div className="ml-0">
-                                    <img class="uk-border-circle" width="40" height="40" src="https://dev.bellefu.com/images/misc/pic.png" />
+                                    <img class="uk-border-circle" width="40" height="40" src="https://bellefu.com/images/misc/pic.png" />
                                 </div>
                             </div>
                         </li>
@@ -50,7 +50,7 @@ export default function MessageChat() {
                                     <p> Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 </div>
                                 <div className="d-flex flex-row-reverse">
-                                    <img class="uk-border-circle" width="40" height="40" src="https://dev.bellefu.com/images/misc/pic.png" />
+                                    <img class="uk-border-circle" width="40" height="40" src="https://bellefu.com/images/misc/pic.png" />
                                 </div>
                             </div>
                         </li>
@@ -68,7 +68,7 @@ export default function MessageChat() {
                                     <p> ok na i dy code the app so</p>
                                 </div>
                                 <div className="ml-0">
-                                    <img class="uk-border-circle" width="40" height="40" src="https://dev.bellefu.com/images/misc/pic.png" />
+                                    <img class="uk-border-circle" width="40" height="40" src="https://bellefu.com/images/misc/pic.png" />
                                 </div>
                             </div>
                         </li>
@@ -85,7 +85,7 @@ export default function MessageChat() {
                                     <p> ok na i dy code the app so</p>
                                 </div>
                                 <div className="ml-0">
-                                    <img class="uk-border-circle" width="40" height="40" src="https://dev.bellefu.com/images/misc/pic.png" />
+                                    <img class="uk-border-circle" width="40" height="40" src="https://bellefu.com/images/misc/pic.png" />
                                 </div>
                             </div>
                         </li>
@@ -102,7 +102,7 @@ export default function MessageChat() {
                                     <p> ok na i dy code the app so</p>
                                 </div>
                                 <div className="ml-0">
-                                    <img class="uk-border-circle" width="40" height="40" src="https://dev.bellefu.com/images/misc/pic.png" />
+                                    <img class="uk-border-circle" width="40" height="40" src="https://bellefu.com/images/misc/pic.png" />
                                 </div>
                             </div>
                         </li>

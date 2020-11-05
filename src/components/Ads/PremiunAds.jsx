@@ -32,7 +32,7 @@ export default function PremiunAds(props) {
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
-	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${props.country.country_slug}`;
+	let apiUrl = `https://bellefu.com/api/product/list?country=${props.country.country_slug}`;
 
 	
 	
@@ -81,8 +81,8 @@ useEffect(() => {
 	return (
 		<div>
 			<Row>
-			{ productsData.map((data) => (
-				<PremiumAdsItem id={props.id} language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
+			{ productsData.map((data, index) => (
+				<PremiumAdsItem index={index} id={props.id} language={language} convertTooltip={convertTooltip} user={props.user} key={data.slug} data={data} styles={styles} />
 									))
 							}
 			</Row>
@@ -94,7 +94,7 @@ useEffect(() => {
 				loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
 				endMessage={
 				<p style={{ textAlign: 'center' }}>
-					<b>Yay! You have seen it all</b>
+					<b></b>
 				</p>
 				}
 				>

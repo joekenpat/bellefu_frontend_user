@@ -17,7 +17,7 @@ import Axios from 'axios';
 const FavouriteItem = (props) => {
     const onUnlike = (slug) => {
         props.setLoadingg(true)
-      Axios.get(`https://dev.bellefu.com/api/user/product/favourite/remove/${slug}`, {
+      Axios.get(`https://bellefu.com/api/user/product/favourite/remove/${slug}`, {
           headers: {
               Authorization: `Bearer ${props.user.token}`,
               "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const FavouriteItem = (props) => {
     return (
         <tr>
             <td className="uk-text-center">
-                <Image src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} style={props.styles.image} />
+                <Image src={`https://bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} style={props.styles.image} />
             </td>
             <td>
                 <p style={props.styles.titel}>{props.data.title}</p>

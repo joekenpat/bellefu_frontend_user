@@ -38,7 +38,7 @@ const MobileCategoryItem = (props) => {
                     style={{ color: "inherit", textDecoration: "inherit" }}>
                     <Card.Body className="text-center">
                         <Image
-                            src={`https://dev.bellefu.com/images/categories/${props.data.image}`}
+                            src={`https://bellefu.com/images/categories/${props.data.image}`}
                             style={{ height: "40px" }}
                         />
                         <Card.Text style={{ fontSize: "0.6em" }} className="mt-2">

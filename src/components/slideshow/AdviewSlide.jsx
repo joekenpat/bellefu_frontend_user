@@ -40,10 +40,10 @@ export default function AdviewSlide(props) {
 									<li>
 										<a
 											class="uk-cover-container uk-inline"
-											href={`https://dev.bellefu.com/images/products/${props.slug}/${data}`}
+											href={`https://bellefu.com/images/products/${props.slug}/${data}`}
 											data-caption="Caption 1">
 											<img
-												src={`https://dev.bellefu.com/images/products/${props.slug}/${data}`}
+												src={`https://bellefu.com/images/products/${props.slug}/${data}`}
 												alt=""
 												uk-cover
 											/>

@@ -19,7 +19,7 @@ const Subcategory = (props) => {
 
     const loadSubCategory = () => {
 		Axios
-			.get(`https://dev.bellefu.com/api/subcategory/listfor/${props.match.params.category_id}`, {
+			.get(`https://bellefu.com/api/subcategory/listfor/${props.match.params.category_id}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Accept: "application/json"
@@ -35,7 +35,7 @@ const Subcategory = (props) => {
     };
 
     const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})

@@ -20,7 +20,7 @@ export const setLanguage = (language) => ({
 export const fetchCountry = () => {
     return (dispatch) => {
         try {
-            fetch('https://dev.bellefu.com/api/location/info')
+            fetch('https://bellefu.com/api/location/info')
             .then((res) => res.json())
             .then((data) => {
                 dispatch(loadCountry(data.location_info))

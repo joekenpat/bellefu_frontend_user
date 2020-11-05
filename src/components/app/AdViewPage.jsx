@@ -19,10 +19,10 @@ export default function AdViewPage(props) {
 	const [productsDataDetail, setproductsDataDetail] = useState({});
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 
-	let url = "https://dev.bellefu.com/api/product/show";
+	let url = "https://bellefu.com/api/product/show";
 
 	const load = async () => {
-		await axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})

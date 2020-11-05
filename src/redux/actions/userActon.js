@@ -25,7 +25,7 @@ export const signin = (identifier, password) => async (dispatch) => {
 	dispatch({ type: USER_SIGNIN_REQUEST, payload: { identifier, password } });
 	try {
 		const { data } = await axios.post(
-			"https://dev.bellefu.com/api/auth/login/challenge/default",
+			"https://bellefu.com/api/auth/login/challenge/default",
 			{
 				identifier,
 				password
@@ -65,7 +65,7 @@ export const signup = (
 	});
 	try {
 		const { data } = await axios.post(
-			"https://dev.bellefu.com/api/auth/register",
+			"https://bellefu.com/api/auth/register",
 			{
 				first_name,
 				last_name,

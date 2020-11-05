@@ -21,6 +21,7 @@ import MobileAds from "./MobileAds";
 
 import { useEffect } from 'react';
 import Axios from 'axios';
+import Quotation from '../slideshow/Quotation';
 const {Translate} = require('@google-cloud/translate').v2;
 
 const PremiumAdsItem = (props) => {
@@ -79,7 +80,7 @@ const PremiumAdsItem = (props) => {
                 <Card.Img
                     style={props.styles.image}
                     variant="top"
-                    src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`}
+                    src={`https://bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`}
                 />
                 </Link>
                 <Card.ImgOverlay style={{ marginTop: "-15px" }}>
@@ -124,7 +125,7 @@ const PremiumAdsItem = (props) => {
                             color: "inherit",
                             textDecoration: "inherit"
                         }}>
-                        <p className="product-title">{text[0]}</p>
+                        <p className="product-title" style={{textTransform: 'capitalize'}}>{text[0]}</p>
                         <div style={{display: 'flex', justifyContent: 'flex-start'}}>
                             <div>
                             <IconContext.Provider value={{ color: "gray", size: '10px'}}>
@@ -142,7 +143,8 @@ const PremiumAdsItem = (props) => {
             <div className="d-none d-md-block" style={{backgroundColor: 'white', paddingBottom: '10px'}}>
                 <Price styles={props.styles} data={props.data} {...props} convertTooltip={props.convertTooltip} />
             </div>
-            <MobileAds id={props.id} text={text}  {...props} data={props.data} convertTooltip={props.convertTooltip} />
+            <MobileAds index={props.index} id={props.id} text={text}  {...props} data={props.data} convertTooltip={props.convertTooltip} />
+            
         </Col>
     )
 }

@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
 import Axios from "axios";
+import Quotation from "../slideshow/Quotation";
 const {Translate} = require('@google-cloud/translate').v2;
 
 
@@ -76,7 +77,7 @@ return (
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-                    <img width="100%" height="100%" className="image-height" src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
+                    <img width="100%" height="100%" className="image-height" src={`https://bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`} />
                 </Link>
             </Col>
             <Col xs={7}>
@@ -89,7 +90,7 @@ return (
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-                        <div className="" style={{fontWeight: '500', lineHeight: '1', fontSize: '13px'}}>{props.text ? props.text[0].substring(0, 48) : text[0].substring(0, 48)}</div>
+                        <div className="" style={{fontWeight: '500', lineHeight: '1', fontSize: '13px', textTransform: 'capitalize'}}>{props.text ? props.text[0].substring(0, 48) : text[0].substring(0, 48)}</div>
                         <div className="pt-1">
                             <IconContext.Provider value={{ color: "gray", size: '10px'}}>
                                 <FaMapMarkerAlt className="cursor" />
@@ -165,6 +166,11 @@ return (
         </Row>
     </div>
 </div>
+        {props.index % 15 === 0 && (
+                <div className="mt-3 d-none">
+                    <Quotation />
+                </div>
+            )}
     </Container>
 )
 }

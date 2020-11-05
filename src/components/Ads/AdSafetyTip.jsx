@@ -82,7 +82,7 @@ export default function AdSafetyTip(props) {
 			props.history.push('/login')
 		}
 		Axios
-			.post(`https://dev.bellefu.com/api/user/product/report/${props.data.slug}`, reportBody, {
+			.post(`https://bellefu.com/api/user/product/report/${props.data.slug}`, reportBody, {
 				headers: {
 					Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",

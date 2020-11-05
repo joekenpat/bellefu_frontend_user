@@ -97,22 +97,15 @@ export default function ProfileForm(props) {
     trans();
   }, [props.id, props.language]);
 
-  useEffect(() => {
-    setUpdateData({
-      first_name: user.user.first_name,
-      last_name: user.user.last_name,
-      phone: user.user.phone,
-      city_code: user.user.city_code,
-      admin1_code: user.user.admin1_code,
-      admin2_code: user.user.admin2_code,
-      country_code: user.user.country_code,
-      address: user.user.address,
-    });
-    setAvatar(user.user.avatar);
-    setBio(user.user.bio);
-  }, [user]);
   const handleOnChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === "admin1_code") {
+      const url = `https://bellefu.com/api/${updateData.country_code}/${updateData.admin1_code}/lga/list`;
+      Axios.get(url).then((res) => {
+        setDrop((prev) => ({ ...prev, city: res.data.lgas }));
+      });
+    }
     setUpdateData((prev) => ({
       ...prev,
       [name]: value,
@@ -121,7 +114,7 @@ export default function ProfileForm(props) {
 
   //Country Effect
   useEffect(() => {
-    const url = "https://dev.bellefu.com/api/country/list";
+    const url = "https://bellefu.com/api/country/list";
     setUpdateData((prev) => ({ ...prev, admin2_code: "", admin1_code: "" }));
 
     Axios.get(url).then((res) => {
@@ -130,43 +123,87 @@ export default function ProfileForm(props) {
   }, []);
   //State Effect
   useEffect(() => {
-    const url = `https://dev.bellefu.com/api/${updateData.country_code}/state/list`;
+    const url = `https://bellefu.com/api/${updateData.country_code}/state/list`;
     setUpdateData((prev) => ({ ...prev, admin2_code: "" }));
 
     Axios.get(url).then((res) => {
       setDrop((prev) => ({ ...prev, state: res.data.states }));
     });
-  }, [updateData.country_code]);
+  }, [updateData.country_code, drop.country, user]);
   // City Effect
   useEffect(() => {
-    const url = `https://dev.bellefu.com/api/${updateData.country_code}/${updateData.admin1_code}/lga/list`;
-
+    const url = `https://bellefu.com/api/${updateData.country_code}/${updateData.admin1_code}/lga/list`;
     Axios.get(url).then((res) => {
       setDrop((prev) => ({ ...prev, city: res.data.lgas }));
     });
-  }, [updateData.admin1_code]);
+  }, [updateData.admin1_code, updateData.country_code, drop.state, user]);
+
+	let url1 = 'https://bellefu.com/api/user/profile/details';
+
+
+  useEffect(() => {
+    Axios.get(url1, {
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		}).then((res) => {
+      setLoading(false)
+      console.log(res.data.user)
+        setUpdateData({
+          first_name: res.data.user.profile.first_name,
+          last_name: res.data.user.profile.last_name,
+          phone: res.data.user.phone,
+          city_code: res.data.user.city_code,
+          admin1_code: res.data.user.admin1_code,
+          admin2_code: res.data.user.admin2_code,
+          country_code: res.data.user.country_code,
+          address: res.data.user.address,
+        });
+        setAvatar(res.data.user.avatar);
+        setBio(res.data.user.bio);
+      })
+  }, [])
 
   const handleSubmmit = (event) => {
     event.preventDefault();
     setLoading(true);
-    Axios.post(
-      "https://dev.bellefu.com/api/user/profile/update",
-      { ...updateData, bio, avatar },
-      {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    )
+    const payload = new FormData();
+    payload.append("first_name", updateData.first_name);
+    payload.append("last_name", updateData.last_name);
+    payload.append("admin1_code", updateData.admin1_code);
+    payload.append("phone", updateData.phone);
+    payload.append("admin2_code", updateData.admin2_code);
+    payload.append("country_code", updateData.country_code);
+    payload.append("address", updateData.address);
+    payload.append("bio", bio);
+    payload.append("avatar", avatar);
+
+    Axios.post("https://bellefu.com/api/user/profile/update", payload, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
       .then(() => {
         setLoading(false);
-        setsnack({
-          view: true,
-          type: "success",
-          message: "Profile update successful",
-        });
+        if(bio !== ""){
+          setsnack({
+            view: true,
+            type: "success",
+            message: "Profile updated successfully",
+
+          });
+        } else {
+          setsnack({
+            view: true,
+            type: "success",
+            message: "Profile updated successfully....Profile photo might take a while to update on the site",
+
+          });
+        }
 
         setTimeout(() => {
           setsnack({
@@ -175,25 +212,13 @@ export default function ProfileForm(props) {
             message: "",
           });
         }, 3800);
-        setUpdateData({
-          first_name: "",
-          last_name: "",
-          phone: "",
-          city_code: "",
-          admin1_code: "",
-          admin2_code: "",
-          country_code: "",
-          bio: "",
-          address: "",
-          avatar: "",
-        });
       })
       .catch((err) => {
         setLoading(false);
         setsnack({
           view: true,
           type: "error",
-          message: "Something went wrong, please try again! ",
+          message: "All fields are required! ",
         });
 
         setTimeout(() => {
@@ -415,8 +440,8 @@ export default function ProfileForm(props) {
                         {text[12]} <AiOutlineUpload style={{ fontSize: 24, marginLeft: 10 }} />
                       </>
                     ) : (
-                      avatar.name
-                    )}
+                        avatar.name
+                      )}
                   </label>
                 </div>
               </Col>
@@ -428,18 +453,7 @@ export default function ProfileForm(props) {
             <Card.Body>
               <Accordion>
                 <Card className="border-0 mt-4">
-                  <Card.Header style={{ backgroundColor: "white" }}>
-                    <Row>
-                      <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <p style={{ opacity: "0.7" }}>{text[13]}</p>
-                      </Col>
-                      <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <Accordion.Toggle style={styles.btn} as={Button} variant="outline-warning" eventKey="0">
-                          {text[14]}
-                        </Accordion.Toggle>
-                      </Col>
-                    </Row>
-                  </Card.Header>
+
                   <Accordion.Collapse eventKey="0">
                     <Card.Body>
                       <Form.Check type="checkbox" id="autoSizingCheck2" label="Agro tools" style={styles.check} />

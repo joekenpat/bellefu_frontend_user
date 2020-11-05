@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card, Image, Col, Row } from "react-bootstrap";
 import avater_placeholder from "../images/avater_placeholder.jpg";
 import Preloader from "./Preloader";
-import { AiOutlineHeart, AiOutlineGift, AiOutlineEyeInvisible } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineGift, AiOutlineEyeInvisible, AiOutlineWallet } from "react-icons/ai";
 import { MdDateRange } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import { useSelector } from "react-redux";
@@ -17,6 +17,7 @@ export default function DashboradInfo(props) {
   const [loading, setLoading] = useState(true);
   const userSignin = useSelector((state) => state.userSignin);
   const { user } = userSignin;
+  const [profile, setProfile] = useState({})
   const [dashboardData, setDashboarddata] = useState({
     favourites: {
       data: 0,
@@ -38,6 +39,10 @@ export default function DashboradInfo(props) {
       data: 0,
       load: true,
     },
+    wallet: {
+      data: 0,
+      load: true,
+    },
   });
 
   const [text, setText] = useState([
@@ -45,14 +50,16 @@ export default function DashboradInfo(props) {
 		"Favourite",
 		'Pending Ads',
 		'Expired Ads',
-		'Hidden Ads',
+    'Hidden Ads',
+    "My Wallet Balance",
 	])
 	const [originalText, setOriginalText] = useState([
 		"My Ads",
 		"Favourite",
 		'Pending Ads',
 		'Expired Ads',
-		'Hidden Ads',
+    'Hidden Ads',
+    "My Wallet Balance",
 	])
 
 	const trans = async() => {
@@ -88,7 +95,33 @@ export default function DashboradInfo(props) {
   }, [user]);
 
   function fetchDashboard() {
-    Axios.get("https://dev.bellefu.com/api/user/product/list", {
+    Axios.get('https://bellefu.com/api/user/profile/details', {
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		})
+		.then((res) => {
+      setProfile(res.data.user.avatar)
+      setDashboarddata((prev) => ({
+        ...prev,
+        wallet: {
+          data: res.data.user.profile.wallet_balance,
+          load: false,
+        },
+      }));
+    })
+    .catch((err) => {
+      setDashboarddata((prev) => ({
+        ...prev,
+        wallet: {
+          data: "N/A",
+          load: false,
+        },
+      }));
+    });
+    Axios.get("https://bellefu.com/api/user/product/list", {
       headers: {
         Authorization: `Bearer ${user.token}`,
         "Content-Type": "application/json",
@@ -115,7 +148,7 @@ export default function DashboradInfo(props) {
           },
         }));
       });
-    Axios.get("https://dev.bellefu.com/api/user/product/favourite/list", {
+    Axios.get("https://bellefu.com/api/user/product/favourite/list", {
       headers: {
         Authorization: `Bearer ${user.token}`,
         "Content-Type": "application/json",
@@ -149,7 +182,7 @@ export default function DashboradInfo(props) {
   }
 
   function getProductData(parameter) {
-    Axios.get("https://dev.bellefu.com/api/user/product/" + parameter, {
+    Axios.get("https://bellefu.com/api/user/product/" + parameter, {
       headers: {
         Authorization: `Bearer ${user.token}`,
         "Content-Type": "application/json",
@@ -187,47 +220,59 @@ export default function DashboradInfo(props) {
         </div>
         ) : (
           <Row>
-            <Col xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Col xs={12} lg={2}>
               <Image
-                src={user.user.avatar !== null ? `images/users/${user.user.username}/${user.user.avatar}` : avater_placeholder}
+                src={profile !== null ? `https://bellefu.com/images/users/${user.user.avatar}` : avater_placeholder}
                 style={styles.avater}
                 roundedCircle
               />
             </Col>
-            <Col xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Col xs={12} lg={10}>
+          <Row>
+            
+            <Col xs={6} sm={6} md={6} lg={4}>
+              <p style={styles.data}>{dashboardData.wallet.load ? <Ripple size="sm" /> : dashboardData.wallet.data}</p>
+              <span>
+                <AiOutlineWallet style={styles.icon} className="mr-2" />
+                <label style={styles.text}>{text[5]}</label>
+              </span>
+            </Col>
+            <Col xs={6} sm={6} md={6} lg={4}>
               <p style={styles.data}>{dashboardData.products.load ? <Ripple size="sm" /> : dashboardData.products.data}</p>
               <span>
                 <AiOutlineGift style={styles.icon} className="mr-2" />
                 <label style={styles.text}>{text[0]}</label>
               </span>
             </Col>
-            <Col xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Col xs={6} sm={6} md={6} lg={4}>
               <p style={styles.data}>{dashboardData.favourites.load ? <Ripple size="sm" /> : dashboardData.favourites.data} </p>
               <span>
                 <AiOutlineHeart style={styles.icon} className="mr-2" />
                 <label style={styles.text}>{text[1]}</label>
               </span>
             </Col>
-            <Col xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Col xs={6} sm={6} md={6} lg={4}>
               <p style={styles.data}>{dashboardData.pending.load ? <Ripple size="sm" /> : dashboardData.pending.data}</p>
               <span>
                 <IoMdTime style={styles.icon} className="mr-2" />
                 <label style={styles.text}>{text[2]}</label>
               </span>
             </Col>
-            <Col xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Col xs={6} sm={6} md={6} lg={4}>
               <p style={styles.data}>{dashboardData.expired.load ? <Ripple size="sm" /> : dashboardData.expired.data}</p>
               <span>
                 <MdDateRange style={styles.icon} className="mr-2" />
                 <label style={styles.text}>{text[3]}</label>
               </span>
             </Col>
-            <Col xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Col xs={6} sm={6} md={6} lg={4}>
               <p style={styles.data}>{dashboardData.hidden.load ? <Ripple size="sm" /> : dashboardData.hidden.data}</p>
               <span>
                 <AiOutlineEyeInvisible style={styles.icon} className="mr-2" />
                 <label style={styles.text}>{text[4]}</label>
               </span>
+            </Col>
+            </Row>
             </Col>
           </Row>
         )}
@@ -241,15 +286,15 @@ const styles = {
     height: "60px",
   },
   icon: {
-    fotsize: "30px",
+    fotsize: "25px",
     color: "#ffa500",
   },
   text: {
     opacity: "0.7",
-    fontSize: "0.9em",
+    fontSize: "0.8em",
   },
   data: {
-    fontSize: "0.7em",
+    fontSize: "0.8em",
     marginBottom: "-3px",
     marginTop: "15px",
   },

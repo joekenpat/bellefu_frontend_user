@@ -1,17 +1,19 @@
 import React from 'react'
-import { Carousel, Card } from "react-bootstrap";
+import { Carousel, Card, Form, Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import Quotation from './Quotation';
 
 
 export default function AdSlide() {
     return (
         <div>
+			<Quotation />
 			<Link to="#">
-				<div>
+				<div className="mt-4">
 				
 				<img
 					className="d-block w-100"
-					src="https://dev.bellefu.com/images/misc/bellefu-external-ad-1.jpeg"
+					src="https://bellefu.com/images/misc/bellefu-external-ad-1.jpeg"
 					alt="First slide"
 					style={{ height: "200px" }}
 				/>
@@ -24,7 +26,7 @@ export default function AdSlide() {
             
 				<img
 					className="d-block w-100"
-					src="https://dev.bellefu.com/images/misc/bellefu-external-ad-2.jpeg"
+					src="https://bellefu.com/images/misc/bellefu-external-ad-2.jpeg"
 					alt="First slide"
 					style={{ height: "200px" }}
 				/>
@@ -37,7 +39,7 @@ export default function AdSlide() {
             
 			<img
 				className="d-block w-100"
-				src="https://dev.bellefu.com/images/misc/bellefu-external-ad-3.jpeg"
+				src="https://bellefu.com/images/misc/bellefu-external-ad-3.jpeg"
 				alt="First slide"
 				style={{ height: "200px" }}
 			/>
@@ -50,7 +52,7 @@ export default function AdSlide() {
             
 			<img
 				className="d-block w-100"
-				src="https://dev.bellefu.com/images/misc/bellefu-external-ad-4.jpeg"
+				src="https://bellefu.com/images/misc/bellefu-external-ad-4.jpeg"
 				alt="First slide"
 				style={{ height: "200px" }}
 			/>

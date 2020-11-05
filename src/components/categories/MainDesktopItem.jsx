@@ -48,7 +48,7 @@ const MainDesktopItem = (props) => {
                         <Image
                             height="40px"
                             width="40px"
-                            src={`https://dev.bellefu.com/images/categories/${props.data.image}`}
+                            src={`https://bellefu.com/images/categories/${props.data.image}`}
                             roundedCircle
                         />
                     </div>

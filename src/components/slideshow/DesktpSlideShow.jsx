@@ -20,7 +20,7 @@ export default function DesktpSlideShow(props) {
 				<Carousel.Item interval={1000} style={{ height: "350px" }}>
 					<img
 						className="d-block w-100"
-						src="https://dev.bellefu.com/images/misc/Bellefu_home_banner_1.png"
+						src="https://bellefu.com/images/misc/Bellefu_home_banner_1.png"
 						alt="First slide"
 						style={{ height: "350px", objectFit: 'cover' }}
 					/>

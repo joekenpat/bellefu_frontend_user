@@ -65,7 +65,7 @@ function EditAd(props) {
 
 
 
-	let url = "https://dev.bellefu.com/api/product/show";
+	let url = "https://bellefu.com/api/product/show";
 	
 
 	const onDescriptionChange = (val) => {
@@ -158,7 +158,7 @@ function EditAd(props) {
 		for (var pair of real_ad_data.entries()) {
 			console.log(pair[0] + ", " + pair[1]);
 		}
-		let url = `https://dev.bellefu.com/api/user/product/update/${props.match.params.slug}`;
+		let url = `https://bellefu.com/api/user/product/update/${props.match.params.slug}`;
 		axios
 			.post(url, real_ad_data, {
 				headers: {
@@ -190,7 +190,7 @@ function EditAd(props) {
 	const [categoryData, setCategoryData] = useState([]);
 	const loadCategory = () => {
 		axios
-			.get("https://dev.bellefu.com/api/category/list", {
+			.get("https://bellefu.com/api/category/list", {
 				headers: {
 					"Content-Type": "application/json",
 					Accept: "application/json"
@@ -211,7 +211,7 @@ function EditAd(props) {
 	const loadSubCategory = (category) => {
 		axios
 			.get(
-				`https://dev.bellefu.com/api/subcategory/listfor/${category}`,
+				`https://bellefu.com/api/subcategory/listfor/${category}`,
 				{
 					headers: {
 						"Content-Type": "application/json",

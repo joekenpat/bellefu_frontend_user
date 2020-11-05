@@ -72,7 +72,7 @@ function PostAd(props) {
 
         let real_ad_data = jsonToFormData(productData, options);
 
-        let url = 'https://dev.bellefu.com/api/user/product/save';
+        let url = 'https://bellefu.com/api/user/product/save';
         axios
             .post(url, real_ad_data, {
                 headers: {
@@ -100,7 +100,7 @@ function PostAd(props) {
     const [categoryData, setCategoryData] = useState([]);
     const loadCategory = () => {
         axios
-            .get('https://dev.bellefu.com/api/category/list', {
+            .get('https://bellefu.com/api/category/list', {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
@@ -120,7 +120,7 @@ function PostAd(props) {
     const [notShow, setNotShow] = useState(true);
     const loadSubCategory = (category) => {
         axios
-            .get(`https://dev.bellefu.com/api/subcategory/listfor/${category}`, {
+            .get(`https://bellefu.com/api/subcategory/listfor/${category}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json'

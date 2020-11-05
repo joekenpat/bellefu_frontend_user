@@ -41,7 +41,7 @@ export default function ExpiredAdTable(props) {
 
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
-	let url = "https://dev.bellefu.com/api/user/product/expired";
+	let url = "https://bellefu.com/api/user/product/expired";
 
 	const nextData = () => {
 		setLoading(false);

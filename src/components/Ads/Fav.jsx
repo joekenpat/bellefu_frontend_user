@@ -18,7 +18,7 @@ const Fav = (props) => {
 
             setIsRed(!isRed)
             axios
-                .get(`https://dev.bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
+                .get(`https://bellefu.com/api/user/product/favourite/${isFav ? 'remove' : 'add'}/${product_slug}`, {
                     headers: {
                         Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
                         "Content-Type": "application/json",
@@ -47,7 +47,9 @@ const Fav = (props) => {
                 padding: "2px",
                 zIndex: '999',
                 borderRadius: "50px",
-                backgroundColor: "white",}}
+                backgroundColor: "white",
+                left: '0'
+            }}
                 onClick={(e) => toggleFav(e, props.data.slug, props.data.is_user_favourite)}
             />
                 </div>

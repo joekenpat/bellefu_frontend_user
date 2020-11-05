@@ -37,6 +37,7 @@ import MessageChatPage from "./components/app/MessageChatPage"
 import  MessageListPage  from "./components/app/MessageListPage"
 import Subcategory from "./components/app/Subcategory";
 import ScrollToTop from "./ScrollToTop";
+import Password from "./components/user/Settings";
 
 function App(props) {
 	return (
@@ -58,6 +59,7 @@ function App(props) {
 							path="/user_dashboard"
 							component={WithCountry(UserDashbordPage)}
 						/>
+						<PrivateRoute {...props} exact path="/password" component={WithCountry(Password)} />
 						 <PrivateRoute {...props} exact path="/profile" component={WithCountry(UserProfilePage)} />
 						<PrivateRoute {...props} exact path="/user_ad" component={WithCountry(UserAdPage)} />
 						<PrivateRoute

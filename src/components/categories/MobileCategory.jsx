@@ -11,7 +11,7 @@ export default function MobileCategory(props) {
 
 	const loadCategory = () => {
 		axios
-			.get("https://dev.bellefu.com/api/category/list", {
+			.get("https://bellefu.com/api/category/list", {
 				headers: {
 					"Content-Type": "application/json",
 					Accept: "application/json"

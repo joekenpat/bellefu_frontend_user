@@ -25,6 +25,7 @@ function LogInForm(props) {
 	const [firstName, setFirstName] = useState('')
 	const [show, setShow] = useState(false);
 	const [isVerified, setIsVerified] = useState(false)
+	const [isFirstEnter, setIsFirstEnter] = useState(true)
 	const [snack, setsnack] = useState({
 		view: false,
 		type: "",
@@ -32,7 +33,7 @@ function LogInForm(props) {
 	  });
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-	let url1 = 'https://dev.bellefu.com/api/user/profile/details';
+	let url1 = 'https://bellefu.com/api/user/profile/details';
 
 	
 	const [text, setText] = useState([
@@ -63,7 +64,7 @@ function LogInForm(props) {
 	])
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -94,7 +95,7 @@ function LogInForm(props) {
 	}, [])
 	
 	useEffect(() => {
-		if(user){
+		if(user && !isFirstEnter){
 			setsnack({
 				view: true,
 				type: "success",
@@ -137,6 +138,7 @@ function LogInForm(props) {
 
 	const onSubmitHandle = (e) => {
 		e.preventDefault();
+		setIsFirstEnter(false)
 		dispatch(signin(identifier, password)).then(() => {
 
 		})

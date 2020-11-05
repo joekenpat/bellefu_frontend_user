@@ -36,7 +36,7 @@ export default function LandingPageItem(props) {
 	const country = userCountry;
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -44,7 +44,7 @@ export default function LandingPageItem(props) {
 	
 
 	useEffect(() => {
-		Axios.get(`https://dev.bellefu.com/api/${country.country_iso2}/state/list`)
+		Axios.get(`https://bellefu.com/api/${country.country_iso2}/state/list`)
 		.then((res) => {
 			setStates(res.data.states)
 		}).catch((e) => {
@@ -56,12 +56,16 @@ export default function LandingPageItem(props) {
 	return (
 		<div>
 			<HeaderNav />
+			<div className="d-none d-lg-block">
 			<DesktopSlideShow id={id} country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow} />
+			</div>
+			<div className="d-block d-lg-none">
 			<MobileSlideShow id={id} country={props.userCountry} lga={lga} state={state} setModalShow={setModalShow}/>
+			</div>
 			<Container style={{marginTop: '30px'}}>
 				<Row>
 					<Col xs={12} md={2}>
-						<Card style={{marginTop: '80px'}} className="d-none d-lg-block ">
+						<Card style={{marginTop: '80px' }} className="d-none d-lg-block ">
 							<MainDesktop id={id} />
 						</Card>
 					</Col>
@@ -83,8 +87,8 @@ export default function LandingPageItem(props) {
 					</Col>
 					<Col xs={12} lg={3}>
 
-						<div style={{marginTop: '70px'}} className="d-none d-lg-block ">
-							<div className="p-2">
+						<div style={{marginTop: '70px',}} className="d-none d-lg-block ">
+							<div>
 								<AdSlide id={id} />
 							</div>
 						</div>

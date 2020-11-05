@@ -28,7 +28,7 @@ export default function PremiunAds(props) {
 
 	
 
-	let apiUrl = `https://dev.bellefu.com/api/product/home/all/latest?country=${props.country.country_slug}`;
+	let apiUrl = `https://bellefu.com/api/product/home/all/latest?country=${props.country.country_slug}`;
 
 	const loadData = () => {
 		axios
@@ -70,7 +70,7 @@ export default function PremiunAds(props) {
 							<Card.Img
 								style={styles.image}
 								variant="top"
-								src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
+								src={`https://bellefu.com/images/products/${data.slug}/${data.images[0]}`}
 							/>
 
 							<Card.ImgOverlay style={{ marginTop: "-15px" }}>

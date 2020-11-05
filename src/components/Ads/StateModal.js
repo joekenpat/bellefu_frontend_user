@@ -69,7 +69,7 @@ export default function MyVerticallyCenteredModal(props) {
     const loadLga = (name, code) => {
         setLoading(true)
         props.setState(name)
-        Axios.get(`https://dev.bellefu.com/api/${props.country.country_iso2}/${code}/lga/list`)
+        Axios.get(`https://bellefu.com/api/${props.country.country_iso2}/${code}/lga/list`)
         .then((res) => {
             setSearchedState('')
             setIsState(false)

@@ -15,10 +15,10 @@ export default function PostAdSuccessMessagePage() {
 					<hr />
 					<div class="mb-0 d-flex flex-row-reverse">
 						<a
-							href="/post_ad"
+							href="/user_dashboard"
 							style={{ color: "inherit", textDecoration: "inherit" }}>
 							<Button style={styles.btn} variant="warning" size="sm">
-								<b>Go Back</b>
+								<b>Go back to dashboard</b>
 							</Button>
 						</a>
 					</div>

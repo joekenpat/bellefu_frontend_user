@@ -31,10 +31,10 @@ export default function BottomNav() {
 	const userSignin = useSelector((state) => state.userSignin);
 	const { user } = userSignin;
 	const [userData, setUserData] = useState({})
-	let url = 'https://dev.bellefu.com/api/user/profile/details';
+	let url = 'https://bellefu.com/api/user/profile/details';
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -100,7 +100,7 @@ export default function BottomNav() {
 
 				<Navbar.Brand style={styles.post_ad_bg} className="mr-auto  ml-auto">
 				<Link to="/post_ad" style={{ color: 'inherit', textDecoration: 'inherit'}}>	
-				<Image src="https://dev.bellefu.com/images/misc/postad.png" roundedCircle  style={styles.post_ad}/>
+				<Image src="https://bellefu.com/images/misc/postad.png" roundedCircle  style={styles.post_ad}/>
 				</Link>
 				</Navbar.Brand>
 

@@ -59,7 +59,7 @@ export default function PendingAdTable(props) {
 			})
 	}
 
-	let url = "https://dev.bellefu.com/api/user/product/pending";
+	let url = "https://bellefu.com/api/user/product/pending";
 
 	useEffect(() => {
 		axios
