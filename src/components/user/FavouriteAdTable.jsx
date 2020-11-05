@@ -62,7 +62,7 @@ export default function FavouriteAdTable(props) {
 	}
 
 
-	let url = "https://dev.bellefu.com/api/user/product/favourite/list";
+	let url = "https://bellefu.com/api/user/product/favourite/list";
 	useEffect(() => {
 			axios
 				.get(`${url}`, {

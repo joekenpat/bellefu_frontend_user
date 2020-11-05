@@ -32,7 +32,7 @@ export default function PremiunAds(props) {
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
-	let apiUrl = `https://dev.bellefu.com/api/product/list?country=${props.country.country_slug}`;
+	let apiUrl = `https://bellefu.com/api/product/list?country=${props.country.country_slug}`;
 
 	
 	

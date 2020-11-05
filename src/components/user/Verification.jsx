@@ -29,7 +29,7 @@ export default function Verification(props) {
 	const [pendingID, setPendingID] = useState(false)
 	const [pendingKYC, setPendingKYC] = useState(false)
 	
-	let url = 'https://dev.bellefu.com/api/user/profile/details';
+	let url = 'https://bellefu.com/api/user/profile/details';
 
 	useEffect(() => {
 		Axios.get(url, {
@@ -78,7 +78,7 @@ export default function Verification(props) {
 	const onCodeRequest = (a) => {
 		setRequestLoading(true)
 		Axios
-		.get('https://dev.bellefu.com/api/user/verification/request/phone_otp', {
+		.get('https://bellefu.com/api/user/verification/request/phone_otp', {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 				'Content-Type': 'application/json',
@@ -91,6 +91,7 @@ export default function Verification(props) {
 			setRequestLoading(false)
 			setShowCodeInput(true)
 			setSeconds(80)
+		
 		})
 		.catch(error => {
 			console.log('this is error: ',error)
@@ -112,7 +113,7 @@ export default function Verification(props) {
 		if(phoneCode.length === 6){
 			setLoading(true)
 		Axios
-		.post('https://dev.bellefu.com/api/user/verification/confirm/phone_otp', {verification_code: Number(phoneCode)}, {
+		.post('https://bellefu.com/api/user/verification/confirm/phone_otp', {verification_code: Number(phoneCode)}, {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 				'Content-Type': 'application/json',
@@ -122,6 +123,7 @@ export default function Verification(props) {
 		.then(res => {
 			console.log(res)
 			setLoading(false)
+			setShowNumber(false)
 			setHeaderTitle('ID Verification')
 			setComponentToShow('id')
 			setError('');
@@ -153,7 +155,7 @@ export default function Verification(props) {
         
 		  
 		Axios
-		.post('https://dev.bellefu.com/api/user/verification/request/id', data, {
+		.post('https://bellefu.com/api/user/verification/request/id', data, {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 				'Content-Type': 'application/json',
@@ -177,7 +179,7 @@ export default function Verification(props) {
 		let formData = new FormData()
 		formData.append('id_images', idImage)
 		Axios
-		.get('https://dev.bellefu.com/api/user/verification/request/kyc', {
+		.get('https://bellefu.com/api/user/verification/request/kyc', {
 			headers: {
 				Authorization: `Bearer ${user.token}`,
 				'Content-Type': 'application/json',

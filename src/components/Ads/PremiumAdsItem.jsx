@@ -80,7 +80,7 @@ const PremiumAdsItem = (props) => {
                 <Card.Img
                     style={props.styles.image}
                     variant="top"
-                    src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`}
+                    src={`https://bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`}
                 />
                 </Link>
                 <Card.ImgOverlay style={{ marginTop: "-15px" }}>
@@ -125,7 +125,7 @@ const PremiumAdsItem = (props) => {
                             color: "inherit",
                             textDecoration: "inherit"
                         }}>
-                        <p className="product-title">{text[0]}</p>
+                        <p className="product-title" style={{textTransform: 'capitalize'}}>{text[0]}</p>
                         <div style={{display: 'flex', justifyContent: 'flex-start'}}>
                             <div>
                             <IconContext.Provider value={{ color: "gray", size: '10px'}}>

@@ -78,7 +78,7 @@ const {Translate} = require('@google-cloud/translate').v2;
 	])
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -108,7 +108,7 @@ const {Translate} = require('@google-cloud/translate').v2;
 		load()
 	}, [])
 	
-	let url1 = 'https://dev.bellefu.com/api/user/profile/details';
+	let url1 = 'https://bellefu.com/api/user/profile/details';
 
 
 	useEffect(() => {

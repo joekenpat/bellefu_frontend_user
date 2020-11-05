@@ -96,7 +96,7 @@ export default function HeaderNav(props) {
 	const [id, setId] = useState('')
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -136,11 +136,11 @@ export default function HeaderNav(props) {
 		setShow(true)
 	}
 
-	const url = 'https://dev.bellefu.com/api/country/list'
+	const url = 'https://bellefu.com/api/country/list'
 
 	const onFlagClick = (code) => {
 		setShow(false)
-		fetch(`https://dev.bellefu.com/api/location/info/set/country/${code}`)
+		fetch(`https://bellefu.com/api/location/info/set/country/${code}`)
 		.then((res) => res.json())
 		.then((data) => {
 			dispatch(updateUserCountry(data.location_info))
@@ -181,7 +181,7 @@ export default function HeaderNav(props) {
 		<div>
 			<Navbar style={styles.head} className=" shadow-sm fixed-top">
 				<Navbar.Brand as={Link} to="/">
-					<img src="https://dev.bellefu.com/images/misc/logo.png" style={styles.logo} />
+					<img src="https://bellefu.com/images/misc/logo.png" style={styles.logo} />
 				</Navbar.Brand>
 				<Navbar.Brand>
 					<OverlayTrigger

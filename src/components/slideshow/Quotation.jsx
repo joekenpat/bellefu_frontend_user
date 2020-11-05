@@ -35,7 +35,7 @@ const Quotation = (props) => {
            })
     }
     return (
-        <div style={{backgroundColor: 'white' ,padding: '10px', border: '4px solid #DCDEE3'}}>
+        <div className="d-none" style={{backgroundColor: 'white' ,padding: '10px', border: '4px solid #DCDEE3'}}>
 				<div style={{fontWeight: '500', fontSize: '17px'}}>One Custom Offer, Multiple Quotes</div>
 				<div className="mt-4">
 					<Form action="mailto:thechiefje@gmail.com" method="post" enctype="text/plain">

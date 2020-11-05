@@ -58,7 +58,8 @@ const ProductTitle = (props) => {
 				<span
 					className="mb-5"
 					style={{
-						fontSize: "15px"
+						fontSize: "15px",
+						textTransform: 'capitalize'
 					}}>
 					<b>{text[0]}</b>
 				</span>

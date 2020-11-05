@@ -33,7 +33,7 @@ function LogInForm(props) {
 	  });
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-	let url1 = 'https://dev.bellefu.com/api/user/profile/details';
+	let url1 = 'https://bellefu.com/api/user/profile/details';
 
 	
 	const [text, setText] = useState([
@@ -64,7 +64,7 @@ function LogInForm(props) {
 	])
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})

@@ -43,6 +43,7 @@ export default function UserAdInfo(props) {
     ])
 	useEffect(() => {
 		setProfileState(props);
+		console.log('this is profile: ', userprofile)
 	}, [props]);
 
 	const trans = async() => {
@@ -84,7 +85,7 @@ export default function UserAdInfo(props) {
 							xl={12}
 							className="text-center">
 							<Image
-								src={avater_placeholder}
+								src={userprofile.user && userprofile.user.avatar !== null ? `https://bellefu.com/images/users/${userprofile.user.avatar}` : avater_placeholder}
 								style={styles.avater}
 								roundedCircle
 							/>
@@ -185,7 +186,7 @@ export default function UserAdInfo(props) {
 											</a>
 											</div>
 											<div className="mt-1">
-											<a href="#">
+											<a href={`/messenger?recipient=${userprofile.user && userprofile.user.username}`}>
 												<IconContext.Provider value={{ color: "#ffa500", size: '15px', style: {textDecoration: 'none', marginRight: '20px'}}}>
 													<FaRegCommentDots className="cursor"/>
 												</IconContext.Provider>

@@ -50,7 +50,7 @@ export default function Footer() {
 	])
 	
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -201,16 +201,7 @@ export default function Footer() {
 											{text[11]}
 											</a>
 										</li>
-										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#">
-											{text[12]}
-											</a>
-										</li>
-										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#">
-											{text[13]}
-											</a>
-										</li>
+										
 										<li className="d-none d-lg-block" style={styles.list}>
 											<a style={styles.link} href="#">
 											{text[14]}
@@ -231,12 +222,7 @@ export default function Footer() {
 															<a style={styles.link} href="#">
 															{text[11]}
 															</a>
-															<a style={styles.link} href="#">
-															{text[12]}
-															</a>
-															<a style={styles.link} href="#">
-															{text[13]}
-															</a>
+															
 															<a style={styles.link} href="#">
 															{text[14]}
 															</a>

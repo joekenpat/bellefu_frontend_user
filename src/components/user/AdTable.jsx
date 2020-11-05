@@ -79,7 +79,7 @@ export default function AdTable(props) {
 			})
 	}
 
-	let url = "https://dev.bellefu.com/api/user/product/list";
+	let url = "https://bellefu.com/api/user/product/list";
 	useEffect(() => {
 		axios
 			.get(url, {
@@ -106,7 +106,7 @@ export default function AdTable(props) {
 			});
 
 			axios
-			.get("https://dev.bellefu.com/api/user/product/upgrade/fee", {
+			.get("https://bellefu.com/api/user/product/upgrade/fee", {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 					"Content-Type": "application/json",

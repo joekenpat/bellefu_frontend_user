@@ -33,7 +33,7 @@ export default function PostAdPayment(props) {
 	const { user } = userSignin;
 	const [userData, setUserData] = useState({})
 	const [profile, setProfile] = useState({})
-	let url = 'https://dev.bellefu.com/api/user/profile/details';
+	let url = 'https://bellefu.com/api/user/profile/details';
 
 	  const metadata = {
 		name: `${userData.firstName} ${userData.lastName}`,
@@ -45,6 +45,7 @@ export default function PostAdPayment(props) {
 		amount: props.match.params.product_plan === 'urgent' ? fee.urgent_upgrade_fee * 100 : props.match.params.product_plan === 'highlighted' ? fee.highlighted.upgrade_fee * 100: fee.featured_upgrade_fee * 100 ,
 		name: `${profile.first_name} ${profile.last_name}`,
 		phone: userData.phone,
+		currency: 'USD',
 		reference,
 		metadata,
 		publicKey: "pk_test_18f280bc5226dd715ba9a6997c73d56ec10d18ef",
@@ -69,36 +70,37 @@ export default function PostAdPayment(props) {
 
 
 	//SUBMIT FUNCTION
-	const onSubmitHandle = (e) => {
+	const onSubmitHandle = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		let mainData = {};
-		let walletPayment = {
+		let mainData = await {};
+		let walletPayment = await {
 			product_slug: `${props.match.params.slug}`,
 			upgrade_plan: `${props.match.params.plan}`,
 			payment_channel: paymentData.payment_channel
 		};
-		let voucherPayment = {
+		let voucherPayment = await {
 			product_slug: `${props.match.params.slug}`,
 			upgrade_plan: `${props.match.params.plan}`,
 			payment_channel: paymentData.payment_channel,
 			voucher_code: paymentData.voucher_code
 		};
-		let cardPayment = {
+		let cardPayment = await {
 			product_slug: `${props.match.params.slug}`,
 			upgrade_plan: `${props.match.params.plan}`,
 			payment_channel: paymentData.payment_channel,
-			gateway_provider: paymentData.gateway_provider
+			gateway_provider: paymentData.gateway_provider,
+			reference: reference
 		};
 		if (paymentData.payment_channel === "wallet") {
-			mainData = walletPayment;
+			mainData = await walletPayment;
 		} else if (paymentData.payment_channel === "voucher") {
-			mainData = voucherPayment;
+			mainData = await voucherPayment;
 		} else if (paymentData.payment_channel === "card") {
-			mainData = cardPayment;
+			mainData = await cardPayment;
 		}
        
-		let url = "https://dev.bellefu.com/api/user/product/upgrade";
+		let url = "https://bellefu.com/api/user/product/upgrade";
 		axios
 			.post(url, mainData, {
 				headers: {
@@ -132,7 +134,7 @@ export default function PostAdPayment(props) {
 		})
 
 		axios
-			.get("https://dev.bellefu.com/api/user/product/upgrade/fee", {
+			.get("https://bellefu.com/api/user/product/upgrade/fee", {
 				headers: {
 					Authorization: `Bearer ${user.token}`,
 					"Content-Type": "application/json",

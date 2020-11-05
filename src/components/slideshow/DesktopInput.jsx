@@ -37,7 +37,7 @@ export default function DesktopInput(props) {
 	
 
 	const load = async () => {
-		await Axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await Axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})
@@ -66,7 +66,7 @@ export default function DesktopInput(props) {
 
 	const loadCategory = () => {
 		Axios
-			.get("https://dev.bellefu.com/api/category/list", {
+			.get("https://bellefu.com/api/category/list", {
 				headers: {
 					"Content-Type": "application/json",
 					Accept: "application/json"

@@ -22,6 +22,7 @@
     "react": "^16.13.1",
     "react-auto-completes": "^0.2.8",
     "react-bootstrap": "^1.3.0",
+    "react-currency-format": "^1.0.0",
     "react-dom": "^16.13.1",
     "react-file-previewer": "^0.6.3",
     "react-hooks-paginator": "^0.4.4",

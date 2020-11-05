@@ -65,7 +65,7 @@ function AdDetails(props) {
 	])
 	
 	const handleCall = () => {
-		Axios.get(`https://dev.bellefu.com/api/product/review/list/for/${props.data.slug}`)
+		Axios.get(`https://bellefu.com/api/product/review/list/for/${props.data.slug}`)
 		.then((res) => {
 			setData(res.data.reviews.data)
 			setdata1(res.data.reviews.data)
@@ -90,7 +90,7 @@ function AdDetails(props) {
 	}
 
 	const handleStat = () => {
-		Axios.get(`https://dev.bellefu.com/api/product/rating/for/${props.data.slug}`)
+		Axios.get(`https://bellefu.com/api/product/rating/for/${props.data.slug}`)
 		.then((res) => {
 			setStat(res.data)
 		})
@@ -166,7 +166,7 @@ function AdDetails(props) {
 			props.history.push('/login')
 		}
 		Axios
-			.post(`https://dev.bellefu.com/api/user/product/review/${props.data.slug}`, reportBody, {
+			.post(`https://bellefu.com/api/user/product/review/${props.data.slug}`, reportBody, {
 				headers: {
 					Authorization: user !== null ? `Bearer ${user.token}` : 'hfh',
 					"Content-Type": "application/json",
@@ -286,16 +286,67 @@ function AdDetails(props) {
 							<Row>
 								<Col xm={12} sm={12} md={12} lg={6} xl={6}>
 									<span style={styles.text}>	
-									`{renderHTML(`${props.data.description}`)}`
+									{renderHTML(`${props.data.description}`)}
 									</span>
 								</Col>
 							</Row>
 						</Card.Body>
 					</Card>
+					{data.length === 0 && (
+						<div className="mt-5">
+							{show && (
+									<Accordion>
+											<Accordion.Toggle eventKey="1">
+											
+												<Button
+													className="border-0"
+													style={{
+														color: 'black',
+														fontSize: "0.9em",
+														backgroundColor: "#EFEFEF",
+														boxShadow: "none",
+														border: 'none'
+													}}>
+													Review Ad
+												</Button>
+											</Accordion.Toggle>
+											<Accordion.Collapse eventKey="1">
+												<Form onSubmit={handleReport}>
+													<Form.Group controlId="formBasicEmail">
+														<div className="mt-2">
+														<ReactStars
+															count={5}
+															isHalf={true}
+															onChange={ratingChanged}
+															size={24}
+															activeColor="#ffd700"
+														/>
+														</div>
+														<div className="mt-2">
+														<Form.Control onChange={handleChange} as="textarea" name="review_message" value={reportBody.review_message} placeholder="nice seller" />
+														</div>
+														<div className="mt-2">
+														<Button
+														onClick={handleReport}
+														style={{backgroundColor: "#ffa500", color: 'white'}}
+															className="border-0"
+															>
+																Review
+														</Button>
+														</div>
+													</Form.Group>
+												</Form>
+											</Accordion.Collapse>
+									</Accordion>
+									
+								) 
+							}
+						</div>
+					)}
 					{data.length > 0 && (
 
 					
-					<Card className="border-0 mt-4" style={{position: 'relative', height: `${data.length * 150}px`}}>
+					<Card className="border-0 mt-4" style={{position: 'relative', height: `${data.length * 170}px`}}>
 						<Card.Header
 							className="border-0"
 							style={{ backgroundColor: "#76ba1b" }}>
@@ -323,7 +374,7 @@ function AdDetails(props) {
 														boxShadow: "none",
 														border: 'none'
 													}}>
-													Review Product
+													Review Ad
 												</Button>
 											</Accordion.Toggle>
 											<Accordion.Collapse eventKey="1">

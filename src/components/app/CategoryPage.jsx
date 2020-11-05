@@ -106,13 +106,13 @@ export default function CategoryPage(props) {
 	
 
 	let dataUrl = "";
-	let apiUrl = `https://dev.bellefu.com/api/product/list?${countryy}${lgaa}${statee}${subcategoryy}${categoryy}${maxPrice}${minPrice}`;
+	let apiUrl = `https://bellefu.com/api/product/list?${countryy}${lgaa}${statee}${subcategoryy}${categoryy}${maxPrice}${minPrice}`;
 
 	let location = useLocation();
 	const parsed = queryString.parse(location.search);
 
 	const loadStates = () => {
-		axios.get(`https://dev.bellefu.com/api/${props.userCountry.country_iso2}/state/list`)
+		axios.get(`https://bellefu.com/api/${props.userCountry.country_iso2}/state/list`)
 		.then((res) => {
 			setStates(res.data.states)
 		}).catch((e) => {
@@ -167,7 +167,7 @@ export default function CategoryPage(props) {
 const [categoryData, setCategoryData] = useState([])
  const loadCategory = () => {
 	
-	axios.get("https://dev.bellefu.com/api/category/list", {
+	axios.get("https://bellefu.com/api/category/list", {
 		headers: {
 			"Content-Type": "application/json",
 			Accept: "application/json"
@@ -190,7 +190,7 @@ const [subcategoryData, setSubCategoryData] = useState([])
 const [notShow, setNotShow] = useState(true)
 const loadSubCategory = () => {
    
-   axios.get(`https://dev.bellefu.com/api/subcategory/listfor/${filterData.category}`, {
+   axios.get(`https://bellefu.com/api/subcategory/listfor/${filterData.category}`, {
 	   headers: {
 		   "Content-Type": "application/json",
 		   Accept: "application/json"
@@ -238,7 +238,7 @@ const loadSubCategory = () => {
 
 
     const load = async () => {
-		await axios.get("https://dev.bellefu.com/api/config/api_key/google_translate")
+		await axios.get("https://bellefu.com/api/config/api_key/google_translate")
 		.then((res) => {
 			setId(res.data.key)
 		})

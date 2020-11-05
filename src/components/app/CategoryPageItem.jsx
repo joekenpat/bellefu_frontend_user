@@ -76,7 +76,7 @@ const CategoryPageItem = (props) => {
                 <Card.Img
                     style={props.styles.image}
                     variant="top"
-                    src={`https://dev.bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`}
+                    src={`https://bellefu.com/images/products/${props.data.slug}/${props.data.images[0]}`}
                 />
 
                 <Card.ImgOverlay style={{ marginTop: "-15px" }}>

@@ -37,7 +37,7 @@ export default function Items(props) {
 	const [productsData, setProductsData] = useState([]);
 
 	let dataUrl = "";
-	let apiUrl = "https://dev.bellefu.com/api/product/list";
+	let apiUrl = "https://bellefu.com/api/product/list";
 
 let filterString = ""
  const  loadFilterData = () => {
@@ -97,7 +97,7 @@ const  loadData = (page=1) => {
 								<Card.Img
 									style={styles.image}
 									variant="top"
-									src={`https://dev.bellefu.com/images/products/${data.slug}/${data.images[0]}`}
+									src={`https://bellefu.com/images/products/${data.slug}/${data.images[0]}`}
 								/>
 
 								<Card.ImgOverlay style={{ marginTop: "-15px" }}>

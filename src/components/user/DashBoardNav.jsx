@@ -35,7 +35,7 @@ export default function DashBoardNav(props) {
 		'Account',
 		'Message',
 		'Verification',
-		'Settings',
+		'Reset Password',
 		'Logout',
 	])
 	const [originalText, setOriginalText] = useState([
@@ -51,7 +51,7 @@ export default function DashBoardNav(props) {
 		'Account',
 		'Message',
 		'Verification',
-		'Settings',
+		'Reset Password',
 		'Logout',
 	])
 
@@ -145,10 +145,12 @@ export default function DashBoardNav(props) {
                                 {text[11]}
                             </li>
                         </Link>
-                        <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
-                            <AiOutlineSetting className="mr-3" style={styles.icon} />
-                            {text[12]}
-                        </li>
+                        <Link to="/password" style={{color: 'inherit', textDecoration: 'inherit'}}>
+                            <li className="pb-3" onMouseOver={listHover} onMouseLeave={listHoverNone}>
+                                <AiOutlineSetting className="mr-3" style={styles.icon} />
+                                {text[12]}
+                            </li>
+                        </Link>
                         <li onClick={logout} className="pb-0" onMouseOver={listHover} onMouseLeave={listHoverNone}>
                             <IoIosLogIn className="mr-3" style={styles.icon} />
                             {text[13]}
