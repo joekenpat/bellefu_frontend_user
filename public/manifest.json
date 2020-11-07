@@ -1,6 +1,6 @@
 {
   "short_name": "Bellefu",
-  "name": "Bellefu-agro-connect",
+  "name": "Bellefu-digital-agro-connect",
   "icons": [
     {
       "src": "bellefu-favicon.png",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#FFFFFF",
-  "background_color": "#ffffff"
+  "theme_color": "#76ba1b",
+  "background_color": "#76ba1b"
 }

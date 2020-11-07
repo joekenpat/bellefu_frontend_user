@@ -38,6 +38,13 @@ import  MessageListPage  from "./components/app/MessageListPage"
 import Subcategory from "./components/app/Subcategory";
 import ScrollToTop from "./ScrollToTop";
 import Password from "./components/user/Settings";
+import AboutPage from "./components/app/AboutPage"
+import PolicyPage from "./components/app/PolicyPage"
+import ContactPage from "./components/app/ContatcPage"
+import FeedbackPage from "./components/app/FeedbackPage"
+import TermsConditionPage from "./components/app/TermsConditionPage"
+
+
 
 function App(props) {
 	return (
@@ -52,6 +59,12 @@ function App(props) {
 					<Route {...props} exact path="/login" component={WithCountry(LoginFormPage)} />
 					<Route {...props} exact path="/product_detail/:id" component={WithCountry(AdViewPage)}/>
 					<Route {...props} exact path="/subcategory/:category_id" component={WithCountry(Subcategory)}/>
+					<Route {...props} exact path="/about" component={WithCountry(AboutPage)}/>
+					<Route {...props} exact path="/policy" component={WithCountry(PolicyPage)}/>
+					<Route {...props} exact path="/contact" component={WithCountry(ContactPage)}/>
+					<Route {...props} exact path="/feedback" component={WithCountry(FeedbackPage )}/>
+					<Route {...props} exact path="/terms&condition" component={WithCountry(TermsConditionPage)}/>
+					
 					
 						<PrivateRoute
 							 {...props}
