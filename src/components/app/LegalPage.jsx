@@ -8,7 +8,7 @@ export default function LegalPage() {
             <Link to="/policy" style={{color: 'inherit', textDecoration: 'inherit'}}>
              <p style={{fontWeight: "bold", color: '#ffa500'}}>Policy and Privacy</p>
              </Link>
-             <Link to="/policy" style={{color: 'inherit', textDecoration: 'inherit'}}>
+             <Link to="/terms&condition" style={{color: 'inherit', textDecoration: 'inherit'}}>
              <p style={{fontWeight: "bold", color: '#ffa500', marginBottom: "50%"}}>Terms and Conditions</p>
              </Link>
             </div>
