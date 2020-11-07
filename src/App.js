@@ -43,7 +43,7 @@ import PolicyPage from "./components/app/PolicyPage"
 import ContactPage from "./components/app/ContatcPage"
 import FeedbackPage from "./components/app/FeedbackPage"
 import TermsConditionPage from "./components/app/TermsConditionPage"
-
+import LegalPage from "./components/app/LegalPage" 
 
 
 function App(props) {
@@ -64,6 +64,7 @@ function App(props) {
 					<Route {...props} exact path="/contact" component={WithCountry(ContactPage)}/>
 					<Route {...props} exact path="/feedback" component={WithCountry(FeedbackPage )}/>
 					<Route {...props} exact path="/terms&condition" component={WithCountry(TermsConditionPage)}/>
+					<Route {...props} exact path="/legal" component={WithCountry(LegalPage)}/>
 					
 					
 						<PrivateRoute
