@@ -43,7 +43,6 @@ function PostAd(props) {
     const onChangeHandler = e => {
         setProductData({...productData, [e.target.name]: e.target.value});
 
-        loadSubCategory();
     };
 
     const onCategoryChange = (e) => {
@@ -128,7 +127,7 @@ function PostAd(props) {
             })
             .then(res => {
                 console.log(res)
-                setSubCategoryData(res.data.subcategories.data);
+                setSubCategoryData(res.data.subcategories);
                 setNotShow(false);
             })
             .catch(error => {
