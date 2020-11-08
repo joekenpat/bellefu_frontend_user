@@ -7,7 +7,7 @@ import {
 	Spinner
 } from "react-bootstrap";
 import PremiumAdsItem from "./PremiumAdsItem";
-import Cookie from 'js-cookie'
+import Cookie from 'js-cookie';
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
 const convertTooltip = (props) => (
@@ -17,9 +17,7 @@ const convertTooltip = (props) => (
 );
 
 
-
-
-export default function PremiunAds(props) {
+const PremiunAds = (props) => {
 	const [id, setId] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
@@ -27,8 +25,6 @@ export default function PremiunAds(props) {
 	const [products, setProducts] = useState([])
 	const [nextPageUrl, setNextPageUrl] = useState('')
 	let apiUrl = `https://bellefu.com/api/product/list?country=${props.country.country_slug}`;
-
-	
 	
 	const loadData = () => {
 		axios
@@ -64,11 +60,8 @@ export default function PremiunAds(props) {
 				setProducts(res.data.products)
 				setNextPageUrl(res.data.products.next_page_url)
 				setProductsData(productsData.concat(...res.data.products.data))
-				console.log(productsData)
 			})
 	}
-
-	
 
 useEffect(() => {
 	loadData();
@@ -102,11 +95,14 @@ useEffect(() => {
 	);
 }
 
+export default PremiunAds
+
 const styles = {
 	image: {
 		height: "150px",
 		padding: "5px",
-		borderRadius: "10px"
+		borderRadius: "10px",
+		objectFit: 'cover'
 	},
 	
 	titleBody: {

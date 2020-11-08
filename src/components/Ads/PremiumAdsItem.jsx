@@ -18,7 +18,6 @@ import { useSelector } from "react-redux";
 import Price from "./Price";
 import Fav from "./Fav";
 import MobileAds from "./MobileAds";
-
 import { useEffect } from 'react';
 import Axios from 'axios';
 import Quotation from '../slideshow/Quotation';
@@ -76,7 +75,7 @@ const PremiumAdsItem = (props) => {
                         color: "inherit",
                         textDecoration: "inherit"
                     }}>
-
+                    
                 <Card.Img
                     style={props.styles.image}
                     variant="top"
