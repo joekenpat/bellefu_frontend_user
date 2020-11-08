@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-	Card,
-	Col,
 	Row,
-	OverlayTrigger,
-	Badge,
 	Tooltip,
-	Accordion,
-	Button
+	Button,
+	Spinner
 } from "react-bootstrap";
 import PremiumAdsItem from "./PremiumAdsItem";
-import InfiniteScroll from "react-infinite-scroll-component";
-import {useSelector} from 'react-redux';
 import Cookie from 'js-cookie'
 
 //THIS IS FOR HOVER TOOLTIP TO SHOW A TEXT (convert)
@@ -27,7 +21,7 @@ const convertTooltip = (props) => (
 
 export default function PremiunAds(props) {
 	const [id, setId] = useState('')
-
+	const [loading, setLoading] = useState(false)
 	const [language, setLanguage] = useState(Cookie.get('language' || 'en'))
 	const [productsData, setProductsData] = useState([]);
 	const [products, setProducts] = useState([])
@@ -56,6 +50,7 @@ export default function PremiunAds(props) {
 	};
 
 	const nextData = () => {
+		setLoading(true)
 		axios
 			.get(nextPageUrl, {
 				headers: {
@@ -65,6 +60,7 @@ export default function PremiunAds(props) {
 				}
 			})
 			.then((res) => {
+				setLoading(false)
 				setProducts(res.data.products)
 				setNextPageUrl(res.data.products.next_page_url)
 				setProductsData(productsData.concat(...res.data.products.data))
@@ -86,19 +82,21 @@ useEffect(() => {
 									))
 							}
 			</Row>
-			<div className="mt-4">
-			<InfiniteScroll
-				dataLength={productsData.length}
-				next={nextData}
-				hasMore={products.current_page !== products.last_page ? true : false}
-				loader={<h4 style={{textAlign: 'center', color: 'gray'}}>Loading...</h4>}
-				endMessage={
-				<p style={{ textAlign: 'center' }}>
-					<b></b>
-				</p>
-				}
-				>
-			</InfiniteScroll>
+			<div className="mt-4" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+			{!loading ? (
+				<div>
+					{products.current_page !== products.last_page && (
+						<div>
+							{productsData.length > 0 && (
+								<Button onClick={nextData} size="sm" style={{backgroundColor: '#ffa500', color: 'white', border: 'none'}}>load more</Button>
+							)}
+						</div>
+					)}
+				</div>
+			) : (
+				<Spinner animation="grow" />
+			)
+		}
 			</div>
 		</div>
 	);
