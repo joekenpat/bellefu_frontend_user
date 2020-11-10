@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Accordion, Card } from "react-bootstrap";
 import Cookie from 'js-cookie'
 import Axios from "axios";
+import { Link } from "react-router-dom";
+// import '../../../public/'
 
 const {Translate} = require('@google-cloud/translate').v2;
 
@@ -12,9 +14,9 @@ export default function Footer() {
     const [text, setText] = useState([
 		'About Us',
 		'Bellefu.com is a dynamic online marketplace dedicated to agriculture-related activities ensuring farmers, buyers, and sellers of agricultural products have direct contact with other agro-allied providers and manufacturing industries around the world. Bellefu is designed to make searching for agro products available at your fingertips.',
-		'My Account',
-		'Login',
-		'Register',
+		'Tools & Resources',
+		'Bellefu Radio',
+		'Training Group',
 		'Help & Support',
 		'Feedback',
 		'Contact',
@@ -26,15 +28,19 @@ export default function Footer() {
 		'Site Map',
 		'Legal',
 		'Privacy Policy',
-		'Bellefu Agro consult. All rights reserved.'
+		'Bellefu Agro consult. All rights reserved.',
+		"Webinar",
+		"Blog",
+		"Head office:",
+		"Contact Phones:",
 	])
 	
 	const [originalText, setOriginalText] = useState([
 		'About Us',
 		'Bellefu.com is a dynamic online marketplace dedicated to agriculture-related activities ensuring farmers, buyers, and sellers of agricultural products have direct contact with other agro-allied providers and manufacturing industries around the world. Bellefu is designed to make searching for agro products available at your fingertips.',
-		'My Account',
-		'Login',
-		'Register',
+		'Tools & Resources',
+		'Bellefu Radio',
+		'Training Group',
 		'Help & Support',
 		'Feedback',
 		'Contact',
@@ -46,7 +52,11 @@ export default function Footer() {
 		'Site Map',
 		'Legal',
 		'Privacy Policy',
-		'Bellefu Agro consult. All rights reserved.'
+		'Bellefu Agro consult. All rights reserved.',
+		"Webinar",
+		"Blog",
+		"Head office:",
+		"Contact Phones:",
 	])
 	
 	const load = async () => {
@@ -113,14 +123,24 @@ export default function Footer() {
 											<p>{text[2]}</p>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="/signin">
-											{text[3]}
-											</a>
+											<a target="_blank" style={styles.link} href="https://bellefu.info">
+															{text[3]}
+															</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="/signup">
-											{text[4]}
-											</a>
+												<a target="_blank" style={styles.link} href="https://chat.whatsapp.com/IJW6VM4aVnG6AOASxx9VIV">
+															{text[4]}
+															</a>
+										</li>
+										<li className="d-none d-lg-block" style={styles.list}>
+												<a target="_blank" style={styles.link} href="https://webinar.bellefu.com">
+															{text[17]}
+															</a>
+										</li>
+										<li className="d-none d-lg-block" style={styles.list}>
+												<a target="_blank" style={styles.link}  href="https://blog.bellefu.com">
+															{text[18]}
+															</a>
 										</li>
 										<li className="d-block d-lg-none mt-2" style={styles.list}>
 											<Accordion>
@@ -129,11 +149,17 @@ export default function Footer() {
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<div className="pt-2">
-															<a style={styles.link} href="/signin">
+															<a target="_blank" style={styles.link} href="https://bellefu.info">
 															{text[3]}
 															</a>
-															<a style={styles.link} href="/signup">
+															<a target="_blank" style={styles.link} href="https://chat.whatsapp.com/IJW6VM4aVnG6AOASxx9VIV">
 															{text[4]}
+															</a>
+															<a target="_blank" style={styles.link} href="https://webinar.bellefu.com">
+															{text[17]}
+															</a>
+															<a target="_blank" style={styles.link} href="https://blog.bellefu.com">
+															{text[18]}
 															</a>
 														</div>
 													</Accordion.Collapse>
@@ -147,22 +173,22 @@ export default function Footer() {
 											<p>{text[5]}</p>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#about">
+											<Link style={styles.link} to="/feedback">
 											{text[6]}
-											</a>
+											</Link>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#about">
+											<Link style={styles.link} to="/contact">
 											{text[7]}
-											</a>
+											</Link>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#about">
+											<a target="_blank" style={styles.link} href="https://www.linkedin.com/company/bellefu">
 											{text[8]}
 											</a>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#about">
+											<a target="_blank" style={styles.link} href="https://www.youtube.com/channel/UCOmmJSiICuspcEjyj4nFx0Q">
 											{text[9]}
 											</a>
 										</li>
@@ -173,18 +199,18 @@ export default function Footer() {
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<div className="pt-2">
-															<a style={styles.link} href="#">
-															{text[6]}
-															</a>
-															<a style={styles.link} href="#">
-															{text[7]}
-															</a>
-															<a style={styles.link} href="#">
-															{text[8]}
-															</a>
-															<a style={styles.link} href="#">
-															{text[9]}
-															</a>
+														<Link style={styles.link} to="/feedback">
+											{text[6]}
+											</Link>
+											<Link style={styles.link} to="/contact">
+											{text[7]}
+											</Link>
+											<a target="_blank" style={styles.link} href="https://www.linkedin.com/company/bellefu">
+											{text[8]}
+											</a>
+											<a target="_blank" style={styles.link} href="https://www.youtube.com/channel/UCOmmJSiICuspcEjyj4nFx0Q">
+											{text[9]}
+											</a>
 														</div>
 													</Accordion.Collapse>
 											</Accordion>
@@ -197,21 +223,17 @@ export default function Footer() {
 											<p>{text[10]}</p>
 										</li>
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#about">
+											<Link style={styles.link} to="/about">
 											{text[11]}
-											</a>
+											</Link>
 										</li>
 										
 										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#">
+											<Link style={styles.link} to="/legal">
 											{text[14]}
-											</a>
+											</Link>
 										</li>
-										<li className="d-none d-lg-block" style={styles.list}>
-											<a style={styles.link} href="#policy">
-											{text[15]}
-											</a>
-										</li>
+										
 										<li className="d-block d-lg-none" style={styles.list}>
 											<Accordion>
 													<Accordion.Toggle style={{backgroundColor: '#191a19', color: 'white', border: 'none'}} eventKey="0">
@@ -219,16 +241,14 @@ export default function Footer() {
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<div className="pt-2">
-															<a style={styles.link} href="#">
+															<Link style={styles.link} to="/about">
 															{text[11]}
-															</a>
+															</Link>
 															
-															<a style={styles.link} href="#">
+															<Link style={styles.link} to="/legal">
 															{text[14]}
-															</a>
-															<a style={styles.link} href="#">
-															{text[15]}
-															</a>
+															</Link>
+															
 														</div>
 													</Accordion.Collapse>
 											</Accordion>
@@ -243,6 +263,40 @@ export default function Footer() {
                     <hr class="uk-divider-icon"style={{opacity: "0.4"}} />
 
 					<div className="footer-bottom">
+						<div className="py-3" style={{display: 'flex', justifyContent: 'flex-start'}}>
+							<div>
+								<h5 style={{color: "white", fontSize: '15px'}}>{text[19]}</h5>
+								<h6 className="mt-2" style={{color: "white" , opacity: "0.4", fontSize: '12px'}}>9550 forestlane Dallas 75243, Dallas, TX, US</h6>
+							</div>
+							<div className="ml-lg-5 ml-2">
+								<h5 style={{color: "white" , fontSize: '15px'}}>{text[20]}</h5>
+								<h6 className="mt-2" style={{color: "white" , opacity: "0.4", fontSize: '12px'}}>+1 (214) 447-5585 USA</h6>
+								<h6 className="mt-2" style={{color: "white" , opacity: "0.4", fontSize: '12px'}}>+234-813 668 6060 Nigeria</h6>
+								<h6 className="mt-2" style={{color: "white" , opacity: "0.4", fontSize: '12px'}}>+27 74 749 0611 South Africa</h6>
+							</div>
+							<div style={{marginTop: '-10px'}} className="ml-5 d-none d-lg-block">
+								<a href="#">
+									<img src="google-play-badge.png" height="170" width="170" />
+								</a>
+							</div>
+							<div className="ml-5 d-none d-lg-block">
+								<a href="#">
+									<img src="badge-download-on-the-app-store.svg" height="135" width="135" />
+								</a>
+							</div>
+						</div>
+						<div className="py-2 py-lg-0 d-block d-lg-none">
+							<span style={{marginTop: '-10px'}}>
+								<a href="#">
+									<img src="google-play-badge.png" height="150" width="150" />
+								</a>
+							</span>
+							<span className="ml-2">
+								<a href="#">
+									<img src="badge-download-on-the-app-store.svg" height="125" width="125" />
+								</a>
+							</span>
+						</div>
 						<h5 className="d-none d-lg-block" style={{color: "white" , opacity: "0.4"}}>&copy; 2020 {text[16]}</h5>
 						<h5 className="d-block d-lg-none" style={{color: "white" , opacity: "0.4", fontSize: '15px'}}>&copy; 2020 {text[16]}</h5>
 					</div>
